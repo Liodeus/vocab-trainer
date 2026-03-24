@@ -2239,6 +2239,7 @@ function switchLanguage(key) {
   updateHomeStats();
   renderStats();
   renderModeSelector();
+  renderQuizSettings();
   seedDemoIfEmpty();
 }
 
@@ -2425,7 +2426,7 @@ function renderQuizSettings() {
 function updateHomeStats() {
   const words = getWords();
   const count = words.length;
-  const min = quizSize();
+  const min = currentGameMode === GameMode.FLASHCARD ? 1 : quizSize();
   const countEl = document.getElementById('word-count');
   const startBtn = document.getElementById('btn-start-quiz');
   const hintEl = document.getElementById('quiz-hint');
@@ -3327,11 +3328,11 @@ function renderFlashcard() {
       setTimeout(() => {
         const ab = content.querySelector('#fc-audio');
         if (ab) {
-          ab.addEventListener('click', e => {
+          ab.onclick = e => {
             e.stopPropagation();
             ab.classList.add('speaking');
             speak(word.target, () => ab.classList.remove('speaking'));
-          });
+          };
           ab.classList.add('speaking');
           speak(word.target, () => ab.classList.remove('speaking'));
         }
@@ -3342,11 +3343,11 @@ function renderFlashcard() {
   if (quizState.flipped) {
     const ab = content.querySelector('#fc-audio');
     if (ab) {
-      ab.addEventListener('click', e => {
+      ab.onclick = e => {
         e.stopPropagation();
         ab.classList.add('speaking');
         speak(word.target, () => ab.classList.remove('speaking'));
-      });
+      };
     }
   }
 
@@ -3363,6 +3364,11 @@ function renderFlashcard() {
 
 function finishFlashcard() {
   const total = quizState ? quizState.totalQuestions : 0;
+  if (quizState) {
+    updateLastSeen(quizState.cards.map(c => c.word.id));
+    incrementSession();
+    addQuizToHistory(total, total, total);
+  }
   document.getElementById('quiz-progress-bar').style.width = '100%';
   document.getElementById('score-emoji').textContent = '🃏';
   document.getElementById('score-value').textContent = total;
@@ -3417,6 +3423,7 @@ function stopChronoTimer() {
 
 /* ---- MCQ SHARED LISTENER ---- */
 function attachMCQListeners(container, correctId) {
+  if (!quizState) return;
   const buttons = container.querySelectorAll('.mcq-option');
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -3451,9 +3458,13 @@ function finishQuiz() {
   const score = quizState.score;
   const total = quizState.totalQuestions;
   document.getElementById('quiz-progress-bar').style.width = '100%';
-  updateLastSeen(quizState.sessionWords.map(w => w.id));
+  const seenCount = quizState.isSurvival ? quizState.currentIndex + 1 : quizState.sessionWords.length;
+  const seenIds = quizState.isSurvival
+    ? quizState.questions.slice(0, quizState.currentIndex + 1).map(q => (q.word || (q.words && q.words[0]))?.id).filter(Boolean)
+    : quizState.sessionWords.map(w => w.id);
+  updateLastSeen(seenIds);
   incrementSession();
-  addQuizToHistory(score, quizState.isSurvival ? score : total, quizState.sessionWords.length);
+  addQuizToHistory(score, quizState.isSurvival ? score : total, seenCount);
 
   let emoji, message;
   if (quizState.isSurvival) {
@@ -3734,6 +3745,7 @@ function renderStats() {
     { id: 1, label: '🔴 Révision',  cls: 'stat-mode-revision' },
     { id: 2, label: '💀 Survie',    cls: 'stat-mode-survival' },
     { id: 3, label: '⏱️ Chrono',    cls: 'stat-mode-chrono'   },
+    { id: 4, label: '🃏 Flashcard', cls: 'stat-mode-flashcard' },
     { id: 5, label: '🎧 Dictée',    cls: 'stat-mode-dictee'   },
     { id: 6, label: '🔀 Anagramme', cls: 'stat-mode-anagram'  },
   ];
@@ -3946,6 +3958,7 @@ function initEventListeners() {
     quitBtn.addEventListener('click', () => {
       if (confirm('Quitter le quiz en cours ?')) {
         speechSynthesis && speechSynthesis.cancel();
+        stopChronoTimer();
         quizState = null;
         showScreen('home');
         updateHomeStats();
