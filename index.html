@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#131F24" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Italiano" />
-  <title>Italiano — Apprentissage</title>
+  <meta name="apple-mobile-web-app-title" content="Langues" />
+  <title>Langues — Apprentissage du vocabulaire</title>
   <style>
 /* ============================================================
    CSS VARIABLES & RESET
@@ -220,6 +220,28 @@ body {
 
 .nav-icon { font-size: 22px; line-height: 1; }
 .nav-label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; }
+
+.nav-icon { position: relative; display: inline-block; }
+.backup-badge {
+  position: absolute;
+  top: -2px; right: -6px;
+  width: 9px; height: 9px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 1.5px solid var(--card);
+}
+
+.score-backup-reminder {
+  background: rgba(255, 217, 0, 0.1);
+  border: 1.5px solid var(--yellow);
+  border-radius: var(--radius-sm);
+  color: var(--yellow);
+  font-size: 13px;
+  padding: 10px 14px;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
 
 /* ============================================================
    CARDS
@@ -1068,6 +1090,9 @@ body {
       </div>
 
       <div class="bank-actions">
+        <button id="btn-share" class="btn btn-secondary">
+          🔗 Partager
+        </button>
         <button id="btn-export" class="btn btn-secondary">
           ⬇️ Exporter
         </button>
@@ -1103,7 +1128,7 @@ body {
       <span class="nav-label">Accueil</span>
     </button>
     <button class="nav-tab" data-target="bank">
-      <span class="nav-icon">📚</span>
+      <span class="nav-icon">📚<span id="backup-badge" class="backup-badge hidden"></span></span>
       <span class="nav-label">Banque</span>
     </button>
   </nav>
@@ -1182,6 +1207,9 @@ body {
         <span class="score-total" id="score-total">/ 8</span>
       </div>
       <p id="score-message" class="score-message">Excellent !</p>
+      <div id="score-backup-reminder" class="score-backup-reminder hidden">
+        💾 Pensez à sauvegarder vos mots via <strong>Partager</strong> ou <strong>Exporter</strong> dans la Banque !
+      </div>
       <div class="score-actions">
         <button id="btn-replay" class="btn btn-primary btn-full">
           🔁 Rejouer
@@ -1560,11 +1588,56 @@ function openEditWordModal(id) {
 /* ============================================================
    EXPORT
    ============================================================ */
-function exportWords() {
+/* ============================================================
+   BACKUP TRACKING
+   ============================================================ */
+const BACKUP_KEY = 'app_backup';
+
+function getBackupInfo() {
+  try {
+    const raw = localStorage.getItem(BACKUP_KEY);
+    return raw ? JSON.parse(raw) : { wordCount: 0, sessions: 0 };
+  } catch(e) { return { wordCount: 0, sessions: 0 }; }
+}
+
+function markBackup() {
+  const info = { wordCount: getWords().length, sessions: 0 };
+  localStorage.setItem(BACKUP_KEY, JSON.stringify(info));
+  updateBackupBadge();
+}
+
+function incrementSession() {
+  const info = getBackupInfo();
+  info.sessions = (info.sessions || 0) + 1;
+  localStorage.setItem(BACKUP_KEY, JSON.stringify(info));
+  updateBackupBadge();
+}
+
+function needsBackup() {
+  const info = getBackupInfo();
+  const currentCount = getWords().length;
+  const newWords = currentCount - (info.wordCount || 0);
+  return newWords >= 5 || (info.sessions || 0) >= 3;
+}
+
+function updateBackupBadge() {
+  const badge = document.getElementById('backup-badge');
+  if (badge) badge.classList.toggle('hidden', !needsBackup());
+}
+
+/* ============================================================
+   EXPORT / SHARE
+   ============================================================ */
+function buildExportData() {
   const words = getWords();
-  if (words.length === 0) { alert('Votre banque de mots est vide.'); return; }
-  const exportData = words.map(({ native, target }) => ({ native, target }));
-  const json = JSON.stringify(exportData, null, 2);
+  if (words.length === 0) { alert('Votre banque de mots est vide.'); return null; }
+  return words.map(({ native, target }) => ({ native, target }));
+}
+
+function exportWords() {
+  const data = buildExportData();
+  if (!data) return;
+  const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1574,6 +1647,26 @@ function exportWords() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  markBackup();
+}
+
+async function shareWords() {
+  const data = buildExportData();
+  if (!data) return;
+  const json = JSON.stringify(data, null, 2);
+  const file = new File([json], lang().filename, { type: 'application/json' });
+
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'Ma banque de mots — ' + lang().title });
+      markBackup();
+    } catch(e) {
+      if (e.name !== 'AbortError') exportWords();
+    }
+  } else {
+    // Fallback : téléchargement classique
+    exportWords();
+  }
 }
 
 /* ============================================================
@@ -1938,6 +2031,7 @@ function finishQuiz() {
   const ratio = score / total;
   document.getElementById('quiz-progress-bar').style.width = '100%';
   updateLastSeen(quizState.sessionWords.map(w => w.id));
+  incrementSession();
 
   let emoji, message;
   if (ratio >= 0.875)     { emoji = '🏆'; message = 'Excellent ! Vous maîtrisez ce vocabulaire !'; }
@@ -1949,6 +2043,10 @@ function finishQuiz() {
   document.getElementById('score-value').textContent = score;
   document.getElementById('score-total').textContent = `/ ${total}`;
   document.getElementById('score-message').textContent = message;
+
+  const backupEl = document.getElementById('score-backup-reminder');
+  if (backupEl) backupEl.classList.toggle('hidden', !needsBackup());
+
   openModal('modal-score');
 }
 
@@ -2117,6 +2215,9 @@ function initEventListeners() {
   }
 
   // Export
+  const shareBtn = document.getElementById('btn-share');
+  if (shareBtn) shareBtn.addEventListener('click', shareWords);
+
   const exportBtn = document.getElementById('btn-export');
   if (exportBtn) exportBtn.addEventListener('click', exportWords);
 
@@ -2200,6 +2301,7 @@ function init() {
   registerSW();
   seedDemoIfEmpty();
   updateHomeStats();
+  updateBackupBadge();
 }
 
 if (document.readyState === 'loading') {
