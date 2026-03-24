@@ -1680,8 +1680,9 @@ async function shareWords() {
   const json = JSON.stringify(data, null, 2);
 
   if (navigator.share) {
-    // Try file sharing first (requires HTTPS), then text sharing (works on file://)
-    const file = new File([json], lang().filename, { type: 'application/json' });
+    // Use text/plain — widely supported on Android Chrome (application/json often blocked)
+    const txtFilename = lang().filename.replace('.json', '.txt');
+    const file = new File([json], txtFilename, { type: 'text/plain' });
     const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
     try {
       if (canShareFile) {
