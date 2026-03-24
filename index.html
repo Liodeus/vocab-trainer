@@ -268,6 +268,58 @@ body {
   color: var(--accent);
 }
 
+.quiz-settings {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.settings-label {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.settings-pills {
+  display: flex;
+  gap: 6px;
+}
+
+.settings-pill {
+  padding: 5px 12px;
+  border-radius: 16px;
+  border: 2px solid var(--border2);
+  background: var(--bg);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.settings-pill:active { transform: scale(0.94); }
+
+.settings-pill.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+
 .bank-lang-label {
   font-size: 12px;
   color: var(--text-muted);
@@ -906,6 +958,7 @@ body {
 
     <main class="screen-content">
       <div id="lang-selector" class="lang-selector"></div>
+      <div id="quiz-settings" class="quiz-settings"></div>
 
       <div class="home-hero">
         <div class="hero-icon">📚</div>
@@ -1083,7 +1136,7 @@ body {
       <h2 class="score-title">Quiz terminé !</h2>
       <div class="score-display">
         <span id="score-value" class="score-number">8</span>
-        <span class="score-total">/8</span>
+        <span class="score-total" id="score-total">/ 8</span>
       </div>
       <p id="score-message" class="score-message">Excellent !</p>
       <div class="score-actions">
@@ -1311,21 +1364,56 @@ function updateFormLabels() {
 }
 
 /* ============================================================
+   QUIZ SETTINGS UI
+   ============================================================ */
+function renderQuizSettings() {
+  const container = document.getElementById('quiz-settings');
+  if (!container) return;
+  const s = getSettings();
+  const qSizes = [5, 8, 10, 15];
+  const mSizes = [3, 4, 5, 6, 7, 8];
+  container.innerHTML = `
+    <div class="settings-row">
+      <span class="settings-label">Questions par quiz</span>
+      <div class="settings-pills">
+        ${qSizes.map(n => `<button class="settings-pill${s.quizSize === n ? ' active' : ''}" data-setting="quizSize" data-value="${n}">${n}</button>`).join('')}
+      </div>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Paires par exercice</span>
+      <div class="settings-pills">
+        ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}" data-setting="matchSize" data-value="${n}">${n}</button>`).join('')}
+      </div>
+    </div>
+  `;
+  container.querySelectorAll('.settings-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = getSettings();
+      s[btn.dataset.setting] = parseInt(btn.dataset.value);
+      saveSettings(s);
+      renderQuizSettings();
+      updateHomeStats();
+    });
+  });
+}
+
+/* ============================================================
    HOME SCREEN
    ============================================================ */
 function updateHomeStats() {
   const words = getWords();
   const count = words.length;
+  const min = quizSize();
   const countEl = document.getElementById('word-count');
   const startBtn = document.getElementById('btn-start-quiz');
   const hintEl = document.getElementById('quiz-hint');
   if (countEl) countEl.textContent = count;
   if (startBtn) {
-    startBtn.disabled = count < 8;
+    startBtn.disabled = count < min;
     if (hintEl) {
-      if (count < 8) {
+      if (count < min) {
         hintEl.classList.remove('hidden');
-        const remaining = 8 - count;
+        const remaining = min - count;
         hintEl.innerHTML = `Ajoutez encore <strong>${remaining} mot${remaining > 1 ? 's' : ''}</strong> pour commencer un quiz.`;
       } else {
         hintEl.classList.add('hidden');
@@ -1521,8 +1609,22 @@ function pickRandom(arr, n) { return shuffle(arr).slice(0, n); }
 /* ============================================================
    QUIZ ENGINE
    ============================================================ */
-const QUIZ_SIZE = 8;
-const MATCH_SIZE = 5;
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+const SETTINGS_KEY = 'app_settings';
+function getSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (raw) return { quizSize: 8, matchSize: 5, ...JSON.parse(raw) };
+  } catch(e) {}
+  return { quizSize: 8, matchSize: 5 };
+}
+function saveSettings(s) {
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch(e) {}
+}
+function quizSize()  { return getSettings().quizSize; }
+function matchSize() { return Math.min(getSettings().matchSize, quizSize()); }
 
 const QuizType = { TEXT_MATCH: 0, AUDIO_MATCH: 1, MCQ_TRANSLATE: 2, MCQ_LISTEN: 3 };
 
@@ -1530,18 +1632,22 @@ let quizState = null;
 
 function buildQuiz() {
   const allWords = getWords();
-  if (allWords.length < QUIZ_SIZE) return null;
+  const QS = quizSize();
+  const MS = matchSize();
+  if (allWords.length < QS) return null;
 
-  const sessionWords = pickRandom(allWords, QUIZ_SIZE);
-  let typePool = ttsSupported ? [0, 1, 2, 3, 0, 1, 2, 3] : [0, 2, 0, 2, 0, 2, 0, 2];
+  const sessionWords = pickRandom(allWords, QS);
+  const types = ttsSupported ? [0, 1, 2, 3] : [0, 2];
+  let typePool = [];
+  for (let i = 0; i < QS; i++) typePool.push(types[i % types.length]);
   typePool = shuffle(typePool);
 
   const questions = [];
-  for (let i = 0; i < QUIZ_SIZE; i++) {
+  for (let i = 0; i < QS; i++) {
     const type = typePool[i];
     let q;
     if (type === QuizType.TEXT_MATCH || type === QuizType.AUDIO_MATCH) {
-      q = { type, words: pickRandom(sessionWords, MATCH_SIZE) };
+      q = { type, words: pickRandom(sessionWords, MS) };
     } else {
       const questionWord = sessionWords[i % sessionWords.length];
       const distractorPool = allWords.filter(w => w.id !== questionWord.id);
@@ -1554,12 +1660,12 @@ function buildQuiz() {
     }
     questions.push(q);
   }
-  return { questions, currentIndex: 0, score: 0, sessionWords };
+  return { questions, currentIndex: 0, score: 0, sessionWords, totalQuestions: QS };
 }
 
 function startQuiz() {
   const state = buildQuiz();
-  if (!state) { alert('Vous avez besoin d\'au moins 8 mots pour commencer un quiz.'); return; }
+  if (!state) { alert(`Vous avez besoin d'au moins ${quizSize()} mots pour commencer un quiz.`); return; }
   quizState = state;
   showScreen('quiz');
   renderCurrentQuestion();
@@ -1569,9 +1675,10 @@ function renderCurrentQuestion() {
   if (!quizState) return;
   const { questions, currentIndex } = quizState;
   const q = questions[currentIndex];
-  const progress = (currentIndex / QUIZ_SIZE) * 100;
+  const total = quizState.totalQuestions;
+  const progress = (currentIndex / total) * 100;
   document.getElementById('quiz-progress-bar').style.width = progress + '%';
-  document.getElementById('quiz-counter').textContent = `Q ${currentIndex + 1} / ${QUIZ_SIZE}`;
+  document.getElementById('quiz-counter').textContent = `Q ${currentIndex + 1} / ${total}`;
   const content = document.getElementById('quiz-content');
   content.innerHTML = '';
   switch (q.type) {
@@ -1767,24 +1874,27 @@ function attachMCQListeners(container, correctId) {
 function advanceQuiz(wasCorrect) {
   if (!quizState) return;
   quizState.currentIndex++;
-  if (quizState.currentIndex >= QUIZ_SIZE) finishQuiz();
+  if (quizState.currentIndex >= quizState.totalQuestions) finishQuiz();
   else renderCurrentQuestion();
 }
 
 function finishQuiz() {
   if (!quizState) return;
   const score = quizState.score;
+  const total = quizState.totalQuestions;
+  const ratio = score / total;
   document.getElementById('quiz-progress-bar').style.width = '100%';
   updateLastSeen(quizState.sessionWords.map(w => w.id));
 
   let emoji, message;
-  if (score >= 7)      { emoji = '🏆'; message = 'Excellent ! Vous maîtrisez ce vocabulaire !'; }
-  else if (score >= 5) { emoji = '⭐'; message = 'Très bien ! Continuez comme ça !'; }
-  else if (score >= 3) { emoji = '👍'; message = 'Continuez vos efforts, vous progressez !'; }
-  else                 { emoji = '💪'; message = 'Entraînez-vous encore, vous pouvez y arriver !'; }
+  if (ratio >= 0.875)     { emoji = '🏆'; message = 'Excellent ! Vous maîtrisez ce vocabulaire !'; }
+  else if (ratio >= 0.625) { emoji = '⭐'; message = 'Très bien ! Continuez comme ça !'; }
+  else if (ratio >= 0.375) { emoji = '👍'; message = 'Continuez vos efforts, vous progressez !'; }
+  else                     { emoji = '💪'; message = 'Entraînez-vous encore, vous pouvez y arriver !'; }
 
   document.getElementById('score-emoji').textContent = emoji;
   document.getElementById('score-value').textContent = score;
+  document.getElementById('score-total').textContent = `/ ${total}`;
   document.getElementById('score-message').textContent = message;
   openModal('modal-score');
 }
@@ -2017,6 +2127,7 @@ function init() {
   initTTS();
   initEventListeners();
   renderLanguageSelector();
+  renderQuizSettings();
   updateAppHeader();
   updateBankHeader();
   updateFormLabels();
