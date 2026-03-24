@@ -1658,23 +1658,40 @@ body.light-theme .tts-warning { background: #fff3cd; border-color: #ffc107; colo
 /* ============================================================
    LARGE TEXT
    ============================================================ */
-body.large-text .mcq-word          { font-size: clamp(22px, 6vw, 34px); }
-body.large-text .mcq-option        { font-size: 16px; padding: 14px 14px; }
-body.large-text .match-card        { font-size: 14px; }
-body.large-text .word-native       { font-size: 17px; }
-body.large-text .word-fr           { font-size: 17px; }
-body.large-text .hint-text         { font-size: 15px; }
-body.large-text .mode-pill         { font-size: 14px; padding: 11px 6px; }
-body.large-text .lang-pill         { font-size: 13px; padding: 9px 14px; }
-body.large-text .free-input-field  { font-size: 22px; }
-body.large-text .anagram-tile      { font-size: 22px; height: 52px; min-width: 44px; }
-body.large-text .anagram-slot      { font-size: 20px; height: 46px; min-width: 34px; }
-body.large-text .flashcard-word    { font-size: clamp(26px, 8vw, 44px); }
-body.large-text .stat-value        { font-size: 30px; }
-body.large-text .btn               { font-size: 16px; }
-body.large-text .nav-label         { font-size: 12px; }
-body.large-text .settings-label    { font-size: 12px; }
-body.large-text .quiz-type-label   { font-size: 12px; }
+body.large-text                    { font-size: 20px; }
+body.large-text .mcq-word          { font-size: clamp(28px, 8vw, 44px); }
+body.large-text .mcq-option        { font-size: 20px; padding: 18px 16px; }
+body.large-text .match-card        { font-size: 19px; }
+body.large-text .word-native       { font-size: 22px; }
+body.large-text .word-fr           { font-size: 22px; }
+body.large-text .hint-text         { font-size: 20px; }
+body.large-text .mode-pill         { font-size: 18px; padding: 13px 8px; }
+body.large-text .lang-pill         { font-size: 17px; padding: 11px 18px; }
+body.large-text .free-input-field  { font-size: 28px; }
+body.large-text .anagram-tile      { font-size: 28px; height: 64px; min-width: 54px; }
+body.large-text .anagram-slot      { font-size: 26px; height: 58px; min-width: 44px; }
+body.large-text .flashcard-word    { font-size: clamp(34px, 10vw, 56px); }
+body.large-text .stat-value        { font-size: 38px; }
+body.large-text .btn               { font-size: 20px; }
+body.large-text .nav-label         { font-size: 15px; }
+body.large-text .settings-label    { font-size: 15px; }
+body.large-text .quiz-type-label   { font-size: 15px; }
+body.large-text .app-title         { font-size: 30px; }
+body.large-text .app-subtitle      { font-size: 18px; }
+body.large-text .screen-title      { font-size: 24px; }
+body.large-text .hero-count        { font-size: 52px; }
+body.large-text .hero-label        { font-size: 18px; }
+body.large-text .tip-list li       { font-size: 17px; }
+body.large-text .word-item         { font-size: 19px; }
+body.large-text .search-input      { font-size: 18px; }
+body.large-text .form-input        { font-size: 20px; }
+body.large-text .form-label        { font-size: 18px; }
+body.large-text .modal-title       { font-size: 22px; }
+body.large-text .quiz-counter      { font-size: 18px; }
+body.large-text .score-number      { font-size: 72px; }
+body.large-text .score-message     { font-size: 22px; }
+body.large-text .stat-label        { font-size: 16px; }
+body.large-text .mode-desc         { font-size: 17px; }
 
 </style>
 </head>
@@ -2246,6 +2263,7 @@ function renderModeSelector() {
     btn.addEventListener('click', () => {
       currentGameMode = parseInt(btn.dataset.mode);
       renderModeSelector();
+      renderQuizSettings();
       updateHomeStats();
     });
   });
@@ -2363,6 +2381,8 @@ function updateFormLabels() {
 function renderQuizSettings() {
   const container = document.getElementById('quiz-settings');
   if (!container) return;
+  if (currentGameMode === GameMode.FLASHCARD) { container.innerHTML = ''; container.style.display = 'none'; return; }
+  container.style.display = '';
   const s = getSettings();
   const qSizes = [5, 8, 10, 15];
   const mSizes = [3, 4, 5, 6, 7, 8];
@@ -3425,76 +3445,196 @@ function finishQuiz() {
    ============================================================ */
 const DEMO_WORDS = {
   'fr-it': [
-    { native: 'bonjour',  target: 'buongiorno' },
-    { native: 'merci',    target: 'grazie'      },
-    { native: 'chat',     target: 'gatto'       },
-    { native: 'chien',    target: 'cane'        },
-    { native: 'maison',   target: 'casa'        },
-    { native: 'eau',      target: 'acqua'       },
-    { native: 'pain',     target: 'pane'        },
-    { native: 'livre',    target: 'libro'       },
-    { native: 'soleil',   target: 'sole'        },
-    { native: 'nuit',     target: 'notte'       },
+    { native: 'bonjour',          target: 'ciao'        },
+    { native: 'merci',            target: 'grazie'      },
+    { native: "s'il vous plaît",  target: 'per favore'  },
+    { native: 'oui',              target: 'sì'          },
+    { native: 'non',              target: 'no'          },
+    { native: 'eau',              target: 'acqua'       },
+    { native: 'pain',             target: 'pane'        },
+    { native: 'maison',           target: 'casa'        },
+    { native: 'voiture',          target: 'macchina'    },
+    { native: 'chat',             target: 'gatto'       },
+    { native: 'chien',            target: 'cane'        },
+    { native: 'livre',            target: 'libro'       },
+    { native: 'table',            target: 'tavolo'      },
+    { native: 'chaise',           target: 'sedia'       },
+    { native: 'fenêtre',          target: 'finestra'    },
+    { native: 'porte',            target: 'porta'       },
+    { native: 'ami',              target: 'amico'       },
+    { native: 'famille',          target: 'famiglia'    },
+    { native: 'manger',           target: 'mangiare'    },
+    { native: 'boire',            target: 'bere'        },
+    { native: 'dormir',           target: 'dormire'     },
+    { native: 'parler',           target: 'parlare'     },
+    { native: 'aller',            target: 'andare'      },
+    { native: 'venir',            target: 'venire'      },
+    { native: 'grand',            target: 'grande'      },
+    { native: 'petit',            target: 'piccolo'     },
+    { native: 'beau',             target: 'bello'       },
+    { native: 'rouge',            target: 'rosso'       },
+    { native: 'bleu',             target: 'blu'         },
+    { native: 'blanc',            target: 'bianco'      },
   ],
   'fr-en': [
-    { native: 'bonjour',  target: 'hello'       },
-    { native: 'merci',    target: 'thank you'   },
-    { native: 'chat',     target: 'cat'         },
-    { native: 'chien',    target: 'dog'         },
-    { native: 'maison',   target: 'house'       },
-    { native: 'eau',      target: 'water'       },
-    { native: 'pain',     target: 'bread'       },
-    { native: 'livre',    target: 'book'        },
-    { native: 'soleil',   target: 'sun'         },
-    { native: 'nuit',     target: 'night'       },
+    { native: 'bonjour',          target: 'hello'       },
+    { native: 'merci',            target: 'thank you'   },
+    { native: "s'il vous plaît",  target: 'please'      },
+    { native: 'oui',              target: 'yes'         },
+    { native: 'non',              target: 'no'          },
+    { native: 'eau',              target: 'water'       },
+    { native: 'pain',             target: 'bread'       },
+    { native: 'maison',           target: 'house'       },
+    { native: 'voiture',          target: 'car'         },
+    { native: 'chat',             target: 'cat'         },
+    { native: 'chien',            target: 'dog'         },
+    { native: 'livre',            target: 'book'        },
+    { native: 'table',            target: 'table'       },
+    { native: 'chaise',           target: 'chair'       },
+    { native: 'fenêtre',          target: 'window'      },
+    { native: 'porte',            target: 'door'        },
+    { native: 'ami',              target: 'friend'      },
+    { native: 'famille',          target: 'family'      },
+    { native: 'manger',           target: 'to eat'      },
+    { native: 'boire',            target: 'to drink'    },
+    { native: 'dormir',           target: 'to sleep'    },
+    { native: 'parler',           target: 'to speak'    },
+    { native: 'aller',            target: 'to go'       },
+    { native: 'venir',            target: 'to come'     },
+    { native: 'grand',            target: 'big'         },
+    { native: 'petit',            target: 'small'       },
+    { native: 'beau',             target: 'beautiful'   },
+    { native: 'rouge',            target: 'red'         },
+    { native: 'bleu',             target: 'blue'        },
+    { native: 'blanc',            target: 'white'       },
   ],
   'fr-es': [
-    { native: 'bonjour',  target: 'hola'        },
-    { native: 'merci',    target: 'gracias'     },
-    { native: 'chat',     target: 'gato'        },
-    { native: 'chien',    target: 'perro'       },
-    { native: 'maison',   target: 'casa'        },
-    { native: 'eau',      target: 'agua'        },
-    { native: 'pain',     target: 'pan'         },
-    { native: 'livre',    target: 'libro'       },
-    { native: 'soleil',   target: 'sol'         },
-    { native: 'nuit',     target: 'noche'       },
+    { native: 'bonjour',          target: 'hola'        },
+    { native: 'merci',            target: 'gracias'     },
+    { native: "s'il vous plaît",  target: 'por favor'   },
+    { native: 'oui',              target: 'sí'          },
+    { native: 'non',              target: 'no'          },
+    { native: 'eau',              target: 'agua'        },
+    { native: 'pain',             target: 'pan'         },
+    { native: 'maison',           target: 'casa'        },
+    { native: 'voiture',          target: 'coche'       },
+    { native: 'chat',             target: 'gato'        },
+    { native: 'chien',            target: 'perro'       },
+    { native: 'livre',            target: 'libro'       },
+    { native: 'table',            target: 'mesa'        },
+    { native: 'chaise',           target: 'silla'       },
+    { native: 'fenêtre',          target: 'ventana'     },
+    { native: 'porte',            target: 'puerta'      },
+    { native: 'ami',              target: 'amigo'       },
+    { native: 'famille',          target: 'familia'     },
+    { native: 'manger',           target: 'comer'       },
+    { native: 'boire',            target: 'beber'       },
+    { native: 'dormir',           target: 'dormir'      },
+    { native: 'parler',           target: 'hablar'      },
+    { native: 'aller',            target: 'ir'          },
+    { native: 'venir',            target: 'venir'       },
+    { native: 'grand',            target: 'grande'      },
+    { native: 'petit',            target: 'pequeño'     },
+    { native: 'beau',             target: 'hermoso'     },
+    { native: 'rouge',            target: 'rojo'        },
+    { native: 'bleu',             target: 'azul'        },
+    { native: 'blanc',            target: 'blanco'      },
   ],
   'fr-de': [
-    { native: 'bonjour',  target: 'Hallo'       },
-    { native: 'merci',    target: 'Danke'       },
-    { native: 'chat',     target: 'Katze'       },
-    { native: 'chien',    target: 'Hund'        },
-    { native: 'maison',   target: 'Haus'        },
-    { native: 'eau',      target: 'Wasser'      },
-    { native: 'pain',     target: 'Brot'        },
-    { native: 'livre',    target: 'Buch'        },
-    { native: 'soleil',   target: 'Sonne'       },
-    { native: 'nuit',     target: 'Nacht'       },
+    { native: 'bonjour',          target: 'Hallo'       },
+    { native: 'merci',            target: 'Danke'       },
+    { native: "s'il vous plaît",  target: 'bitte'       },
+    { native: 'oui',              target: 'ja'          },
+    { native: 'non',              target: 'nein'        },
+    { native: 'eau',              target: 'Wasser'      },
+    { native: 'pain',             target: 'Brot'        },
+    { native: 'maison',           target: 'Haus'        },
+    { native: 'voiture',          target: 'Auto'        },
+    { native: 'chat',             target: 'Katze'       },
+    { native: 'chien',            target: 'Hund'        },
+    { native: 'livre',            target: 'Buch'        },
+    { native: 'table',            target: 'Tisch'       },
+    { native: 'chaise',           target: 'Stuhl'       },
+    { native: 'fenêtre',          target: 'Fenster'     },
+    { native: 'porte',            target: 'Tür'         },
+    { native: 'ami',              target: 'Freund'      },
+    { native: 'famille',          target: 'Familie'     },
+    { native: 'manger',           target: 'essen'       },
+    { native: 'boire',            target: 'trinken'     },
+    { native: 'dormir',           target: 'schlafen'    },
+    { native: 'parler',           target: 'sprechen'    },
+    { native: 'aller',            target: 'gehen'       },
+    { native: 'venir',            target: 'kommen'      },
+    { native: 'grand',            target: 'groß'        },
+    { native: 'petit',            target: 'klein'       },
+    { native: 'beau',             target: 'schön'       },
+    { native: 'rouge',            target: 'rot'         },
+    { native: 'bleu',             target: 'blau'        },
+    { native: 'blanc',            target: 'weiß'        },
   ],
   'fr-pt': [
-    { native: 'bonjour',  target: 'olá'         },
-    { native: 'merci',    target: 'obrigado'    },
-    { native: 'chat',     target: 'gato'        },
-    { native: 'chien',    target: 'cão'         },
-    { native: 'maison',   target: 'casa'        },
-    { native: 'eau',      target: 'água'        },
-    { native: 'pain',     target: 'pão'         },
-    { native: 'livre',    target: 'livro'       },
-    { native: 'soleil',   target: 'sol'         },
-    { native: 'nuit',     target: 'noite'       },
+    { native: 'bonjour',          target: 'olá'         },
+    { native: 'merci',            target: 'obrigado'    },
+    { native: "s'il vous plaît",  target: 'por favor'   },
+    { native: 'oui',              target: 'sim'         },
+    { native: 'non',              target: 'não'         },
+    { native: 'eau',              target: 'água'        },
+    { native: 'pain',             target: 'pão'         },
+    { native: 'maison',           target: 'casa'        },
+    { native: 'voiture',          target: 'carro'       },
+    { native: 'chat',             target: 'gato'        },
+    { native: 'chien',            target: 'cão'         },
+    { native: 'livre',            target: 'livro'       },
+    { native: 'table',            target: 'mesa'        },
+    { native: 'chaise',           target: 'cadeira'     },
+    { native: 'fenêtre',          target: 'janela'      },
+    { native: 'porte',            target: 'porta'       },
+    { native: 'ami',              target: 'amigo'       },
+    { native: 'famille',          target: 'família'     },
+    { native: 'manger',           target: 'comer'       },
+    { native: 'boire',            target: 'beber'       },
+    { native: 'dormir',           target: 'dormir'      },
+    { native: 'parler',           target: 'falar'       },
+    { native: 'aller',            target: 'ir'          },
+    { native: 'venir',            target: 'vir'         },
+    { native: 'grand',            target: 'grande'      },
+    { native: 'petit',            target: 'pequeno'     },
+    { native: 'beau',             target: 'bonito'      },
+    { native: 'rouge',            target: 'vermelho'    },
+    { native: 'bleu',             target: 'azul'        },
+    { native: 'blanc',            target: 'branco'      },
   ],
   'fr-jp': [
-    { native: 'bonjour',  target: 'こんにちは'   },
-    { native: 'merci',    target: 'ありがとう'   },
-    { native: 'chat',     target: 'ねこ'         },
-    { native: 'chien',    target: 'いぬ'         },
-    { native: 'maison',   target: 'いえ'         },
-    { native: 'eau',      target: 'みず'         },
-    { native: 'pain',     target: 'パン'         },
-    { native: 'livre',    target: 'ほん'         },
-    { native: 'soleil',   target: 'たいよう'     },
-    { native: 'nuit',     target: 'よる'         },
+    { native: 'bonjour',          target: 'こんにちは'     },
+    { native: 'merci',            target: 'ありがとう'     },
+    { native: "s'il vous plaît",  target: 'おねがいします' },
+    { native: 'oui',              target: 'はい'           },
+    { native: 'non',              target: 'いいえ'         },
+    { native: 'eau',              target: 'みず'           },
+    { native: 'pain',             target: 'パン'           },
+    { native: 'maison',           target: 'いえ'           },
+    { native: 'voiture',          target: 'くるま'         },
+    { native: 'chat',             target: 'ねこ'           },
+    { native: 'chien',            target: 'いぬ'           },
+    { native: 'livre',            target: 'ほん'           },
+    { native: 'table',            target: 'テーブル'       },
+    { native: 'chaise',           target: 'いす'           },
+    { native: 'fenêtre',          target: 'まど'           },
+    { native: 'porte',            target: 'ドア'           },
+    { native: 'ami',              target: 'ともだち'       },
+    { native: 'famille',          target: 'かぞく'         },
+    { native: 'manger',           target: 'たべる'         },
+    { native: 'boire',            target: 'のむ'           },
+    { native: 'dormir',           target: 'ねる'           },
+    { native: 'parler',           target: 'はなす'         },
+    { native: 'aller',            target: 'いく'           },
+    { native: 'venir',            target: 'くる'           },
+    { native: 'grand',            target: 'おおきい'       },
+    { native: 'petit',            target: 'ちいさい'       },
+    { native: 'beau',             target: 'きれい'         },
+    { native: 'rouge',            target: 'あか'           },
+    { native: 'bleu',             target: 'あお'           },
+    { native: 'blanc',            target: 'しろ'           },
   ],
 };
 
