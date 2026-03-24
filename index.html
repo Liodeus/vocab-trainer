@@ -1701,9 +1701,10 @@ function buildQuiz() {
       q = { type, words: pickRandom(sessionWords, MS) };
     } else {
       const questionWord = sessionWords[i % sessionWords.length];
+      const needed = MS - 1;
       const distractorPool = allWords.filter(w => w.id !== questionWord.id);
-      const distractors = pickRandom(distractorPool, 3);
-      while (distractors.length < 3) {
+      const distractors = pickRandom(distractorPool, needed);
+      while (distractors.length < needed) {
         const pad = sessionWords.find(w => w.id !== questionWord.id && !distractors.some(d => d.id === w.id));
         if (pad) distractors.push(pad); else break;
       }
@@ -1850,7 +1851,7 @@ function initMatchGame(container, words, isAudio) {
 function renderMCQTranslate(q, container) {
   const { word, distractors } = q;
   const options = shuffle([word, ...distractors]);
-  const letters = ['A', 'B', 'C', 'D'];
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
   container.innerHTML = `
     <div class="quiz-type-label">Traduction — FR → ${lang().targetFlag}</div>
@@ -1873,7 +1874,7 @@ function renderMCQTranslate(q, container) {
 function renderMCQListen(q, container) {
   const { word, distractors } = q;
   const options = shuffle([word, ...distractors]);
-  const letters = ['A', 'B', 'C', 'D'];
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
   container.innerHTML = `
     <div class="quiz-type-label">Écoute &amp; Traduction — ${lang().targetFlag} → FR</div>
