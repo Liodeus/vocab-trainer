@@ -1678,17 +1678,22 @@ async function shareWords() {
   const data = buildExportData();
   if (!data) return;
   const json = JSON.stringify(data, null, 2);
-  const file = new File([json], lang().filename, { type: 'application/json' });
 
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+  if (navigator.share) {
+    // Try file sharing first (requires HTTPS), then text sharing (works on file://)
+    const file = new File([json], lang().filename, { type: 'application/json' });
+    const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
     try {
-      await navigator.share({ files: [file], title: 'Ma banque de mots — ' + lang().title });
+      if (canShareFile) {
+        await navigator.share({ files: [file], title: 'Ma banque de mots — ' + lang().title });
+      } else {
+        await navigator.share({ title: 'Ma banque de mots — ' + lang().title, text: json });
+      }
       markBackup();
     } catch(e) {
       if (e.name !== 'AbortError') exportWords();
     }
   } else {
-    // Fallback : téléchargement classique
     exportWords();
   }
 }
