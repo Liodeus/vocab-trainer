@@ -2287,7 +2287,7 @@ function renderModeDesc() {
   const s          = getSettings();
   const isChrono   = currentGameMode === GameMode.CHRONO;
   const isFC       = currentGameMode === GameMode.FLASHCARD;
-  const times      = [1, 2, 3, 5, 7, 10];
+  const times      = [3, 5, 7, 10, 15, 30];
   const cur        = chronoTime();
   const fcDir      = s.fcDirection || 'mix';
   const fcCount    = s.fcCount !== undefined ? s.fcCount : 0;
@@ -2755,6 +2755,7 @@ function buildQuiz() {
   if (pool.length < QS) return null;
 
   // --- session words ---
+  const isSurvival = currentGameMode === GameMode.SURVIVAL;
   let sessionWords;
   if (currentGameMode === GameMode.NORMAL) {
     sessionWords = getSRSSessionWords(pool, QS);
@@ -2762,13 +2763,14 @@ function buildQuiz() {
     sessionWords = [...pool].sort((a, b) =>
       (b.error_count / Math.max(b.seen_count, 1)) - (a.error_count / Math.max(a.seen_count, 1))
     ).slice(0, QS);
+  } else if (isSurvival) {
+    sessionWords = shuffle([...pool]); // tous les mots, mélangés
   } else {
     sessionWords = pickRandom(pool, QS);
   }
 
-  // --- question count (survival = 50 max) ---
-  const isSurvival = currentGameMode === GameMode.SURVIVAL;
-  const numQ = isSurvival ? Math.min(50, pool.length * 3) : QS;
+  // --- question count ---
+  const numQ = isSurvival ? 9999 : QS;
 
   // --- type pool ---
   let typeOptions;
@@ -2779,10 +2781,14 @@ function buildQuiz() {
   } else {
     const baseMCQ   = ttsSupported ? [QuizType.MCQ_TRANSLATE, QuizType.MCQ_LISTEN] : [QuizType.MCQ_TRANSLATE];
     const baseMatch = ttsSupported ? [QuizType.TEXT_MATCH, QuizType.AUDIO_MATCH]   : [QuizType.TEXT_MATCH];
-    // For CHRONO/SURVIVAL: no match games
-    typeOptions = (currentGameMode === GameMode.CHRONO || isSurvival)
-      ? [...baseMCQ, QuizType.FREE_INPUT]
-      : [...baseMCQ, ...baseMatch, QuizType.FREE_INPUT];
+    const isFastChrono = currentGameMode === GameMode.CHRONO && chronoTime() <= 5;
+    if (isFastChrono) {
+      typeOptions = baseMCQ;
+    } else if (currentGameMode === GameMode.CHRONO || isSurvival) {
+      typeOptions = [...baseMCQ, QuizType.FREE_INPUT];
+    } else {
+      typeOptions = [...baseMCQ, ...baseMatch, QuizType.FREE_INPUT];
+    }
   }
 
   const shuffledOpts = shuffle([...typeOptions]);
@@ -2797,10 +2803,22 @@ function buildQuiz() {
     if (type === QuizType.TEXT_MATCH || type === QuizType.AUDIO_MATCH) {
       q = { type, words: pickRandom(sessionWords, MS) };
     } else if (type === QuizType.FREE_INPUT || type === QuizType.DICTEE || type === QuizType.ANAGRAM) {
-      const questionWord = sessionWords[i % sessionWords.length];
+      let questionWord = isSurvival
+        ? sessionWords[Math.floor(Math.random() * sessionWords.length)]
+        : sessionWords[i % sessionWords.length];
+      if (type === QuizType.ANAGRAM) {
+        const anagramPool = sessionWords.filter(w => Array.from(w.target).filter(c => c !== ' ').length >= 3);
+        if (anagramPool.length > 0) {
+          questionWord = isSurvival
+            ? anagramPool[Math.floor(Math.random() * anagramPool.length)]
+            : anagramPool[i % anagramPool.length];
+        }
+      }
       q = { type, word: questionWord };
     } else {
-      const questionWord = sessionWords[i % sessionWords.length];
+      const questionWord = isSurvival
+        ? sessionWords[Math.floor(Math.random() * sessionWords.length)]
+        : sessionWords[i % sessionWords.length];
       const needed = MS - 1;
       const distractorPool = allWords.filter(w => w.id !== questionWord.id);
       const distractors = pickRandom(distractorPool, needed);
@@ -3144,10 +3162,15 @@ function renderAnagram(q, container) {
     renderFreeInput(q, container);
     return;
   }
-  // Shuffle and ensure result differs from original
-  let shuffled = shuffle([...chars]);
-  for (let attempt = 0; shuffled.join('') === word.target && attempt < 20; attempt++) {
-    shuffled = shuffle([...chars]);
+
+  // Separate letters from spaces
+  const letterChars = chars.filter(c => c !== ' ');
+  const spacePositions = new Set(chars.reduce((acc, c, i) => { if (c === ' ') acc.push(i); return acc; }, []));
+
+  // Shuffle only letters, ensure result differs from original
+  let shuffled = shuffle([...letterChars]);
+  for (let attempt = 0; shuffled.join('') === letterChars.join('') && attempt < 20; attempt++) {
+    shuffled = shuffle([...letterChars]);
   }
 
   container.innerHTML = `
@@ -3156,10 +3179,13 @@ function renderAnagram(q, container) {
       <div class="mcq-word">${escHtml(word.native)}</div>
     </div>
     <div id="anagram-answer" class="anagram-answer">
-      ${chars.map(() => `<span class="anagram-slot">_</span>`).join('')}
+      ${chars.map((ch, i) => ch === ' '
+        ? `<span class="anagram-slot filled" data-space="true" style="border-style:dashed;opacity:0.5;">·</span>`
+        : `<span class="anagram-slot">_</span>`
+      ).join('')}
     </div>
     <div id="anagram-tiles" class="anagram-tiles">
-      ${shuffled.map((ch, i) => `<button class="anagram-tile${ch === ' ' ? ' anagram-tile-space' : ''}" data-i="${i}">${ch === ' ' ? '·' : escHtml(ch)}</button>`).join('')}
+      ${shuffled.map((ch, i) => `<button class="anagram-tile" data-i="${i}">${escHtml(ch)}</button>`).join('')}
     </div>
     <div id="anagram-hint" class="free-input-hint hidden"></div>
   `;
@@ -3167,15 +3193,19 @@ function renderAnagram(q, container) {
   const answerEl = container.querySelector('#anagram-answer');
   const tilesEl  = container.querySelector('#anagram-tiles');
   const hintEl   = container.querySelector('#anagram-hint');
-  const placed   = []; // indices into shuffled[]
+  const placed   = []; // indices into shuffled[] (letters only)
   let done       = false;
 
+  // Letter slots only (exclude pre-filled space slots)
+  function getLetterSlots() {
+    return [...answerEl.querySelectorAll('.anagram-slot:not([data-space])')];
+  }
+
   function redrawAnswer() {
-    const slots = answerEl.querySelectorAll('.anagram-slot');
-    slots.forEach((slot, i) => {
+    const letterSlots = getLetterSlots();
+    letterSlots.forEach((slot, i) => {
       if (i < placed.length) {
-        const ch = shuffled[placed[i]];
-        slot.textContent = ch === ' ' ? '·' : ch;
+        slot.textContent = shuffled[placed[i]];
         slot.classList.add('filled');
         slot.dataset.pi = i;
       } else {
@@ -3184,7 +3214,7 @@ function renderAnagram(q, container) {
         delete slot.dataset.pi;
       }
     });
-    answerEl.querySelectorAll('.anagram-slot.filled').forEach(slot => {
+    answerEl.querySelectorAll('.anagram-slot[data-pi]').forEach(slot => {
       slot.onclick = () => {
         if (done) return;
         const pi = parseInt(slot.dataset.pi);
@@ -3194,15 +3224,20 @@ function renderAnagram(q, container) {
         redrawAnswer();
       };
     });
-    if (placed.length === chars.length && !done) validateAnagram();
+    if (placed.length === letterChars.length && !done) validateAnagram();
   }
 
   function validateAnagram() {
     done = true;
     stopChronoTimer();
-    const answer = placed.map(i => shuffled[i]).join('');
+    // Reconstruct full answer with spaces at correct positions
+    let letterIdx = 0;
+    const answer = chars.map((ch) => {
+      if (ch === ' ') return ' ';
+      return shuffled[placed[letterIdx++]] || '';
+    }).join('');
     const isCorrect = answer.toLowerCase() === word.target.toLowerCase();
-    answerEl.querySelectorAll('.anagram-slot').forEach(s => s.classList.add(isCorrect ? 'correct' : 'incorrect'));
+    answerEl.querySelectorAll('.anagram-slot:not([data-space])').forEach(s => s.classList.add(isCorrect ? 'correct' : 'incorrect'));
     tilesEl.querySelectorAll('.anagram-tile').forEach(t => t.disabled = true);
     if (!isCorrect) {
       hintEl.textContent = `✓ ${word.target}`;
@@ -3344,6 +3379,7 @@ function startChronoTimer(content) {
   const container = document.getElementById('quiz-timer-container');
   if (!bar || !container) return;
   const seconds = chronoTime();
+  const questionIndex = quizState ? quizState.currentIndex : -1;
   container.classList.remove('hidden');
   bar.style.transition = 'none';
   bar.style.width = '100%';
@@ -3357,13 +3393,18 @@ function startChronoTimer(content) {
     remaining--;
     if (remaining <= 10) bar.className = 'quiz-timer-bar timer-warning';
     if (remaining <= 5)  bar.className = 'quiz-timer-bar timer-danger';
-    if (remaining <= 0)  {
+    if (remaining <= 0) {
       clearInterval(chronoTimer);
       chronoTimer = null;
-      // Time's up — mark wrong
+      // Guard: ignore if question already changed
+      if (!quizState || quizState.currentIndex !== questionIndex) return;
       content.querySelectorAll('button:not(:disabled), input').forEach(el => el.disabled = true);
       content.style.opacity = '0.5';
-      setTimeout(() => { content.style.opacity = ''; advanceQuiz(false); }, 700);
+      setTimeout(() => {
+        if (!quizState || quizState.currentIndex !== questionIndex) return;
+        content.style.opacity = '';
+        advanceQuiz(false);
+      }, 700);
     }
   }, 1000);
 }
@@ -3381,6 +3422,7 @@ function attachMCQListeners(container, correctId) {
     btn.addEventListener('click', () => {
       const isCorrect = btn.dataset.correct === 'true';
       buttons.forEach(b => b.disabled = true);
+      stopChronoTimer();
       if (isCorrect) {
         btn.classList.add('correct');
         quizState.score++;
