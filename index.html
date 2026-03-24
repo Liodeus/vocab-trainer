@@ -184,7 +184,7 @@ body {
   font-weight: 700;
   color: var(--text-muted);
   flex-shrink: 0;
-  min-width: 44px;
+  min-width: 52px;
   text-align: right;
   letter-spacing: 0.3px;
 }
@@ -237,7 +237,7 @@ body {
    ============================================================ */
 .lang-selector {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 4px;
@@ -246,18 +246,19 @@ body {
 .lang-pill {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
+  gap: 4px;
+  padding: 7px 12px;
   border-radius: 20px;
   border: 2px solid var(--border2);
   background: var(--card);
   color: var(--text2);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
   -webkit-user-select: none;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .lang-pill:active { transform: scale(0.96); }
@@ -272,7 +273,7 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 10px 14px;
   margin-bottom: 12px;
   display: flex;
   flex-direction: column;
@@ -281,25 +282,27 @@ body {
 
 .settings-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 }
 
 .settings-label {
-  font-size: 12px;
-  color: var(--text2);
-  font-weight: 600;
-  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
 }
 
 .settings-pills {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
 .settings-pill {
-  padding: 5px 12px;
+  padding: 5px 11px;
   border-radius: 16px;
   border: 2px solid var(--border2);
   background: var(--bg);
@@ -310,9 +313,17 @@ body {
   transition: border-color 0.15s, background 0.15s, color 0.15s;
   -webkit-user-select: none;
   user-select: none;
+  flex-shrink: 0;
+  min-width: 38px;
+  text-align: center;
 }
 
-.settings-pill:active { transform: scale(0.94); }
+.settings-pill:active:not(:disabled) { transform: scale(0.94); }
+
+.settings-pill:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
 
 .settings-pill.active {
   border-color: var(--accent);
@@ -334,27 +345,32 @@ body {
   background: linear-gradient(135deg, var(--card2) 0%, var(--card) 100%);
   border: 1.5px solid var(--border2);
   border-radius: var(--radius);
-  padding: 22px 20px;
+  padding: 16px;
   margin-bottom: 14px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
+  overflow: hidden;
 }
 
 .hero-icon {
-  width: 60px; height: 60px;
+  width: 52px; height: 52px;
   background: var(--accent-glow);
   border: 2px solid var(--accent);
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
+  font-size: 24px;
   flex-shrink: 0;
 }
 
-.hero-text {}
+.hero-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
 
 .hero-count {
-  font-size: 38px;
+  font-size: 34px;
   font-weight: 900;
   color: var(--accent);
   line-height: 1;
@@ -362,9 +378,10 @@ body {
 }
 
 .hero-label {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text2);
   margin-top: 3px;
+  overflow-wrap: break-word;
 }
 
 .quiz-start-area {
@@ -384,7 +401,8 @@ body {
   background: var(--card);
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 18px;
+  padding: 14px;
+  overflow: hidden;
 }
 
 .home-tips h3 {
@@ -407,6 +425,14 @@ body {
   color: var(--text2);
   display: flex; align-items: flex-start; gap: 8px;
   line-height: 1.4;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.tip-list li span:last-child {
+  flex: 1;
+  min-width: 0;
 }
 
 /* ============================================================
@@ -423,7 +449,8 @@ body {
   cursor: pointer;
   transition: transform 0.1s, opacity 0.15s, box-shadow 0.15s;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
   -webkit-user-select: none; user-select: none;
   letter-spacing: 0.2px;
 }
@@ -747,7 +774,6 @@ body {
   display: flex; flex-direction: column;
   gap: 14px;
   padding-top: 6px;
-  height: 100%;
 }
 
 .quiz-type-label {
@@ -762,21 +788,28 @@ body {
   background: var(--card);
   border: 1.5px solid var(--border2);
   border-radius: var(--radius);
-  padding: 22px 16px;
-  text-align: center;
+  padding: 16px;
   display: flex; flex-direction: column;
-  align-items: center; gap: 10px;
+  align-items: stretch; gap: 10px;
+  width: 100%; overflow: hidden;
+  box-sizing: border-box;
 }
 
 .mcq-word {
-  font-size: 28px; font-weight: 800;
+  font-size: clamp(18px, 5vw, 28px);
+  font-weight: 800;
   color: var(--text); line-height: 1.2;
   word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mcq-options {
   display: flex; flex-direction: column;
   gap: 9px;
+  width: 100%;
 }
 
 .mcq-option {
@@ -784,13 +817,14 @@ body {
   border: 2px solid var(--border2);
   border-radius: var(--radius-sm);
   color: var(--text);
-  font-size: 15px; font-weight: 600;
-  padding: 15px 16px;
+  font-size: 14px; font-weight: 600;
+  padding: 12px 14px;
   cursor: pointer; text-align: left;
   transition: background 0.12s, border-color 0.12s, transform 0.1s;
   width: 100%;
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   box-shadow: 0 2px 0 var(--border);
+  overflow: hidden;
 }
 .mcq-option:active:not(:disabled) {
   transform: translateY(1px);
@@ -813,17 +847,24 @@ body {
 }
 
 .mcq-option-letter {
-  width: 28px; height: 28px;
+  width: 26px; height: 26px;
   border-radius: 50%;
   background: var(--bg2);
   border: 1.5px solid var(--border2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800;
+  font-size: 11px; font-weight: 800;
   color: var(--text-muted);
   flex-shrink: 0;
 }
 .mcq-option.correct  .mcq-option-letter { background: var(--accent); color: #0a1a00; border-color: var(--accent); }
 .mcq-option.incorrect .mcq-option-letter { background: var(--red); color: #fff; border-color: var(--red); }
+
+.mcq-option-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
 
 /* ---- AUDIO BUTTON ---- */
 .audio-btn-wrapper {
@@ -862,19 +903,21 @@ body {
 .match-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 7px;
   align-items: stretch;
+  width: 100%;
+  overflow-y: auto;
 }
 
 .match-card {
   background: var(--card);
   border: 2px solid var(--border2);
   border-radius: var(--radius-sm);
-  padding: 11px 8px;
+  padding: 9px 6px;
   text-align: center; cursor: pointer;
-  font-size: 13px; font-weight: 600;
+  font-size: 12px; font-weight: 600;
   line-height: 1.3; word-break: break-word;
-  min-height: 50px;
+  min-height: 44px;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.12s, border-color 0.12s, transform 0.1s;
   -webkit-user-select: none; user-select: none;
@@ -980,9 +1023,9 @@ body {
       <div class="home-tips">
         <h3>Comment ça marche</h3>
         <ul class="tip-list">
-          <li><span>📝</span> Ajoutez des paires de mots dans la banque</li>
-          <li><span>🎯</span> Lancez un quiz de 8 questions variées</li>
-          <li><span>🔊</span> Exercices d'écoute, d'association et de traduction</li>
+          <li><span>📝</span><span>Ajoutez des paires de mots dans la banque</span></li>
+          <li><span>🎯</span><span id="tip-quiz-size">Lancez un quiz de 8 questions variées</span></li>
+          <li><span>🔊</span><span>Exercices d'écoute, d'association et de traduction</span></li>
         </ul>
       </div>
     </main>
@@ -1382,7 +1425,7 @@ function renderQuizSettings() {
     <div class="settings-row">
       <span class="settings-label">Paires par exercice</span>
       <div class="settings-pills">
-        ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}" data-setting="matchSize" data-value="${n}">${n}</button>`).join('')}
+        ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}${n > s.quizSize ? ' disabled' : ''}" data-setting="matchSize" data-value="${n}" ${n > s.quizSize ? 'disabled' : ''}>${n}</button>`).join('')}
       </div>
     </div>
   `;
@@ -1390,11 +1433,19 @@ function renderQuizSettings() {
     btn.addEventListener('click', () => {
       const s = getSettings();
       s[btn.dataset.setting] = parseInt(btn.dataset.value);
+      if (s.matchSize > s.quizSize) s.matchSize = s.quizSize;
       saveSettings(s);
       renderQuizSettings();
       updateHomeStats();
     });
   });
+
+  const tipEl = document.getElementById('tip-quiz-size');
+  if (tipEl) {
+    const qs = s.quizSize;
+    const ms = Math.min(s.matchSize, s.quizSize);
+    tipEl.textContent = `Lancez un quiz de ${qs} question${qs > 1 ? 's' : ''} (${ms} paires par exercice d'association)`;
+  }
 }
 
 /* ============================================================
@@ -1810,7 +1861,7 @@ function renderMCQTranslate(q, container) {
       ${options.map((opt, i) => `
         <button class="mcq-option" data-correct="${opt.id === word.id}" data-id="${escHtml(opt.id)}">
           <span class="mcq-option-letter">${letters[i]}</span>
-          ${escHtml(opt.target)}
+          <span class="mcq-option-text">${escHtml(opt.target)}</span>
         </button>
       `).join('')}
     </div>
@@ -1834,7 +1885,7 @@ function renderMCQListen(q, container) {
       ${options.map((opt, i) => `
         <button class="mcq-option" data-correct="${opt.id === word.id}" data-id="${escHtml(opt.id)}">
           <span class="mcq-option-letter">${letters[i]}</span>
-          ${escHtml(opt.native)}
+          <span class="mcq-option-text">${escHtml(opt.native)}</span>
         </button>
       `).join('')}
     </div>
