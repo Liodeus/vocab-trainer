@@ -81,9 +81,11 @@ body {
 .screen-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 16px calc(var(--nav-h) + 20px);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  min-width: 0;
 }
 .screen-content::-webkit-scrollbar { display: none; }
 
@@ -1013,6 +1015,268 @@ body {
 }
 
 /* ============================================================
+   STATS SCREEN
+   ============================================================ */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.stats-summary-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.stat-card-good   { border-color: var(--accent); background: var(--accent-glow); }
+.stat-card-good   .stat-value { color: var(--accent); }
+.stat-card-ok     { border-color: var(--yellow); background: var(--yellow-glow); }
+.stat-card-ok     .stat-value { color: var(--yellow); }
+.stat-card-bad    { border-color: var(--red); background: var(--red-glow); }
+.stat-card-bad    .stat-value { color: var(--red); }
+.stat-card-streak { border-color: var(--yellow); background: var(--yellow-glow); }
+.stat-card-streak .stat-value { color: var(--yellow); }
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.stats-section {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.stats-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.stat-bars { display: flex; flex-direction: column; gap: 8px; }
+
+.stat-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.stat-bar-labels {
+  flex: 0 0 clamp(60px, 26%, 110px);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.stat-bar-native {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-bar-target {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+}
+
+.stat-bar-track {
+  flex: 1;
+  min-width: 0;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s var(--ease);
+  min-width: 4px;
+}
+
+.stat-fill-red   { background: linear-gradient(90deg, var(--red-dark), var(--red)); }
+.stat-fill-blue  { background: linear-gradient(90deg, #1480b0, var(--blue)); }
+.stat-fill-green { background: linear-gradient(90deg, var(--accent-dark), var(--accent)); }
+
+.stat-bar-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  min-width: 30px;
+  max-width: 44px;
+}
+.stat-bar-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+.stat-bar-unit {
+  font-size: 9px;
+  color: var(--text-muted);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.stats-section-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: inline;
+}
+
+.stats-section-muted .stats-section-title {
+  color: var(--text-muted);
+}
+
+.stat-never-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+.stat-never-pill {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text2);
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: break-word;
+}
+.stat-never-pill span:first-child {
+  color: var(--text-muted);
+}
+.stat-never-more {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 4px 0;
+}
+
+/* ---- Segmented bar ---- */
+.stat-seg-bar {
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 10px;
+  background: var(--border);
+}
+.stat-seg {
+  height: 100%;
+  transition: width 0.6s var(--ease);
+  min-width: 0;
+}
+.seg-mastered { background: var(--accent); }
+.seg-learning { background: var(--blue); }
+.seg-review   { background: var(--red); }
+.seg-never    { background: var(--border2); }
+
+.stat-seg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.stat-seg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text2);
+  white-space: nowrap;
+}
+.stat-seg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ---- Quiz history chart ---- */
+.stat-history-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 64px;
+}
+.stat-hist-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 2px;
+  min-width: 0;
+}
+.stat-hist-bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.stat-hist-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s var(--ease);
+  min-height: 4px;
+}
+.stat-hist-good { background: var(--accent); }
+.stat-hist-ok   { background: var(--yellow); }
+.stat-hist-bad  { background: var(--red); }
+.stat-hist-label {
+  font-size: 8px;
+  color: var(--text-muted);
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: clip;
+}
+
+/* ============================================================
    UTILITY
    ============================================================ */
 .hidden { display: none !important; }
@@ -1128,6 +1392,17 @@ body {
     </div>
   </div>
 
+  <!-- ===== SCREEN: STATS ===== -->
+  <div id="screen-stats" class="screen" data-screen="stats">
+    <header class="app-header">
+      <h1 class="screen-title">Statistiques</h1>
+      <p id="stats-lang-label" class="bank-lang-label"></p>
+    </header>
+    <main class="screen-content">
+      <div id="stats-content"></div>
+    </main>
+  </div>
+
   <!-- ===== SCREEN: QUIZ ===== -->
   <div id="screen-quiz" class="screen" data-screen="quiz">
     <header class="quiz-header">
@@ -1154,6 +1429,10 @@ body {
     <button class="nav-tab" data-target="bank">
       <span class="nav-icon">📚<span id="backup-badge" class="backup-badge hidden"></span></span>
       <span class="nav-label">Banque</span>
+    </button>
+    <button class="nav-tab" data-target="stats">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Stats</span>
     </button>
   </nav>
 
@@ -1270,11 +1549,13 @@ function lang() { return LANGUAGES[currentLangKey]; }
    ============================================================ */
 function storageKey() { return 'words_' + currentLangKey; }
 
-// Migrate old fr/it fields to native/target
+// Migrate old fr/it fields to native/target + ensure stat fields exist
 function migrateWord(w) {
   if (w.native === undefined && w.fr !== undefined) {
-    return { id: w.id, native: w.fr, target: w.it, created_at: w.created_at, last_seen: w.last_seen };
+    return { id: w.id, native: w.fr, target: w.it, created_at: w.created_at, last_seen: w.last_seen, seen_count: 0, error_count: 0 };
   }
+  if (w.seen_count === undefined) w.seen_count = 0;
+  if (w.error_count === undefined) w.error_count = 0;
   return w;
 }
 
@@ -1343,6 +1624,79 @@ function updateLastSeen(ids) {
     if (w) w.last_seen = now;
   });
   saveWords(words);
+}
+
+function recordAnswer(wordId, isCorrect) {
+  const words = getWords();
+  const w = words.find(w => w.id === wordId);
+  if (!w) return;
+  w.seen_count = (w.seen_count || 0) + 1;
+  if (!isCorrect) w.error_count = (w.error_count || 0) + 1;
+  saveWords(words);
+}
+
+/* ============================================================
+   QUIZ HISTORY & STREAK
+   ============================================================ */
+function historyKey() { return 'quiz_history_' + currentLangKey; }
+
+function getQuizHistory() {
+  try {
+    const raw = localStorage.getItem(historyKey());
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch(e) { return []; }
+}
+
+function addQuizToHistory(score, total, wordsSeen) {
+  const history = getQuizHistory();
+  history.push({ date: todayStr(), score, total, wordsSeen });
+  if (history.length > 60) history.splice(0, history.length - 60);
+  localStorage.setItem(historyKey(), JSON.stringify(history));
+}
+
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+function computeStreak(history) {
+  if (!history.length) return 0;
+  const days = [...new Set(history.map(s => s.date))].sort().reverse();
+  const today = todayStr();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (days[0] !== today && days[0] !== yesterday) return 0;
+  let streak = 0;
+  let cur = days[0];
+  for (const day of days) {
+    if (day === cur) {
+      streak++;
+      cur = new Date(new Date(cur).getTime() - 86400000).toISOString().slice(0, 10);
+    } else { break; }
+  }
+  return streak;
+}
+
+function countTodaySeen(history) {
+  return history.filter(s => s.date === todayStr()).reduce((sum, s) => sum + (s.wordsSeen || 0), 0);
+}
+
+function categorizeWords(words) {
+  const mastered = [], learning = [], toReview = [], never = [];
+  for (const w of words) {
+    const seen = w.seen_count || 0;
+    const errors = w.error_count || 0;
+    if (seen === 0)                                         never.push(w);
+    else if (seen >= 3 && errors / seen <= 0.25)           mastered.push(w);
+    else if (errors / seen > 0.5)                          toReview.push(w);
+    else                                                   learning.push(w);
+  }
+  return { mastered, learning, toReview, never };
+}
+
+function globalScore(words) {
+  if (!words.length) return null;
+  const { mastered, learning, toReview, never } = categorizeWords(words);
+  const score = (mastered.length * 100 + learning.length * 60 + toReview.length * 20) / words.length;
+  return Math.round(score);
 }
 
 /* ============================================================
@@ -1421,6 +1775,7 @@ function switchLanguage(key) {
   document.getElementById('search-input').value = '';
   renderWordList('');
   updateHomeStats();
+  renderStats();
   seedDemoIfEmpty();
 }
 
@@ -1447,6 +1802,8 @@ function updateAppHeader() {
 function updateBankHeader() {
   const el = document.getElementById('bank-lang-label');
   if (el) el.textContent = lang().label;
+  const el2 = document.getElementById('stats-lang-label');
+  if (el2) el2.textContent = lang().label;
 }
 
 function updateFormLabels() {
@@ -1909,6 +2266,7 @@ function initMatchGame(container, words, isAudio) {
   let selectedRight = null;
   let matchedCount = 0;
   let isLocked = false;
+  const wordErrors = {}; // wordId -> error count during this match
 
   function handleCardClick(card) {
     if (isLocked) return;
@@ -1949,10 +2307,21 @@ function initMatchGame(container, words, isAudio) {
         selectedRight = null;
         isLocked = false;
         if (matchedCount === words.length) {
+          // Batch record stats for all words in this match
+          const allWords = getWords();
+          words.forEach(w => {
+            const stored = allWords.find(sw => sw.id === w.id);
+            if (stored) {
+              stored.seen_count = (stored.seen_count || 0) + 1;
+              stored.error_count = (stored.error_count || 0) + (wordErrors[w.id] || 0);
+            }
+          });
+          saveWords(allWords);
           quizState.score++;
           setTimeout(() => advanceQuiz(true), 400);
         }
       } else {
+        wordErrors[selectedLeft.dataset.id] = (wordErrors[selectedLeft.dataset.id] || 0) + 1;
         selectedLeft.classList.add('incorrect');
         selectedRight.classList.add('incorrect');
         setTimeout(() => {
@@ -2041,6 +2410,7 @@ function attachMCQListeners(container, correctId) {
         btn.classList.add('incorrect');
         buttons.forEach(b => { if (b.dataset.correct === 'true') b.classList.add('correct'); });
       }
+      recordAnswer(correctId, isCorrect);
       setTimeout(() => advanceQuiz(isCorrect), 1200);
     });
   });
@@ -2062,6 +2432,7 @@ function finishQuiz() {
   document.getElementById('quiz-progress-bar').style.width = '100%';
   updateLastSeen(quizState.sessionWords.map(w => w.id));
   incrementSession();
+  addQuizToHistory(score, total, quizState.sessionWords.length);
 
   let emoji, message;
   if (ratio >= 0.875)     { emoji = '🏆'; message = 'Excellent ! Vous maîtrisez ce vocabulaire !'; }
@@ -2144,6 +2515,180 @@ function seedDemoIfEmpty() {
 }
 
 /* ============================================================
+   STATS SCREEN
+   ============================================================ */
+function renderStats() {
+  const container = document.getElementById('stats-content');
+  if (!container) return;
+  const words = getWords();
+  const history = getQuizHistory();
+
+  // Totaux
+  const totalSeen   = words.reduce((s, w) => s + (w.seen_count  || 0), 0);
+  const totalErrors = words.reduce((s, w) => s + (w.error_count || 0), 0);
+  const accuracy    = totalSeen > 0 ? Math.round((totalSeen - totalErrors) / totalSeen * 100) : null;
+  const accuracyCls = accuracy === null ? '' : accuracy >= 70 ? 'stat-card-good' : accuracy >= 40 ? 'stat-card-ok' : 'stat-card-bad';
+
+  // Streak & aujourd'hui
+  const streak     = computeStreak(history);
+  const todaySeen  = countTodaySeen(history);
+  const score      = globalScore(words);
+  const scoreCls   = score === null ? '' : score >= 70 ? 'stat-card-good' : score >= 40 ? 'stat-card-ok' : 'stat-card-bad';
+
+  // Catégories
+  const cats = categorizeWords(words);
+  const total = words.length;
+  const pct = n => total > 0 ? Math.round(n / total * 100) : 0;
+
+  // Mots à revoir : triés par taux d'erreur
+  const withErrors = [...words]
+    .filter(w => (w.error_count || 0) > 0)
+    .sort((a, b) => (b.error_count / b.seen_count) - (a.error_count / a.seen_count))
+    .slice(0, 8);
+
+  // Les plus pratiqués
+  const mostPracticed = [...words]
+    .filter(w => (w.seen_count || 0) > 0)
+    .sort((a, b) => (b.seen_count || 0) - (a.seen_count || 0))
+    .slice(0, 8);
+  const maxSeen = mostPracticed[0]?.seen_count || 1;
+
+  // Historique
+  const recentHistory = history.slice(-15);
+
+  const barRow = (w, value, max, cls, unit) => `
+    <div class="stat-bar-row">
+      <div class="stat-bar-labels">
+        <span class="stat-bar-native">${escHtml(w.native)}</span>
+        <span class="stat-bar-target">${escHtml(w.target)}</span>
+      </div>
+      <div class="stat-bar-track">
+        <div class="stat-bar-fill ${cls}" style="width:${Math.round((value / max) * 100)}%"></div>
+      </div>
+      <div class="stat-bar-count">
+        <span class="stat-bar-num">${value}</span>
+        <span class="stat-bar-unit">${unit}</span>
+      </div>
+    </div>`;
+
+  container.innerHTML = `
+    <!-- Résumé clé (2×2) -->
+    <div class="stats-summary stats-summary-4">
+      <div class="stat-card ${streak > 0 ? 'stat-card-streak' : ''}">
+        <div class="stat-value">${streak > 0 ? '🔥 ' : ''}${streak}</div>
+        <div class="stat-label">jour${streak > 1 ? 's' : ''} de suite</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${todaySeen}</div>
+        <div class="stat-label">vus aujourd'hui</div>
+      </div>
+      <div class="stat-card ${scoreCls}">
+        <div class="stat-value">${score !== null ? score + '%' : '—'}</div>
+        <div class="stat-label">maîtrise globale</div>
+      </div>
+      <div class="stat-card ${accuracyCls}">
+        <div class="stat-value">${accuracy !== null ? accuracy + '%' : '—'}</div>
+        <div class="stat-label">réussite quiz</div>
+      </div>
+    </div>
+
+    <!-- Répartition du vocabulaire -->
+    ${total > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">📊 Répartition du vocabulaire
+        <span class="stats-section-hint"> — ${total} mot${total > 1 ? 's' : ''} au total</span>
+      </h3>
+      <div class="stat-seg-bar">
+        ${cats.mastered.length ? `<div class="stat-seg seg-mastered" style="width:${pct(cats.mastered.length)}%" title="Maîtrisés"></div>` : ''}
+        ${cats.learning.length ? `<div class="stat-seg seg-learning" style="width:${pct(cats.learning.length)}%" title="En apprentissage"></div>` : ''}
+        ${cats.toReview.length ? `<div class="stat-seg seg-review"   style="width:${pct(cats.toReview.length)}%" title="À revoir"></div>` : ''}
+        ${cats.never.length    ? `<div class="stat-seg seg-never"    style="width:${pct(cats.never.length)}%"    title="Jamais vus"></div>` : ''}
+      </div>
+      <div class="stat-seg-legend">
+        ${cats.mastered.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-mastered"></span>Maîtrisés : ${cats.mastered.length}</span>` : ''}
+        ${cats.learning.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-learning"></span>En cours : ${cats.learning.length}</span>` : ''}
+        ${cats.toReview.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-review"></span>À revoir : ${cats.toReview.length}</span>` : ''}
+        ${cats.never.length    ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-never"></span>Nouveaux : ${cats.never.length}</span>` : ''}
+      </div>
+    </div>` : ''}
+
+    <!-- Historique des quiz -->
+    ${recentHistory.length > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">📈 Historique des quiz
+        <span class="stats-section-hint"> — ${recentHistory.length} dernière${recentHistory.length > 1 ? 's' : ''} session${recentHistory.length > 1 ? 's' : ''}</span>
+      </h3>
+      <div class="stat-history-chart">
+        ${recentHistory.map(s => {
+          const p = Math.round(s.score / s.total * 100);
+          const cls = p >= 75 ? 'stat-hist-good' : p >= 50 ? 'stat-hist-ok' : 'stat-hist-bad';
+          return `<div class="stat-hist-col">
+            <div class="stat-hist-bar-wrap"><div class="stat-hist-bar ${cls}" style="height:${Math.max(p, 6)}%"></div></div>
+            <div class="stat-hist-label">${p}%</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    <!-- Mots à revoir -->
+    ${withErrors.length > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">🔴 Mots à revoir
+        <span class="stats-section-hint"> — classés par taux d'erreurs</span>
+      </h3>
+      <div class="stat-bars">
+        ${withErrors.map(w => {
+          const rate = Math.round((w.error_count / w.seen_count) * 100);
+          return barRow(w, rate, 100, 'stat-fill-red', '% raté');
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    <!-- Mots maîtrisés -->
+    ${cats.mastered.length > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">✅ Mots maîtrisés</h3>
+      <div class="stat-bars">
+        ${cats.mastered.slice(0, 8).map(w => {
+          const acc = Math.round(((w.seen_count - (w.error_count || 0)) / w.seen_count) * 100);
+          return barRow(w, acc, 100, 'stat-fill-green', '% juste');
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    <!-- Les plus pratiqués -->
+    ${mostPracticed.length > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">🔵 Les plus pratiqués
+        <span class="stats-section-hint"> — nombre de fois vus en quiz</span>
+      </h3>
+      <div class="stat-bars">
+        ${mostPracticed.map(w => barRow(w, w.seen_count, maxSeen, 'stat-fill-blue', 'fois')).join('')}
+      </div>
+    </div>` : `
+    <div class="empty-state">
+      <div class="empty-icon">📊</div>
+      <p>Aucune donnée</p>
+      <p class="text-muted">Faites des quiz pour voir vos statistiques !</p>
+    </div>`}
+
+    <!-- Jamais pratiqués -->
+    ${cats.never.length > 0 ? `
+    <div class="stats-section stats-section-muted">
+      <h3 class="stats-section-title">😶 Jamais pratiqués
+        <span class="stats-section-hint"> — ${cats.never.length} mot${cats.never.length > 1 ? 's' : ''}</span>
+      </h3>
+      <div class="stat-never-list">
+        ${cats.never.slice(0, 12).map(w => `
+          <span class="stat-never-pill">${escHtml(w.native)} → ${escHtml(w.target)}</span>
+        `).join('')}
+        ${cats.never.length > 12 ? `<span class="stat-never-more">+${cats.never.length - 12} autres</span>` : ''}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+/* ============================================================
    SERVICE WORKER
    ============================================================ */
 function registerSW() {
@@ -2161,8 +2706,9 @@ function initEventListeners() {
     tab.addEventListener('click', () => {
       const target = tab.dataset.target;
       showScreen(target);
-      if (target === 'bank') renderWordList(document.getElementById('search-input').value);
-      if (target === 'home') updateHomeStats();
+      if (target === 'bank')  renderWordList(document.getElementById('search-input').value);
+      if (target === 'home')  updateHomeStats();
+      if (target === 'stats') renderStats();
     });
   });
 
