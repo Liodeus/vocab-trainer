@@ -537,6 +537,18 @@ body {
   transform: translateY(2px);
 }
 
+.btn-retry {
+  background: rgba(255,153,0,0.12);
+  color: #ff9900;
+  border: 1.5px solid #ff9900;
+  box-shadow: 0 3px 0 rgba(180,100,0,0.35);
+}
+.btn-retry:active:not(:disabled) {
+  background: rgba(255,153,0,0.25);
+  box-shadow: 0 1px 0 rgba(180,100,0,0.35);
+  transform: translateY(2px);
+}
+
 .btn-large {
   padding: 17px 28px;
   font-size: 17px;
@@ -647,6 +659,20 @@ body {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   font-style: italic;
 }
+
+.word-mastery {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  align-self: center;
+  display: inline-block;
+  vertical-align: middle;
+}
+.word-mastery-mastered { background: var(--accent); }
+.word-mastery-learning { background: var(--yellow); }
+.word-mastery-review   { background: var(--red); }
+.word-mastery-never    { background: var(--border2); }
 
 .word-actions {
   display: flex; gap: 6px; flex-shrink: 0;
@@ -1206,6 +1232,73 @@ body {
 }
 
 /* ============================================================
+   ACTIVITY HEATMAP
+   ============================================================ */
+.heatmap-month-row {
+  display: flex;
+  gap: 3px;
+  margin-left: 20px;
+  margin-bottom: 3px;
+}
+.heatmap-month {
+  width: 20px;
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.heatmap-body {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+.heatmap-day-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 12px;
+  flex-shrink: 0;
+}
+.heatmap-day-label {
+  height: 20px;
+  line-height: 20px;
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: right;
+}
+.heatmap-grid {
+  display: flex;
+  gap: 3px;
+}
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.heatmap-cell {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.heatmap-l0 { background: var(--card2); }
+.heatmap-l1 { background: rgba(88,204,2,0.25); }
+.heatmap-l2 { background: rgba(88,204,2,0.55); }
+.heatmap-l3 { background: var(--accent); box-shadow: 0 0 5px var(--accent-glow); }
+.heatmap-lx { background: transparent; }
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+.heatmap-lgd-label { font-size: 10px; color: var(--text-muted); }
+.heatmap-legend .heatmap-cell { width: 14px; height: 14px; }
+
+/* ============================================================
    MODE SELECTOR — CAROUSEL
    ============================================================ */
 .mode-carousel-wrap {
@@ -1485,6 +1578,23 @@ body {
 
 /* Header compact */
 #screen-home .app-header { padding: 10px 14px 8px; }
+#screen-bank .app-header, #screen-stats .app-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+}
+#screen-bank .screen-title, #screen-stats .screen-title {
+  grid-column: 1; grid-row: 1;
+}
+#screen-bank #btn-bank-legend {
+  grid-column: 2; grid-row: 1;
+}
+#screen-bank .bank-lang-label, #screen-stats .bank-lang-label {
+  grid-column: 1 / -1; grid-row: 2;
+  margin-top: 2px;
+}
 #screen-home .app-title  { font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Contenu scrollable sans padding bas excessif */
@@ -1854,6 +1964,7 @@ body.large-text .mode-desc         { font-size: 17px; }
     <header class="app-header">
       <h1 class="screen-title">Ma banque de mots</h1>
       <p id="bank-lang-label" class="bank-lang-label"></p>
+      <button id="btn-bank-legend" class="pref-toggle pref-toggle-text" title="Code couleur">?</button>
     </header>
 
     <main class="screen-content">
@@ -2025,6 +2136,9 @@ body.large-text .mode-desc         { font-size: 17px; }
         💾 Pensez à sauvegarder vos mots via <strong>Partager</strong> ou <strong>Exporter</strong> dans la Banque !
       </div>
       <div class="score-actions">
+        <button id="btn-retry-errors" class="btn btn-retry btn-full hidden">
+          ⚡ Réviser les ratés
+        </button>
         <button id="btn-replay" class="btn btn-primary btn-full">
           🔁 Rejouer
         </button>
@@ -2060,6 +2174,24 @@ body.large-text .mode-desc         { font-size: 17px; }
           <li><span>🔊</span><span>Exercices variés : écoute, association, traduction, anagramme…</span></li>
           <li><span>📈</span><span>Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
           <li><span>💾</span><span>Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: LÉGENDE COULEURS ===== -->
+  <div id="modal-bank-legend" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Code couleur des mots</h2>
+        <button class="modal-close" data-close="modal-bank-legend">✕</button>
+      </div>
+      <div class="modal-body">
+        <ul class="tip-list">
+          <li><span class="word-mastery word-mastery-mastered"></span><span>Maîtrisé — vu ≥ 3 fois, moins de 25 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-learning"></span><span>En apprentissage — vu au moins une fois</span></li>
+          <li><span class="word-mastery word-mastery-review"></span><span>À revoir — plus de 50 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-never"></span><span>Jamais pratiqué — pas encore vu en quiz</span></li>
         </ul>
       </div>
     </div>
@@ -2181,6 +2313,10 @@ function recordAnswer(wordId, isCorrect) {
   if (!isCorrect) w.error_count = (w.error_count || 0) + 1;
   updateWordSRS(w, isCorrect);
   saveWords(words);
+  if (!isCorrect && quizState && !quizState.isFlashcard) {
+    if (!quizState.failedWordIds) quizState.failedWordIds = [];
+    if (!quizState.failedWordIds.includes(wordId)) quizState.failedWordIds.push(wordId);
+  }
 }
 
 function updateWordSRS(word, isCorrect) {
@@ -2519,10 +2655,10 @@ function updateFormLabels() {
 function renderQuizSettings() {
   const container = document.getElementById('quiz-settings');
   if (!container) return;
-  if (currentGameMode === GameMode.FLASHCARD) { container.innerHTML = ''; container.style.display = 'none'; return; }
+  if (currentGameMode === GameMode.FLASHCARD || currentGameMode === GameMode.SURVIVAL) { container.innerHTML = ''; container.style.display = 'none'; return; }
   container.style.display = '';
   const s = getSettings();
-  const qSizes = [5, 8, 10, 15];
+  const qSizes = [5, 8, 10, 15, 20, 25, 30];
   const mSizes = [3, 4, 5, 6, 7, 8];
   const hidePairs = currentGameMode === GameMode.ANAGRAM || currentGameMode === GameMode.DICTEE;
   container.innerHTML = `
@@ -2616,6 +2752,7 @@ function renderWordList(filter) {
         <div class="word-native">${escHtml(word.native)}</div>
         <div class="word-target">${lang().targetFlag} ${escHtml(word.target)}</div>
       </div>
+      ${getMasteryBadge(word)}
       <div class="word-actions">
         <button class="btn-icon-sm edit" data-action="edit" data-id="${escHtml(word.id)}" title="Modifier">✏️</button>
         <button class="btn-icon-sm delete" data-action="delete" data-id="${escHtml(word.id)}" title="Supprimer">🗑️</button>
@@ -2631,6 +2768,17 @@ function escHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function getMasteryBadge(word) {
+  const seen   = word.seen_count  || 0;
+  const errors = word.error_count || 0;
+  let cls, title;
+  if (seen === 0)                                  { cls = 'never';    title = 'Jamais pratiqué'; }
+  else if (seen >= 3 && errors / seen <= 0.25)     { cls = 'mastered'; title = 'Maîtrisé'; }
+  else if (errors / seen > 0.5)                    { cls = 'review';   title = 'À revoir'; }
+  else                                             { cls = 'learning'; title = 'En apprentissage'; }
+  return `<span class="word-mastery word-mastery-${cls}" title="${title}"></span>`;
 }
 
 /* ============================================================
@@ -3121,6 +3269,10 @@ function initMatchGame(container, words, isAudio) {
               stored.seen_count  = (stored.seen_count  || 0) + 1;
               stored.error_count = (stored.error_count || 0) + (hadError ? 1 : 0);
               updateWordSRS(stored, !hadError);
+              if (hadError && quizState && !quizState.isFlashcard) {
+                if (!quizState.failedWordIds) quizState.failedWordIds = [];
+                if (!quizState.failedWordIds.includes(w.id)) quizState.failedWordIds.push(w.id);
+              }
             }
           });
           saveWords(allWords);
@@ -3518,7 +3670,42 @@ function finishFlashcard() {
   document.getElementById('score-message').textContent = 'Révision terminée !';
   const backupEl = document.getElementById('score-backup-reminder');
   if (backupEl) backupEl.classList.add('hidden');
+  const retryBtnFC = document.getElementById('btn-retry-errors');
+  if (retryBtnFC) retryBtnFC.classList.add('hidden');
   openModal('modal-score');
+}
+
+/* ---- RETRY FAILED WORDS ---- */
+function startRetryQuiz(failedWordIds) {
+  const allWords = getWords();
+  const retryWords = allWords.filter(w => failedWordIds.includes(w.id));
+  if (retryWords.length === 0) return;
+  const MS = matchSize();
+  const typeOptions = ttsSupported
+    ? [QuizType.MCQ_TRANSLATE, QuizType.MCQ_LISTEN, QuizType.FREE_INPUT]
+    : [QuizType.MCQ_TRANSLATE, QuizType.FREE_INPUT];
+  const shuffledOpts = shuffle([...typeOptions]);
+  const questions = retryWords.map((word, i) => {
+    let type = shuffledOpts[i % shuffledOpts.length];
+    const distractorPool = allWords.filter(w => w.id !== word.id);
+    if ((type === QuizType.MCQ_TRANSLATE || type === QuizType.MCQ_LISTEN) && distractorPool.length === 0) {
+      type = QuizType.FREE_INPUT;
+    }
+    if (type === QuizType.FREE_INPUT) return { type, word };
+    const distractors = pickRandom(distractorPool, Math.min(MS - 1, distractorPool.length));
+    return { type, word, distractors };
+  });
+  quizState = {
+    questions,
+    currentIndex: 0,
+    score: 0,
+    sessionWords: retryWords,
+    totalQuestions: retryWords.length,
+    isSurvival: false,
+    isRetry: true,
+  };
+  showScreen('quiz');
+  renderCurrentQuestion();
 }
 
 /* ---- CHRONO TIMER ---- */
@@ -3631,6 +3818,17 @@ function finishQuiz() {
 
   const backupEl = document.getElementById('score-backup-reminder');
   if (backupEl) backupEl.classList.toggle('hidden', !needsBackup());
+
+  const failedIds = quizState ? (quizState.failedWordIds || []) : [];
+  const retryBtn = document.getElementById('btn-retry-errors');
+  if (retryBtn) {
+    const showRetry = failedIds.length > 0 && !quizState.isSurvival && !quizState.isRetry;
+    retryBtn.classList.toggle('hidden', !showRetry);
+    if (showRetry) {
+      retryBtn.textContent = `⚡ Réviser les ${failedIds.length} raté${failedIds.length > 1 ? 's' : ''}`;
+      retryBtn._failedIds = failedIds.slice();
+    }
+  }
 
   openModal('modal-score');
 }
@@ -3940,6 +4138,13 @@ function renderStats() {
       </div>
     </div>
 
+    <!-- Heatmap d'activité -->
+    ${history.length > 0 ? `
+    <div class="stats-section">
+      <h3 class="stats-section-title">📅 Activité des 12 dernières semaines</h3>
+      ${buildHeatmapHTML(history)}
+    </div>` : ''}
+
     <!-- Répartition du vocabulaire -->
     ${total > 0 ? `
     <div class="stats-section">
@@ -4034,6 +4239,65 @@ function renderStats() {
 }
 
 /* ============================================================
+   HEATMAP
+   ============================================================ */
+function buildHeatmapHTML(history) {
+  const dateCounts = {};
+  history.forEach(h => { if (h.date) dateCounts[h.date] = (dateCounts[h.date] || 0) + 1; });
+
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+  // Align grid start to Monday of the week that is 11 weeks back
+  const dow = (today.getDay() + 6) % 7; // Mon=0 … Sun=6
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() - dow - 11 * 7);
+
+  const weeks = [];
+  const cur = new Date(startDate);
+  for (let w = 0; w < 12; w++) {
+    const week = [];
+    for (let d = 0; d < 7; d++) {
+      const str = cur.toISOString().slice(0, 10);
+      week.push({ date: str, count: dateCounts[str] || 0, future: cur > today });
+      cur.setDate(cur.getDate() + 1);
+    }
+    weeks.push(week);
+  }
+
+  const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  const monthRow = weeks.map(wk => {
+    const d = new Date(wk[0].date);
+    return d.getDate() <= 7 ? months[d.getMonth()] : '';
+  });
+
+  const lvl = c => c === 0 ? 0 : c === 1 ? 1 : c <= 3 ? 2 : 3;
+  const dayLabels = ['L','','M','','V','','D'];
+
+  return `
+    <div class="heatmap-wrap">
+      <div class="heatmap-month-row">
+        ${monthRow.map(m => `<span class="heatmap-month">${m}</span>`).join('')}
+      </div>
+      <div class="heatmap-body">
+        <div class="heatmap-day-labels">
+          ${dayLabels.map(d => `<span class="heatmap-day-label">${d}</span>`).join('')}
+        </div>
+        <div class="heatmap-grid">
+          ${weeks.map(wk => `<div class="heatmap-col">${wk.map(day => `<div class="heatmap-cell heatmap-l${day.future ? 'x' : lvl(day.count)}" title="${day.date}${day.count ? ': ' + day.count + ' session' + (day.count > 1 ? 's' : '') : ''}"></div>`).join('')}</div>`).join('')}
+        </div>
+      </div>
+      <div class="heatmap-legend">
+        <span class="heatmap-lgd-label">Moins</span>
+        <div class="heatmap-cell heatmap-l0"></div>
+        <div class="heatmap-cell heatmap-l1"></div>
+        <div class="heatmap-cell heatmap-l2"></div>
+        <div class="heatmap-cell heatmap-l3"></div>
+        <span class="heatmap-lgd-label">Plus</span>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
    SERVICE WORKER
    ============================================================ */
 function registerSW() {
@@ -4097,6 +4361,10 @@ function initEventListeners() {
   // Aide
   const helpBtn = document.getElementById('btn-help');
   if (helpBtn) helpBtn.addEventListener('click', () => openModal('modal-help'));
+
+  // Légende couleurs banque
+  const bankLegendBtn = document.getElementById('btn-bank-legend');
+  if (bankLegendBtn) bankLegendBtn.addEventListener('click', () => openModal('modal-bank-legend'));
 
   // Start quiz
   const startBtn = document.getElementById('btn-start-quiz');
@@ -4219,6 +4487,16 @@ function initEventListeners() {
       quizState = null;
       showScreen('home');
       updateHomeStats();
+    });
+  }
+
+  const retryErrorsBtn = document.getElementById('btn-retry-errors');
+  if (retryErrorsBtn) {
+    retryErrorsBtn.addEventListener('click', () => {
+      const ids = retryErrorsBtn._failedIds || [];
+      closeModal('modal-score');
+      quizState = null;
+      startRetryQuiz(ids);
     });
   }
 
