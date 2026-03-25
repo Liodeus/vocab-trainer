@@ -1206,33 +1206,55 @@ body {
 }
 
 /* ============================================================
-   MODE SELECTOR
+   MODE SELECTOR — CAROUSEL
    ============================================================ */
-.mode-selector {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  margin-bottom: 10px;
+.mode-carousel-wrap {
+  position: relative;
+  margin-bottom: 4px;
+}
+.mode-carousel-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 32px;
+  height: calc(100% - 10px);
+  background: linear-gradient(to right, transparent, var(--bg));
+  pointer-events: none;
 }
 
+.mode-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.mode-selector::-webkit-scrollbar { display: none; }
+
 .mode-pill {
-  padding: 9px 6px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 11px 13px;
   border-radius: var(--radius-sm);
   border: 2px solid var(--border2);
   background: var(--card);
   color: var(--text2);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
+  min-width: 70px;
   text-align: center;
-  line-height: 1.3;
-  overflow: hidden;
-  min-width: 0;
+  white-space: nowrap;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
   -webkit-user-select: none;
   user-select: none;
 }
-.mode-pill:active { transform: scale(0.96); }
+.mode-pill-icon { font-size: 22px; line-height: 1; }
+.mode-pill:active { transform: scale(0.95); }
 .mode-pill.active                { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
 .mode-pill.mode-revision.active  { border-color: var(--yellow); background: var(--yellow-glow); color: var(--yellow); }
 .mode-pill.mode-danger.active    { border-color: var(--red);    background: var(--red-glow);    color: var(--red); }
@@ -1452,11 +1474,94 @@ body {
 .mode-pill.mode-dictee.active    { border-color: var(--blue);   background: var(--blue-glow);   color: var(--blue); }
 .mode-pill.mode-anagram.active   { border-color: var(--yellow); background: var(--yellow-glow); color: var(--yellow); }
 
-/* Last pill spans full width if alone in its row */
-.mode-selector > .mode-pill:last-child:nth-child(odd) { grid-column: 1 / -1; }
+/* stat-mode-flashcard border color */
 
 .stat-mode-dictee  { border-left: 3px solid var(--blue);   }
 .stat-mode-anagram { border-left: 3px solid var(--yellow); }
+
+/* ============================================================
+   HOME — NOUVELLE STRUCTURE
+   ============================================================ */
+
+/* Header compact */
+#screen-home .app-header { padding: 10px 14px 8px; }
+#screen-home .app-title  { font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Contenu scrollable sans padding bas excessif */
+.home-content { padding-bottom: 8px; }
+
+/* Barre de démarrage épinglée */
+.home-start-bar {
+  flex-shrink: 0;
+  padding: 10px 16px calc(var(--nav-h) + 10px);
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+.home-start-bar .hint-text { margin-top: 8px; }
+
+/* Barre backup contextuelle */
+.home-backup-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255,217,0,0.07);
+  border: 1px solid rgba(255,217,0,0.28);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+.home-backup-bar strong { color: var(--text2); }
+
+/* Chip langue dans le header */
+.lang-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: var(--card2);
+  border: 1.5px solid var(--border2);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.lang-chip:active { transform: scale(0.96); background: var(--border2); }
+.lang-chip-count  { color: var(--accent); font-weight: 800; font-size: 12px; }
+.lang-chip-arrow  { font-size: 9px; color: var(--text-muted); margin-left: 1px; }
+
+/* Modal langue — grille 2 colonnes */
+.lang-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.lang-modal-card {
+  background: var(--card2);
+  border: 2px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 16px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lang-modal-card:active { transform: scale(0.96); }
+.lang-modal-card.active { border-color: var(--accent); background: var(--accent-glow); }
+.lang-modal-card.active .lang-modal-name { color: var(--accent); }
+.lang-modal-flag  { font-size: 30px; line-height: 1; }
+.lang-modal-name  { font-size: 14px; font-weight: 700; color: var(--text); }
+.lang-modal-count { font-size: 11px; color: var(--text-muted); }
 
 /* ============================================================
    PREFERENCES (THEME + FONT SIZE)
@@ -1465,10 +1570,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
 }
-.app-header-main { flex: 1; min-width: 0; }
-.app-header-prefs { display: flex; gap: 6px; flex-shrink: 0; }
+.app-header-main { flex: 1; min-width: 0; overflow: hidden; }
+.app-header-prefs { display: flex; gap: 5px; flex-shrink: 0; }
 
 .pref-toggle {
   width: 36px; height: 36px;
@@ -1665,8 +1770,12 @@ body.large-text .match-card        { font-size: 19px; }
 body.large-text .word-native       { font-size: 22px; }
 body.large-text .word-fr           { font-size: 22px; }
 body.large-text .hint-text         { font-size: 20px; }
-body.large-text .mode-pill         { font-size: 18px; padding: 13px 8px; }
-body.large-text .lang-pill         { font-size: 17px; padding: 11px 18px; }
+body.large-text .mode-pill         { font-size: 13px; padding: 13px 14px; }
+body.large-text .mode-pill-icon    { font-size: 26px; }
+body.large-text .lang-chip         { font-size: 15px; padding: 7px 12px; }
+body.large-text .lang-chip-count   { font-size: 14px; }
+body.large-text .lang-modal-name   { font-size: 17px; }
+body.large-text .lang-modal-count  { font-size: 13px; }
 body.large-text .free-input-field  { font-size: 28px; }
 body.large-text .anagram-tile      { font-size: 28px; height: 64px; min-width: 54px; }
 body.large-text .anagram-slot      { font-size: 26px; height: 58px; min-width: 44px; }
@@ -1707,51 +1816,37 @@ body.large-text .mode-desc         { font-size: 17px; }
     <header class="app-header app-header-home">
       <div class="app-header-main">
         <h1 class="app-title" id="app-title">🇮🇹 Italiano</h1>
-        <p class="app-subtitle" id="app-subtitle">Apprentissage du vocabulaire</p>
       </div>
       <div class="app-header-prefs">
+        <button id="btn-lang-chip" class="lang-chip" title="Changer de langue">
+          <span id="lang-chip-flag">🇮🇹</span>
+          <span id="lang-chip-count" class="lang-chip-count">0</span>
+          <span class="lang-chip-arrow">▾</span>
+        </button>
+        <button id="btn-help" class="pref-toggle pref-toggle-text" title="Aide">?</button>
         <button id="btn-theme" class="pref-toggle" title="Thème clair / sombre">☀️</button>
         <button id="btn-font-size" class="pref-toggle pref-toggle-text" title="Texte plus grand">Aa</button>
       </div>
     </header>
 
-    <main class="screen-content">
-      <div id="lang-selector" class="lang-selector"></div>
-      <div id="mode-selector" class="mode-selector"></div>
+    <main class="screen-content home-content">
+      <div class="mode-carousel-wrap">
+        <div id="mode-selector" class="mode-selector"></div>
+      </div>
       <div id="mode-desc" class="mode-desc"></div>
       <div id="quiz-settings" class="quiz-settings"></div>
-
-      <div class="home-hero">
-        <div class="hero-icon">📚</div>
-        <div class="hero-text">
-          <div class="hero-count" id="word-count">0</div>
-          <div class="hero-label">mots dans votre banque</div>
-        </div>
-      </div>
-
-      <div class="quiz-start-area">
-        <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled>
-          Commencer le quiz
-        </button>
-        <p id="quiz-hint" class="hint-text hidden">
-          Ajoutez encore <strong>8 mots</strong> minimum pour lancer un quiz.
-        </p>
-      </div>
-
-      <div class="home-tips">
-        <h3>Comment ça marche</h3>
-        <ul class="tip-list">
-          <li><span>📝</span><span>Ajoutez des paires de mots dans la banque</span></li>
-          <li><span>🎯</span><span id="tip-quiz-size">Lancez un quiz de 8 questions variées</span></li>
-          <li><span>🔊</span><span>Exercices d'écoute, d'association et de traduction</span></li>
-        </ul>
-      </div>
-
-      <div class="home-backup-notice">
-        <span class="home-backup-icon">💾</span>
-        <span>Vos mots sont stockés localement. Pour ne pas les perdre, exportez-les régulièrement depuis la <strong>Banque</strong> (Partager ou Exporter).</span>
+      <div id="home-backup-bar" class="home-backup-bar hidden">
+        <span>💾</span>
+        <span>Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !</span>
       </div>
     </main>
+
+    <div class="home-start-bar">
+      <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled>
+        Commencer le quiz
+      </button>
+      <p id="quiz-hint" class="hint-text hidden"></p>
+    </div>
   </div>
 
   <!-- ===== SCREEN: BANK ===== -->
@@ -1936,6 +2031,36 @@ body.large-text .mode-desc         { font-size: 17px; }
         <button id="btn-go-home" class="btn btn-secondary btn-full">
           🏠 Accueil
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: LANGUE ===== -->
+  <div id="modal-lang" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Choisir une langue</h2>
+        <button class="modal-close" data-close="modal-lang">✕</button>
+      </div>
+      <div id="lang-modal-grid" class="lang-modal-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: AIDE ===== -->
+  <div id="modal-help" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Comment ça marche</h2>
+        <button class="modal-close" data-close="modal-help">✕</button>
+      </div>
+      <div class="modal-body">
+        <ul class="tip-list">
+          <li><span>📝</span><span>Ajoutez des paires de mots dans la <strong>Banque</strong></span></li>
+          <li><span>🎯</span><span>Choisissez un mode de jeu et lancez un quiz</span></li>
+          <li><span>🔊</span><span>Exercices variés : écoute, association, traduction, anagramme…</span></li>
+          <li><span>📈</span><span>Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
+          <li><span>💾</span><span>Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -2247,17 +2372,18 @@ function renderModeSelector() {
   const container = document.getElementById('mode-selector');
   if (!container) return;
   const modes = [
-    { id: GameMode.NORMAL,    label: '🎯 Normal',      cls: '' },
-    { id: GameMode.REVISION,  label: '🔴 Révision',    cls: 'mode-revision' },
-    { id: GameMode.SURVIVAL,  label: '💀 Survie',      cls: 'mode-danger' },
-    { id: GameMode.CHRONO,    label: '⏱️ Chrono',      cls: 'mode-chrono' },
-    { id: GameMode.FLASHCARD, label: '🃏 Flashcards',  cls: 'mode-flashcard' },
-    { id: GameMode.DICTEE,    label: '🎧 Dictée',      cls: 'mode-dictee' },
-    { id: GameMode.ANAGRAM,   label: '🔀 Anagramme',   cls: 'mode-anagram' },
+    { id: GameMode.NORMAL,    label: 'Normal',     icon: '🎯', cls: '' },
+    { id: GameMode.REVISION,  label: 'Révision',   icon: '🔴', cls: 'mode-revision' },
+    { id: GameMode.SURVIVAL,  label: 'Survie',     icon: '💀', cls: 'mode-danger' },
+    { id: GameMode.CHRONO,    label: 'Chrono',     icon: '⏱️', cls: 'mode-chrono' },
+    { id: GameMode.FLASHCARD, label: 'Flashcards', icon: '🃏', cls: 'mode-flashcard' },
+    { id: GameMode.DICTEE,    label: 'Dictée',     icon: '🎧', cls: 'mode-dictee' },
+    { id: GameMode.ANAGRAM,   label: 'Anagramme',  icon: '🔀', cls: 'mode-anagram' },
   ];
   container.innerHTML = modes.map(m => `
     <button class="mode-pill ${m.cls}${currentGameMode === m.id ? ' active' : ''}" data-mode="${m.id}">
-      ${m.label}
+      <span class="mode-pill-icon">${m.icon}</span>
+      <span>${m.label}</span>
     </button>
   `).join('');
   container.querySelectorAll('.mode-pill').forEach(btn => {
@@ -2268,6 +2394,12 @@ function renderModeSelector() {
       updateHomeStats();
     });
   });
+  // Centre le mode actif dans le carousel
+  const active = container.querySelector('.mode-pill.active');
+  if (active) {
+    const offset = active.offsetLeft - (container.clientWidth - active.offsetWidth) / 2;
+    container.scrollLeft = Math.max(0, offset);
+  }
   renderModeDesc();
 }
 
@@ -2340,23 +2472,28 @@ function renderModeDesc() {
 }
 
 function renderLanguageSelector() {
-  const container = document.getElementById('lang-selector');
+  const container = document.getElementById('lang-modal-grid');
   if (!container) return;
-  container.innerHTML = Object.entries(LANGUAGES).map(([key, l]) => `
-    <button class="lang-pill${key === currentLangKey ? ' active' : ''}" data-lang="${key}">
-      ${l.targetFlag} ${l.label.split('→')[1].trim()}
-    </button>
-  `).join('');
-  container.querySelectorAll('.lang-pill').forEach(btn => {
-    btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
+  container.innerHTML = Object.entries(LANGUAGES).map(([key, l]) => {
+    let count = 0;
+    try { const raw = localStorage.getItem('words_' + key); count = raw ? JSON.parse(raw).length : 0; } catch(e) {}
+    return `
+      <button class="lang-modal-card${key === currentLangKey ? ' active' : ''}" data-lang="${key}">
+        <span class="lang-modal-flag">${l.targetFlag}</span>
+        <span class="lang-modal-name">${l.label.split('→')[1].trim()}</span>
+        <span class="lang-modal-count">${count} mot${count !== 1 ? 's' : ''}</span>
+      </button>`;
+  }).join('');
+  container.querySelectorAll('.lang-modal-card').forEach(btn => {
+    btn.addEventListener('click', () => { switchLanguage(btn.dataset.lang); closeModal('modal-lang'); });
   });
 }
 
 function updateAppHeader() {
   const title = document.getElementById('app-title');
-  const subtitle = document.getElementById('app-subtitle');
   if (title) title.textContent = lang().title;
-  if (subtitle) subtitle.textContent = lang().subtitle;
+  const chipFlag = document.getElementById('lang-chip-flag');
+  if (chipFlag) chipFlag.textContent = lang().targetFlag;
 }
 
 function updateBankHeader() {
@@ -2387,6 +2524,7 @@ function renderQuizSettings() {
   const s = getSettings();
   const qSizes = [5, 8, 10, 15];
   const mSizes = [3, 4, 5, 6, 7, 8];
+  const hidePairs = currentGameMode === GameMode.ANAGRAM || currentGameMode === GameMode.DICTEE;
   container.innerHTML = `
     <div class="settings-row">
       <span class="settings-label">Questions par quiz</span>
@@ -2394,12 +2532,13 @@ function renderQuizSettings() {
         ${qSizes.map(n => `<button class="settings-pill${s.quizSize === n ? ' active' : ''}" data-setting="quizSize" data-value="${n}">${n}</button>`).join('')}
       </div>
     </div>
+    ${hidePairs ? '' : `
     <div class="settings-row">
       <span class="settings-label">Paires par exercice</span>
       <div class="settings-pills">
         ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}${n > s.quizSize ? ' disabled' : ''}" data-setting="matchSize" data-value="${n}" ${n > s.quizSize ? 'disabled' : ''}>${n}</button>`).join('')}
       </div>
-    </div>
+    </div>`}
   `;
   container.querySelectorAll('.settings-pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2428,6 +2567,8 @@ function updateHomeStats() {
   const count = words.length;
   const min = currentGameMode === GameMode.FLASHCARD ? 1 : quizSize();
   const countEl = document.getElementById('word-count');
+  const chipCount = document.getElementById('lang-chip-count');
+  if (chipCount) chipCount.textContent = count;
   const startBtn = document.getElementById('btn-start-quiz');
   const hintEl = document.getElementById('quiz-hint');
   if (countEl) countEl.textContent = count;
@@ -2564,8 +2705,11 @@ function needsBackup() {
 }
 
 function updateBackupBadge() {
+  const needs = needsBackup();
   const badge = document.getElementById('backup-badge');
-  if (badge) badge.classList.toggle('hidden', !needsBackup());
+  if (badge) badge.classList.toggle('hidden', !needs);
+  const bar = document.getElementById('home-backup-bar');
+  if (bar) bar.classList.toggle('hidden', !needs);
 }
 
 /* ============================================================
@@ -2764,7 +2908,7 @@ function buildQuiz() {
     sessionWords = [...pool].sort((a, b) =>
       (b.error_count / Math.max(b.seen_count, 1)) - (a.error_count / Math.max(a.seen_count, 1))
     ).slice(0, QS);
-  } else if (isSurvival) {
+  } else if (isSurvival || currentGameMode === GameMode.ANAGRAM) {
     sessionWords = shuffle([...pool]); // tous les mots, mélangés
   } else {
     sessionWords = pickRandom(pool, QS);
@@ -2810,9 +2954,7 @@ function buildQuiz() {
       if (type === QuizType.ANAGRAM) {
         const anagramPool = sessionWords.filter(w => Array.from(w.target).filter(c => c !== ' ').length >= 3);
         if (anagramPool.length > 0) {
-          questionWord = isSurvival
-            ? anagramPool[Math.floor(Math.random() * anagramPool.length)]
-            : anagramPool[i % anagramPool.length];
+          questionWord = anagramPool[Math.floor(Math.random() * anagramPool.length)];
         }
       }
       q = { type, word: questionWord };
@@ -3947,6 +4089,14 @@ function initEventListeners() {
       if (target === 'stats') renderStats();
     });
   });
+
+  // Lang chip → ouvre modal langue
+  const langChip = document.getElementById('btn-lang-chip');
+  if (langChip) langChip.addEventListener('click', () => { renderLanguageSelector(); openModal('modal-lang'); });
+
+  // Aide
+  const helpBtn = document.getElementById('btn-help');
+  if (helpBtn) helpBtn.addEventListener('click', () => openModal('modal-help'));
 
   // Start quiz
   const startBtn = document.getElementById('btn-start-quiz');
