@@ -3460,7 +3460,6 @@ function renderAnagram(q, container) {
 
   // Separate letters from spaces
   const letterChars = chars.filter(c => c !== ' ');
-  const spacePositions = new Set(chars.reduce((acc, c, i) => { if (c === ' ') acc.push(i); return acc; }, []));
 
   // Shuffle only letters, ensure result differs from original
   let shuffled = shuffle([...letterChars]);
@@ -3787,10 +3786,12 @@ function finishQuiz() {
   const score = quizState.score;
   const total = quizState.totalQuestions;
   document.getElementById('quiz-progress-bar').style.width = '100%';
-  const seenCount = quizState.isSurvival ? quizState.currentIndex + 1 : quizState.sessionWords.length;
+  const seenCount = quizState.isSurvival ? quizState.currentIndex + 1 : quizState.totalQuestions;
   const seenIds = quizState.isSurvival
     ? quizState.questions.slice(0, quizState.currentIndex + 1).map(q => (q.word || (q.words && q.words[0]))?.id).filter(Boolean)
-    : quizState.sessionWords.map(w => w.id);
+    : [...new Set(quizState.questions.slice(0, quizState.currentIndex).flatMap(q =>
+        q.words ? q.words.map(w => w.id) : (q.word ? [q.word.id] : [])
+      ))];
   updateLastSeen(seenIds);
   incrementSession();
   addQuizToHistory(score, quizState.isSurvival ? score : total, seenCount);
