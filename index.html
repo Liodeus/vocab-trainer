@@ -1549,6 +1549,217 @@ body {
 }
 
 /* ============================================================
+   GRAMMAR SCREEN
+   ============================================================ */
+#screen-grammar .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+#screen-grammar .screen-title { flex: 1; min-width: 0; }
+#screen-grammar #btn-add-grammar { flex-shrink: 0; font-size: 14px; padding: 7px 14px; }
+
+.grammar-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.grammar-stats .stat-card { padding: 10px 6px; }
+.grammar-stats .stat-value { font-size: 22px; }
+.grammar-stats .stat-label { font-size: 10px; }
+.grammar-review-bar {
+  position: sticky;
+  bottom: var(--nav-h);
+  padding: 12px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+.grammar-bar-btn { flex: 1; }
+
+.grammar-lesson-group {
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.grammar-lesson-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  background: var(--card2);
+  border-bottom: 1px solid var(--border);
+}
+
+.grammar-lesson-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.grammar-lesson-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grammar-lesson-stat {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.grammar-review-btn {
+  font-size: 13px;
+  padding: 6px 14px;
+  flex-shrink: 0;
+}
+
+.grammar-cards-list { padding: 2px 0; }
+
+.grammar-card-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.grammar-card-item:last-child { border-bottom: none; }
+
+.grammar-card-content {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.grammar-card-question {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.grammar-card-sep { color: var(--text-muted); font-size: 13px; }
+
+.grammar-card-answer {
+  font-size: 13px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grammar-card-btns { display: flex; gap: 2px; flex-shrink: 0; }
+
+.grammar-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.12s;
+  line-height: 1;
+}
+.grammar-action-btn:hover { background: var(--border); }
+
+/* Grammar review card (inside quiz-content) */
+.grammar-review-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.grammar-review-question {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.grammar-reveal-btn { min-width: 180px; }
+
+.grammar-review-sep {
+  width: 56px;
+  height: 2px;
+  background: var(--border2);
+  border-radius: 2px;
+}
+
+.grammar-review-answer {
+  font-size: 18px;
+  color: var(--text2);
+  line-height: 1.8;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, Menlo, 'Courier New', monospace;
+  text-align: left;
+  width: 100%;
+}
+
+.grammar-review-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+.grammar-review-btn-no, .grammar-review-btn-yes { flex: 1; }
+
+/* Grammar finish screen */
+.grammar-finish {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 8px;
+  text-align: center;
+}
+
+.grammar-finish-emoji  { font-size: 64px; line-height: 1; }
+.grammar-finish-score  { font-size: 30px; font-weight: 800; color: var(--text); }
+.grammar-finish-message { font-size: 15px; color: var(--text2); }
+
+.grammar-finish-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 8px;
+}
+
+/* Textarea */
+.form-textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+  font-family: inherit;
+}
+
+/* ============================================================
    UTILITY
    ============================================================ */
 .hidden { display: none !important; }
@@ -1724,6 +1935,7 @@ body {
   background: var(--card);
   border: 2px solid var(--border);
   display: inline-flex; align-items: center; justify-content: center;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, Menlo, 'Courier New', monospace;
   font-size: 17px; font-weight: 700;
   color: var(--text-muted);
   cursor: default;
@@ -1754,6 +1966,7 @@ body {
   background: var(--card2);
   border: 2px solid var(--border2);
   color: var(--text);
+  font-family: ui-monospace, 'Cascadia Code', Consolas, Menlo, 'Courier New', monospace;
   font-size: 18px; font-weight: 800;
   cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
@@ -2022,6 +2235,26 @@ body.large-text .mode-desc         { font-size: 17px; }
     </main>
   </div>
 
+  <!-- ===== SCREEN: GRAMMAR ===== -->
+  <div id="screen-grammar" class="screen" data-screen="grammar">
+    <header class="app-header">
+      <h1 class="screen-title">Fiches de cours</h1>
+      <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+    </header>
+    <main class="screen-content">
+      <div id="grammar-list"></div>
+      <div id="grammar-empty" class="empty-state hidden">
+        <div class="empty-icon">📖</div>
+        <p>Aucune fiche de cours</p>
+        <p class="text-muted">Créez votre première fiche ci-dessus !</p>
+      </div>
+    </main>
+    <div id="grammar-review-all-bar" class="grammar-review-bar hidden">
+      <button id="btn-grammar-review-all" class="btn btn-secondary grammar-bar-btn">📖 Tout réviser</button>
+      <button id="btn-grammar-review-weak" class="btn btn-danger grammar-bar-btn hidden">⚡ À revoir</button>
+    </div>
+  </div>
+
   <!-- ===== SCREEN: QUIZ ===== -->
   <div id="screen-quiz" class="screen" data-screen="quiz">
     <header class="quiz-header">
@@ -2051,6 +2284,10 @@ body.large-text .mode-desc         { font-size: 17px; }
     <button class="nav-tab" data-target="bank">
       <span class="nav-icon">📚</span>
       <span class="nav-label">Banque</span>
+    </button>
+    <button class="nav-tab" data-target="grammar">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">Cours</span>
     </button>
     <button class="nav-tab" data-target="stats">
       <span class="nav-icon">📊</span>
@@ -2197,6 +2434,39 @@ body.large-text .mode-desc         { font-size: 17px; }
     </div>
   </div>
 
+  <!-- ===== MODAL: ADD / EDIT GRAMMAR CARD ===== -->
+  <div id="modal-add-grammar" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-grammar-title" class="modal-title">Ajouter une fiche</h2>
+        <button class="modal-close" data-close="modal-add-grammar">✕</button>
+      </div>
+      <form id="form-add-grammar" class="modal-form" novalidate>
+        <input type="hidden" id="edit-grammar-id" value="" />
+        <div class="form-group">
+          <label for="input-grammar-lesson" class="form-label">Leçon</label>
+          <input type="text" id="input-grammar-lesson" class="form-input"
+                 placeholder="ex: Articles définis"
+                 list="grammar-lessons-list" autocomplete="off" autocorrect="off" spellcheck="false" />
+          <datalist id="grammar-lessons-list"></datalist>
+        </div>
+        <div class="form-group">
+          <label for="input-grammar-question" class="form-label">Question / Titre</label>
+          <input type="text" id="input-grammar-question" class="form-input"
+                 placeholder="ex: Masculin singulier" autocomplete="off" autocorrect="off" spellcheck="false" />
+        </div>
+        <div class="form-group">
+          <label for="input-grammar-answer" class="form-label">Réponse</label>
+          <textarea id="input-grammar-answer" class="form-input form-textarea"
+                    placeholder="ex: il (il libro)&#10;lo (lo zaino)&#10;l' (l'uomo)"
+                    rows="5" autocorrect="off" spellcheck="false"></textarea>
+        </div>
+        <div id="form-grammar-error" class="form-error hidden"></div>
+        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+      </form>
+    </div>
+  </div>
+
   <script>
 /* ============================================================
    APP.JS — Apprentissage de vocabulaire (multi-langue)
@@ -2293,6 +2563,63 @@ function updateWord(id, native, target) {
 
 function deleteWord(id) {
   saveWords(getWords().filter(w => w.id !== id));
+}
+
+/* ============================================================
+   GRAMMAR CARDS STORAGE
+   ============================================================ */
+function grammarStorageKey() { return 'grammar_' + currentLangKey; }
+
+function getGrammarCards() {
+  try {
+    const raw = localStorage.getItem(grammarStorageKey());
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(c => {
+      if (c.last_known === undefined) c.last_known = null;
+      return c;
+    });
+  } catch (e) { return []; }
+}
+
+function saveGrammarCards(cards) {
+  try {
+    localStorage.setItem(grammarStorageKey(), JSON.stringify(cards));
+  } catch (e) { console.error('saveGrammarCards error:', e); }
+}
+
+function addGrammarCard(lesson, question, answer) {
+  const cards = getGrammarCards();
+  const card = {
+    id: (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Date.now().toString(36),
+    lesson: lesson.trim(),
+    question: question.trim(),
+    answer: answer.trim(),
+    seen_count: 0,
+    error_count: 0,
+    last_known: null
+  };
+  cards.push(card);
+  saveGrammarCards(cards);
+  return card;
+}
+
+function updateGrammarCard(id, lesson, question, answer) {
+  const cards = getGrammarCards();
+  const idx = cards.findIndex(c => c.id === id);
+  if (idx === -1) return false;
+  cards[idx].lesson   = lesson.trim();
+  cards[idx].question = question.trim();
+  cards[idx].answer   = answer.trim();
+  saveGrammarCards(cards);
+  return true;
+}
+
+function deleteGrammarCard(id) {
+  saveGrammarCards(getGrammarCards().filter(c => c.id !== id));
 }
 
 function updateLastSeen(ids) {
@@ -2501,6 +2828,7 @@ function switchLanguage(key) {
   renderStats();
   renderModeSelector();
   renderQuizSettings();
+  renderGrammarScreen();
   seedDemoIfEmpty();
 }
 
@@ -3030,6 +3358,8 @@ function getRevisionPool(allWords) {
 }
 
 let quizState = null;
+let grammarReviewState = null;
+let quitTarget = 'home'; // 'home' | 'grammar'
 let chronoTimer = null;
 
 function buildQuiz() {
@@ -4341,6 +4671,243 @@ function toggleFontSize() {
 }
 
 /* ============================================================
+   GRAMMAR SCREEN
+   ============================================================ */
+function renderGrammarScreen() {
+  const cards = getGrammarCards();
+  const listEl = document.getElementById('grammar-list');
+  const emptyEl = document.getElementById('grammar-empty');
+  const reviewAllBar = document.getElementById('grammar-review-all-bar');
+  if (!listEl) return;
+
+  if (cards.length === 0) {
+    listEl.innerHTML = '';
+    emptyEl && emptyEl.classList.remove('hidden');
+    reviewAllBar && reviewAllBar.classList.add('hidden');
+    return;
+  }
+  emptyEl && emptyEl.classList.add('hidden');
+
+  // Group by lesson (preserve insertion order)
+  const lessons = {};
+  for (const card of cards) {
+    if (!lessons[card.lesson]) lessons[card.lesson] = [];
+    lessons[card.lesson].push(card);
+  }
+
+  const lessonNames = Object.keys(lessons);
+  if (reviewAllBar) reviewAllBar.classList.toggle('hidden', cards.length < 2);
+  const weakBtn = document.getElementById('btn-grammar-review-weak');
+  const weakCards = cards.filter(c => c.last_known === false);
+  if (weakBtn) weakBtn.classList.toggle('hidden', weakCards.length === 0);
+
+  // Global stats — basées sur last_known (résultat de la DERNIÈRE révision de chaque fiche)
+  const reviewed   = cards.filter(c => c.last_known !== null).length;
+  const knownCount = cards.filter(c => c.last_known === true).length;
+  const successPct = reviewed > 0 ? Math.round(knownCount / reviewed * 100) : null;
+  const successClass = successPct === null ? '' : successPct >= 80 ? 'stat-card-good' : successPct >= 60 ? 'stat-card-ok' : 'stat-card-bad';
+
+  const statsHtmlGlobal = `
+    <div class="grammar-stats">
+      <div class="stat-card">
+        <div class="stat-value">${lessonNames.length}</div>
+        <div class="stat-label">Leçons</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${cards.length}</div>
+        <div class="stat-label">Fiches</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${reviewed}</div>
+        <div class="stat-label">Révisées</div>
+      </div>
+      <div class="stat-card ${successClass}">
+        <div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div>
+        <div class="stat-label">Réussite</div>
+      </div>
+    </div>`;
+
+  listEl.innerHTML = statsHtmlGlobal + lessonNames.map(lesson => {
+    const lCards  = lessons[lesson];
+    const lReviewed = lCards.filter(c => c.last_known !== null).length;
+    const lKnown    = lCards.filter(c => c.last_known === true).length;
+    const ratePct   = lReviewed > 0 ? Math.round(lKnown / lReviewed * 100) : null;
+    const statsHtml = ratePct !== null
+      ? `<span class="grammar-lesson-stat">${lKnown}/${lReviewed} connues</span>` : '';
+
+    const cardsHtml = lCards.map(card => {
+      const firstLine = card.answer.split('\n')[0];
+      const hasMore   = card.answer.includes('\n');
+      return `
+        <div class="grammar-card-item">
+          <div class="grammar-card-content">
+            <span class="grammar-card-question">${escHtml(card.question)}</span>
+            <span class="grammar-card-sep">→</span>
+            <span class="grammar-card-answer">${escHtml(firstLine)}${hasMore ? ' …' : ''}</span>
+          </div>
+          <div class="grammar-card-btns">
+            <button class="grammar-action-btn" data-action="edit"   data-id="${card.id}" title="Modifier">✏️</button>
+            <button class="grammar-action-btn" data-action="delete" data-id="${card.id}" title="Supprimer">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="grammar-lesson-group">
+        <div class="grammar-lesson-header">
+          <div class="grammar-lesson-title-wrap">
+            <span class="grammar-lesson-title">📖 ${escHtml(lesson)}</span>
+            ${statsHtml}
+          </div>
+          <button class="btn btn-primary grammar-review-btn" data-lesson="${escHtml(lesson)}">Réviser</button>
+        </div>
+        <div class="grammar-cards-list">${cardsHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+function openAddGrammarModal() {
+  const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
+  const dl = document.getElementById('grammar-lessons-list');
+  if (dl) dl.innerHTML = lessons.map(l => `<option value="${escHtml(l)}">`).join('');
+  document.getElementById('modal-grammar-title').textContent = 'Ajouter une fiche';
+  document.getElementById('edit-grammar-id').value           = '';
+  document.getElementById('input-grammar-lesson').value      = '';
+  document.getElementById('input-grammar-question').value    = '';
+  document.getElementById('input-grammar-answer').value      = '';
+  document.getElementById('form-grammar-error').classList.add('hidden');
+  openModal('modal-add-grammar');
+  setTimeout(() => document.getElementById('input-grammar-lesson').focus(), 200);
+}
+
+function openEditGrammarModal(id) {
+  const card = getGrammarCards().find(c => c.id === id);
+  if (!card) return;
+  const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
+  const dl = document.getElementById('grammar-lessons-list');
+  if (dl) dl.innerHTML = lessons.map(l => `<option value="${escHtml(l)}">`).join('');
+  document.getElementById('modal-grammar-title').textContent = 'Modifier la fiche';
+  document.getElementById('edit-grammar-id').value           = id;
+  document.getElementById('input-grammar-lesson').value      = card.lesson;
+  document.getElementById('input-grammar-question').value    = card.question;
+  document.getElementById('input-grammar-answer').value      = card.answer;
+  document.getElementById('form-grammar-error').classList.add('hidden');
+  openModal('modal-add-grammar');
+}
+
+/* ---- Grammar review (uses quiz screen) ---- */
+function startGrammarReview(lesson, weakOnly = false) {
+  const all  = getGrammarCards();
+  let pool = lesson ? all.filter(c => c.lesson === lesson) : all;
+  if (weakOnly) pool = pool.filter(c => c.last_known === false);
+  if (pool.length === 0) { alert('Aucune fiche à revoir pour le moment.'); return; }
+  grammarReviewState = {
+    cards: shuffle([...pool]),
+    lesson: lesson || null,
+    weakOnly,
+    currentIndex: 0,
+    totalCards: pool.length,
+    knownCount: 0,
+    revealed: false
+  };
+  quitTarget = 'grammar';
+  document.getElementById('quiz-timer-container').classList.add('hidden');
+  showScreen('quiz');
+  renderGrammarReviewCard();
+}
+
+function renderGrammarReviewCard() {
+  if (!grammarReviewState) return;
+  const { cards, currentIndex, totalCards, revealed } = grammarReviewState;
+  const card = cards[currentIndex];
+  document.getElementById('quiz-progress-bar').style.width = (currentIndex / totalCards * 100) + '%';
+  document.getElementById('quiz-counter').textContent = `📖 ${currentIndex + 1} / ${totalCards}`;
+
+  const content = document.getElementById('quiz-content');
+  const answerHtml = escHtml(card.answer).replace(/\n/g, '<br>');
+
+  if (!revealed) {
+    content.innerHTML = `
+      <div class="quiz-type-label">${escHtml(card.lesson)}</div>
+      <div class="grammar-review-card">
+        <div class="grammar-review-question">${escHtml(card.question)}</div>
+        <button class="btn btn-secondary grammar-reveal-btn" id="gr-reveal">Voir la réponse</button>
+      </div>`;
+    content.querySelector('#gr-reveal').addEventListener('click', () => {
+      grammarReviewState.revealed = true;
+      renderGrammarReviewCard();
+    });
+  } else {
+    content.innerHTML = `
+      <div class="quiz-type-label">${escHtml(card.lesson)}</div>
+      <div class="grammar-review-card grammar-review-card-revealed">
+        <div class="grammar-review-question">${escHtml(card.question)}</div>
+        <div class="grammar-review-sep"></div>
+        <div class="grammar-review-answer">${answerHtml}</div>
+        <div class="grammar-review-actions">
+          <button class="btn btn-danger  grammar-review-btn-no"  id="gr-no">✗ À revoir</button>
+          <button class="btn btn-primary grammar-review-btn-yes" id="gr-yes">✓ Connu</button>
+        </div>
+      </div>`;
+    content.querySelector('#gr-no' ).addEventListener('click', () => advanceGrammarReview(false));
+    content.querySelector('#gr-yes').addEventListener('click', () => advanceGrammarReview(true));
+  }
+}
+
+function advanceGrammarReview(knew) {
+  if (!grammarReviewState) return;
+  const card = grammarReviewState.cards[grammarReviewState.currentIndex];
+
+  const all = getGrammarCards();
+  const idx = all.findIndex(c => c.id === card.id);
+  if (idx !== -1) {
+    all[idx].seen_count  = (all[idx].seen_count  || 0) + 1;
+    if (!knew) all[idx].error_count = (all[idx].error_count || 0) + 1;
+    all[idx].last_known  = knew;
+    saveGrammarCards(all);
+  }
+
+  if (knew) grammarReviewState.knownCount++;
+  grammarReviewState.currentIndex++;
+  grammarReviewState.revealed = false;
+
+  if (grammarReviewState.currentIndex >= grammarReviewState.totalCards) {
+    finishGrammarReview();
+  } else {
+    renderGrammarReviewCard();
+  }
+}
+
+function finishGrammarReview() {
+  const { knownCount, totalCards, lesson, weakOnly } = grammarReviewState;
+  grammarReviewState = null;
+
+  document.getElementById('quiz-progress-bar').style.width = '100%';
+  document.getElementById('quiz-counter').textContent = '';
+
+  const ratio = knownCount / totalCards;
+  let emoji, message;
+  if (ratio === 1)        { emoji = '🏆'; message = 'Parfait ! Toutes les fiches maîtrisées !'; }
+  else if (ratio >= 0.75) { emoji = '⭐'; message = 'Très bien ! Quelques fiches à revoir.'; }
+  else if (ratio >= 0.5)  { emoji = '📖'; message = 'Continuez à pratiquer !'; }
+  else                    { emoji = '💪'; message = 'À force de révisions, vous y arriverez !'; }
+
+  const content = document.getElementById('quiz-content');
+  content.innerHTML = `
+    <div class="grammar-finish">
+      <div class="grammar-finish-emoji">${emoji}</div>
+      <div class="grammar-finish-score">${knownCount} / ${totalCards} connus</div>
+      <p class="grammar-finish-message">${escHtml(message)}</p>
+      <div class="grammar-finish-actions">
+        <button class="btn btn-primary   btn-full" id="gr-replay">🔁 Réessayer</button>
+        <button class="btn btn-secondary btn-full" id="gr-back">📖 Retour aux cours</button>
+      </div>
+    </div>`;
+  content.querySelector('#gr-replay').addEventListener('click', () => startGrammarReview(lesson, weakOnly));
+  content.querySelector('#gr-back' ).addEventListener('click', () => { showScreen('grammar'); renderGrammarScreen(); });
+}
+
+/* ============================================================
    EVENT LISTENERS
    ============================================================ */
 function initEventListeners() {
@@ -4349,9 +4916,10 @@ function initEventListeners() {
     tab.addEventListener('click', () => {
       const target = tab.dataset.target;
       showScreen(target);
-      if (target === 'bank')  renderWordList(document.getElementById('search-input').value);
-      if (target === 'home')  updateHomeStats();
-      if (target === 'stats') renderStats();
+      if (target === 'bank')    renderWordList(document.getElementById('search-input').value);
+      if (target === 'home')    updateHomeStats();
+      if (target === 'grammar') renderGrammarScreen();
+      if (target === 'stats')   renderStats();
     });
   });
 
@@ -4371,17 +4939,70 @@ function initEventListeners() {
   const startBtn = document.getElementById('btn-start-quiz');
   if (startBtn) startBtn.addEventListener('click', () => { if (!startBtn.disabled) startQuiz(); });
 
-  // Quit quiz
+  // Quit quiz / grammar review
   const quitBtn = document.getElementById('btn-quit-quiz');
   if (quitBtn) {
     quitBtn.addEventListener('click', () => {
-      if (confirm('Quitter le quiz en cours ?')) {
-        speechSynthesis && speechSynthesis.cancel();
-        stopChronoTimer();
-        quizState = null;
-        showScreen('home');
-        updateHomeStats();
+      const isActive = quizState || grammarReviewState;
+      if (isActive && !confirm('Quitter ?')) return;
+      speechSynthesis && speechSynthesis.cancel();
+      stopChronoTimer();
+      quizState = null;
+      grammarReviewState = null;
+      const dest = quitTarget;
+      quitTarget = 'home';
+      if (dest === 'grammar') { showScreen('grammar'); renderGrammarScreen(); }
+      else { showScreen('home'); updateHomeStats(); }
+    });
+  }
+
+  // Grammar: add button
+  const addGrammarBtn = document.getElementById('btn-add-grammar');
+  if (addGrammarBtn) addGrammarBtn.addEventListener('click', openAddGrammarModal);
+
+  // Grammar: review all
+  const reviewAllBtn = document.getElementById('btn-grammar-review-all');
+  if (reviewAllBtn) reviewAllBtn.addEventListener('click', () => startGrammarReview(null, false));
+
+  const reviewWeakBtn = document.getElementById('btn-grammar-review-weak');
+  if (reviewWeakBtn) reviewWeakBtn.addEventListener('click', () => startGrammarReview(null, true));
+
+  // Grammar: list delegation (review per lesson, edit, delete)
+  const grammarList = document.getElementById('grammar-list');
+  if (grammarList) {
+    grammarList.addEventListener('click', (e) => {
+      const reviewBtn = e.target.closest('.grammar-review-btn');
+      if (reviewBtn) { startGrammarReview(reviewBtn.dataset.lesson, false); return; }
+      const actionBtn = e.target.closest('[data-action]');
+      if (!actionBtn) return;
+      const { action, id } = actionBtn.dataset;
+      if (action === 'edit') openEditGrammarModal(id);
+      else if (action === 'delete') {
+        if (confirm('Supprimer cette fiche ?')) { deleteGrammarCard(id); renderGrammarScreen(); }
       }
+    });
+  }
+
+  // Grammar: form submit
+  const grammarForm = document.getElementById('form-add-grammar');
+  if (grammarForm) {
+    grammarForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const lesson   = document.getElementById('input-grammar-lesson').value.trim();
+      const question = document.getElementById('input-grammar-question').value.trim();
+      const answer   = document.getElementById('input-grammar-answer').value.trim();
+      const errorEl  = document.getElementById('form-grammar-error');
+      const editId   = document.getElementById('edit-grammar-id').value;
+      if (!lesson || !question || !answer) {
+        errorEl.textContent = 'Tous les champs sont requis.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      if (editId) updateGrammarCard(editId, lesson, question, answer);
+      else addGrammarCard(lesson, question, answer);
+      closeModal('modal-add-grammar');
+      renderGrammarScreen();
     });
   }
 
