@@ -5454,12 +5454,13 @@ function renderGrammarReviewCard() {
   const revealClass = rev ? 'grammar-review-question' : 'grammar-review-answer';
   const promptHtml  = rev ? escHtml(promptText).replace(/\n/g, '<br>') : escHtml(promptText);
 
+  const revealBtnLabel = rev ? 'Voir la question' : 'Voir la réponse';
   if (!revealed) {
     content.innerHTML = `
       <div class="quiz-type-label">${escHtml(card.lesson)}</div>
       <div class="grammar-review-card">
         <div class="${promptClass}">${promptHtml}</div>
-        <button class="btn btn-secondary grammar-reveal-btn" id="gr-reveal">Voir la réponse</button>
+        <button class="btn btn-secondary grammar-reveal-btn" id="gr-reveal">${revealBtnLabel}</button>
       </div>`;
     content.querySelector('#gr-reveal').addEventListener('click', () => {
       grammarReviewState.revealed = true;
@@ -5662,13 +5663,14 @@ function renderPhraseReviewCard() {
   const promptFlag = rev ? lang().targetFlag : lang().nativeFlag;
   const revealFlag = rev ? lang().nativeFlag : lang().targetFlag;
 
+  const phraseRevealLabel = rev ? 'Révéler la phrase originale' : 'Révéler la traduction';
   if (!revealed) {
     content.innerHTML = `
       <div class="grammar-review-card">
         ${topicHtml}
         <div class="quiz-type-label">${promptFlag} → ${revealFlag}</div>
         <div class="grammar-review-question phrase-review-text">${escHtml(promptText).replace(/\n/g, '<br>')}</div>
-        <button class="btn btn-secondary grammar-reveal-btn" id="pr-reveal">Révéler la traduction</button>
+        <button class="btn btn-secondary grammar-reveal-btn" id="pr-reveal">${phraseRevealLabel}</button>
       </div>`;
     content.querySelector('#pr-reveal').addEventListener('click', () => {
       phraseReviewState.revealed = true;
