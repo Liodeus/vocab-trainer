@@ -220,8 +220,8 @@ body {
 }
 .nav-tab.active { color: var(--accent); }
 
-.nav-icon { font-size: 22px; line-height: 1; }
-.nav-label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; }
+.nav-icon { font-size: 20px; line-height: 1; }
+.nav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
 
 .nav-icon { position: relative; display: inline-block; }
 .backup-badge {
@@ -1551,14 +1551,17 @@ body {
 /* ============================================================
    GRAMMAR SCREEN
    ============================================================ */
-#screen-grammar .app-header {
+#screen-grammar .app-header,
+#screen-phrases .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
-#screen-grammar .screen-title { flex: 1; min-width: 0; }
-#screen-grammar #btn-add-grammar { flex-shrink: 0; font-size: 14px; padding: 7px 14px; }
+#screen-grammar .screen-title,
+#screen-phrases .screen-title { flex: 1; min-width: 0; }
+#screen-grammar #btn-add-grammar,
+#screen-phrases #btn-add-phrase { flex-shrink: 0; font-size: 14px; padding: 7px 14px; }
 
 .grammar-stats {
   display: grid;
@@ -1579,6 +1582,31 @@ body {
   gap: 10px;
 }
 .grammar-bar-btn { flex: 1; }
+
+.review-dir-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.review-dir-bar.hidden { display: none; }
+.review-dir-bar .settings-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  flex-shrink: 0;
+}
+.review-dir-bar .settings-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
 
 .grammar-lesson-group {
   margin-bottom: 14px;
@@ -1750,6 +1778,103 @@ body {
   max-width: 300px;
   margin-top: 8px;
 }
+
+/* ============================================================
+   PHRASES LIST
+   ============================================================ */
+.phrase-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  border-left: 1.5px solid var(--border);
+  border-right: 1.5px solid var(--border);
+}
+.phrase-item:first-of-type {
+  border-top: 1.5px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.phrase-item:last-of-type  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: 1.5px solid var(--border); }
+.phrase-item + .phrase-item { margin-top: -1px; }
+
+.phrase-content { flex: 1; min-width: 0; }
+
+.phrase-native {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.phrase-target {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 3px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.phrase-topic-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  margin-top: 5px;
+  background: rgba(248, 184, 50, 0.15);
+  color: var(--yellow);
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.phrase-review-text {
+  font-size: 20px;
+  text-align: left;
+  width: 100%;
+}
+
+/* ============================================================
+   TAGS
+   ============================================================ */
+.form-label-hint {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tag-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px 4px;
+}
+
+.word-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.word-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+.word-tag-chip:hover  { background: var(--accent); color: #fff; }
+.word-tag-chip.active { background: var(--accent); color: #fff; }
+.word-tag-chip.sm     { font-size: 10px; padding: 1px 6px; cursor: default; pointer-events: none; }
 
 /* Textarea */
 .form-textarea {
@@ -2199,6 +2324,8 @@ body.large-text .mode-desc         { font-size: 17px; }
         </button>
       </div>
 
+      <div id="tag-filter-bar" class="tag-filter-bar hidden"></div>
+
       <ul id="word-list" class="word-list">
         <!-- Words rendered by JS -->
       </ul>
@@ -2249,10 +2376,42 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Créez votre première fiche ci-dessus !</p>
       </div>
     </main>
+    <div id="grammar-dir-bar" class="review-dir-bar hidden"></div>
     <div id="grammar-review-all-bar" class="grammar-review-bar hidden">
       <button id="btn-grammar-review-all" class="btn btn-secondary grammar-bar-btn">📖 Tout réviser</button>
       <button id="btn-grammar-review-weak" class="btn btn-danger grammar-bar-btn hidden">⚡ À revoir</button>
     </div>
+    <div class="bank-actions">
+      <button id="btn-grammar-export" class="btn btn-secondary">⬇️ Exporter</button>
+      <button id="btn-grammar-import" class="btn btn-secondary">⬆️ Importer</button>
+    </div>
+    <input type="file" id="grammar-import-file-input" accept=".json" style="display:none" />
+  </div>
+
+  <!-- ===== SCREEN: PHRASES ===== -->
+  <div id="screen-phrases" class="screen" data-screen="phrases">
+    <header class="app-header">
+      <h1 class="screen-title">Phrases & expressions</h1>
+      <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+    </header>
+    <main class="screen-content">
+      <div id="phrases-list"></div>
+      <div id="phrases-empty" class="empty-state hidden">
+        <div class="empty-icon">💬</div>
+        <p>Aucune phrase</p>
+        <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
+      </div>
+    </main>
+    <div id="phrases-dir-bar" class="review-dir-bar hidden"></div>
+    <div id="phrases-review-bar" class="grammar-review-bar hidden">
+      <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Tout réviser</button>
+      <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn hidden">⚡ À revoir</button>
+    </div>
+    <div class="bank-actions">
+      <button id="btn-phrases-export" class="btn btn-secondary">⬇️ Exporter</button>
+      <button id="btn-phrases-import" class="btn btn-secondary">⬆️ Importer</button>
+    </div>
+    <input type="file" id="phrases-import-file-input" accept=".json" style="display:none" />
   </div>
 
   <!-- ===== SCREEN: QUIZ ===== -->
@@ -2288,6 +2447,10 @@ body.large-text .mode-desc         { font-size: 17px; }
     <button class="nav-tab" data-target="grammar">
       <span class="nav-icon">📖</span>
       <span class="nav-label">Cours</span>
+    </button>
+    <button class="nav-tab" data-target="phrases">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Phrases</span>
     </button>
     <button class="nav-tab" data-target="stats">
       <span class="nav-icon">📊</span>
@@ -2326,6 +2489,18 @@ body.large-text .mode-desc         { font-size: 17px; }
             required
           />
         </div>
+        <div class="form-group">
+          <label for="input-tags" class="form-label">🏷️ Tags <span class="form-label-hint">(optionnel, ex: chapitre1, couleurs)</span></label>
+          <input
+            type="text"
+            id="input-tags"
+            class="form-input"
+            placeholder="ex: #chapitre1, #couleurs"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+          />
+        </div>
         <div id="form-error" class="form-error hidden"></div>
         <button type="submit" class="btn btn-primary btn-full">
           💾 Sauvegarder
@@ -2338,21 +2513,21 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-import" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Importer des mots</h2>
+        <h2 class="modal-title" id="import-modal-title">Importer des mots</h2>
         <button class="modal-close" data-close="modal-import">✕</button>
       </div>
       <div class="modal-body">
         <p class="import-filename" id="import-filename">📄 fichier.json</p>
         <p class="import-count" id="import-count"></p>
-        <p class="modal-text">Comment souhaitez-vous importer ces mots ?</p>
+        <p class="modal-text" id="import-modal-text">Comment souhaitez-vous importer ces mots ?</p>
         <div class="import-options">
           <button id="btn-merge" class="btn btn-secondary btn-full">
             🔀 Fusionner
-            <span class="btn-sub">Ajoute les nouveaux mots sans supprimer les existants</span>
+            <span class="btn-sub" id="import-merge-desc">Ajoute les nouveaux mots sans supprimer les existants</span>
           </button>
           <button id="btn-replace" class="btn btn-danger btn-full">
             🔄 Remplacer
-            <span class="btn-sub">Supprime tous les mots existants et importe ceux-ci</span>
+            <span class="btn-sub" id="import-replace-desc">Supprime tous les mots existants et importe ceux-ci</span>
           </button>
         </div>
       </div>
@@ -2434,6 +2609,38 @@ body.large-text .mode-desc         { font-size: 17px; }
     </div>
   </div>
 
+  <!-- ===== MODAL: ADD / EDIT PHRASE ===== -->
+  <div id="modal-add-phrase" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-phrase-title" class="modal-title">Ajouter une phrase</h2>
+        <button class="modal-close" data-close="modal-add-phrase">✕</button>
+      </div>
+      <form id="form-add-phrase" class="modal-form" novalidate>
+        <input type="hidden" id="edit-phrase-id" value="" />
+        <div class="form-group">
+          <label for="input-phrase-native" class="form-label">🇫🇷 Phrase en français</label>
+          <textarea id="input-phrase-native" class="form-input form-textarea"
+                    placeholder="ex: Comment allez-vous ?" rows="3"
+                    autocorrect="off" spellcheck="false"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-phrase-target" id="label-phrase-target" class="form-label">🇮🇹 Traduction</label>
+          <textarea id="input-phrase-target" class="form-input form-textarea"
+                    placeholder="ex: Come state?" rows="3"
+                    autocorrect="off" spellcheck="false"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-phrase-topic" class="form-label">📌 Thème <span class="form-label-hint">(optionnel)</span></label>
+          <input type="text" id="input-phrase-topic" class="form-input"
+                 placeholder="ex: Salutations" autocomplete="off" autocorrect="off" spellcheck="false" />
+        </div>
+        <div id="form-phrase-error" class="form-error hidden"></div>
+        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+      </form>
+    </div>
+  </div>
+
   <!-- ===== MODAL: ADD / EDIT GRAMMAR CARD ===== -->
   <div id="modal-add-grammar" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
@@ -2505,6 +2712,7 @@ function migrateWord(w) {
   if (w.srs_ease     === undefined) w.srs_ease     = 2.5;
   if (w.srs_reps     === undefined) w.srs_reps     = 0;
   if (w.srs_next_review === undefined) w.srs_next_review = null;
+  if (w.tags         === undefined) w.tags         = [];
   return w;
 }
 
@@ -2531,32 +2739,48 @@ function saveWords(words) {
 
 function getWords() { return loadWords(); }
 
-function createWord(native, target) {
+function parseTags(str) {
+  return (str || '').split(/[,\s]+/)
+    .map(t => t.trim().replace(/^#/, '').toLowerCase())
+    .filter(Boolean);
+}
+
+function getAllTags() {
+  const tagSet = new Set();
+  getWords().forEach(w => (w.tags || []).forEach(t => tagSet.add(t)));
+  return [...tagSet].sort();
+}
+
+let currentTagFilter = null; // null = all words, string = filter by tag
+
+function createWord(native, target, tags = []) {
   return {
     id: (typeof crypto !== 'undefined' && crypto.randomUUID)
       ? crypto.randomUUID()
       : Math.random().toString(36).slice(2) + Date.now().toString(36),
     native: native.trim(),
     target: target.trim(),
+    tags:   tags,
     created_at: new Date().toISOString(),
     last_seen: null
   };
 }
 
-function addWord(native, target) {
+function addWord(native, target, tags = []) {
   const words = getWords();
-  const word = createWord(native, target);
+  const word = createWord(native, target, tags);
   words.unshift(word);
   saveWords(words);
   return word;
 }
 
-function updateWord(id, native, target) {
+function updateWord(id, native, target, tags = []) {
   const words = getWords();
   const idx = words.findIndex(w => w.id === id);
   if (idx === -1) return false;
   words[idx].native = native.trim();
   words[idx].target = target.trim();
+  words[idx].tags   = tags;
   saveWords(words);
   return true;
 }
@@ -2620,6 +2844,62 @@ function updateGrammarCard(id, lesson, question, answer) {
 
 function deleteGrammarCard(id) {
   saveGrammarCards(getGrammarCards().filter(c => c.id !== id));
+}
+
+/* ============================================================
+   PHRASES STORAGE
+   ============================================================ */
+function phrasesStorageKey() { return 'phrases_' + currentLangKey; }
+
+function getPhrases() {
+  try {
+    const raw = localStorage.getItem(phrasesStorageKey());
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(p => {
+      if (p.last_known === undefined) p.last_known = null;
+      if (p.topic      === undefined) p.topic      = '';
+      if (p.seen_count === undefined) p.seen_count  = 0;
+      return p;
+    });
+  } catch { return []; }
+}
+
+function savePhrases(phrases) {
+  try { localStorage.setItem(phrasesStorageKey(), JSON.stringify(phrases)); } catch (e) { console.error(e); }
+}
+
+function addPhrase(native, target, topic) {
+  const phrases = getPhrases();
+  const phrase = {
+    id: (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Date.now().toString(36),
+    native: native.trim(),
+    target: target.trim(),
+    topic:  topic.trim(),
+    last_known: null,
+    seen_count: 0
+  };
+  phrases.push(phrase);
+  savePhrases(phrases);
+  return phrase;
+}
+
+function updatePhrase(id, native, target, topic) {
+  const phrases = getPhrases();
+  const idx = phrases.findIndex(p => p.id === id);
+  if (idx === -1) return false;
+  phrases[idx].native = native.trim();
+  phrases[idx].target = target.trim();
+  phrases[idx].topic  = topic.trim();
+  savePhrases(phrases);
+  return true;
+}
+
+function deletePhrase(id) {
+  savePhrases(getPhrases().filter(p => p.id !== id));
 }
 
 function updateLastSeen(ids) {
@@ -2817,18 +3097,21 @@ function switchLanguage(key) {
   if (!LANGUAGES[key] || key === currentLangKey) return;
   currentLangKey = key;
   localStorage.setItem(LANG_KEY, key);
+  currentTagFilter = null; // reset tag filter on lang change
   refreshTTSVoice();
   renderLanguageSelector();
   updateAppHeader();
   updateBankHeader();
   updateFormLabels();
   document.getElementById('search-input').value = '';
+  renderTagFilterBar();
   renderWordList('');
   updateHomeStats();
   renderStats();
   renderModeSelector();
   renderQuizSettings();
   renderGrammarScreen();
+  renderPhrasesScreen();
   seedDemoIfEmpty();
 }
 
@@ -2939,13 +3222,20 @@ function renderLanguageSelector() {
   const container = document.getElementById('lang-modal-grid');
   if (!container) return;
   container.innerHTML = Object.entries(LANGUAGES).map(([key, l]) => {
-    let count = 0;
-    try { const raw = localStorage.getItem('words_' + key); count = raw ? JSON.parse(raw).length : 0; } catch(e) {}
+    let words = 0, grammar = 0, phrases = 0;
+    try { const r = localStorage.getItem('words_'   + key); words   = r ? JSON.parse(r).length : 0; } catch(e) {}
+    try { const r = localStorage.getItem('grammar_' + key); grammar = r ? JSON.parse(r).length : 0; } catch(e) {}
+    try { const r = localStorage.getItem('phrases_' + key); phrases = r ? JSON.parse(r).length : 0; } catch(e) {}
+    const parts = [
+      `${words} mot${words !== 1 ? 's' : ''}`,
+      grammar > 0 ? `${grammar} fiche${grammar !== 1 ? 's' : ''}` : null,
+      phrases > 0 ? `${phrases} phrase${phrases !== 1 ? 's' : ''}` : null,
+    ].filter(Boolean).join(' · ');
     return `
       <button class="lang-modal-card${key === currentLangKey ? ' active' : ''}" data-lang="${key}">
         <span class="lang-modal-flag">${l.targetFlag}</span>
         <span class="lang-modal-name">${l.label.split('→')[1].trim()}</span>
-        <span class="lang-modal-count">${count} mot${count !== 1 ? 's' : ''}</span>
+        <span class="lang-modal-count">${parts}</span>
       </button>`;
   }).join('');
   container.querySelectorAll('.lang-modal-card').forEach(btn => {
@@ -2989,6 +3279,16 @@ function renderQuizSettings() {
   const qSizes = [5, 8, 10, 15, 20, 25, 30];
   const mSizes = [3, 4, 5, 6, 7, 8];
   const hidePairs = currentGameMode === GameMode.ANAGRAM || currentGameMode === GameMode.DICTEE;
+  const allTags = getAllTags();
+  const tagRow = allTags.length > 0 ? `
+    <div class="settings-row">
+      <span class="settings-label">Filtrer par tag</span>
+      <div class="settings-pills">
+        <button class="settings-pill${currentTagFilter === null ? ' active' : ''}" data-tag-filter="">Tous</button>
+        ${allTags.map(t => `<button class="settings-pill${currentTagFilter === t ? ' active' : ''}" data-tag-filter="${escHtml(t)}">#${escHtml(t)}</button>`).join('')}
+      </div>
+    </div>` : '';
+
   container.innerHTML = `
     <div class="settings-row">
       <span class="settings-label">Questions par quiz</span>
@@ -3003,13 +3303,22 @@ function renderQuizSettings() {
         ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}${n > s.quizSize ? ' disabled' : ''}" data-setting="matchSize" data-value="${n}" ${n > s.quizSize ? 'disabled' : ''}>${n}</button>`).join('')}
       </div>
     </div>`}
+    ${tagRow}
   `;
-  container.querySelectorAll('.settings-pill').forEach(btn => {
+  container.querySelectorAll('.settings-pill[data-setting]').forEach(btn => {
     btn.addEventListener('click', () => {
       const s = getSettings();
       s[btn.dataset.setting] = parseInt(btn.dataset.value);
       if (s.matchSize > s.quizSize) s.matchSize = s.quizSize;
       saveSettings(s);
+      renderQuizSettings();
+      updateHomeStats();
+    });
+  });
+  container.querySelectorAll('[data-tag-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentTagFilter = btn.dataset.tagFilter === '' ? null : btn.dataset.tagFilter;
+      renderTagFilterBar();
       renderQuizSettings();
       updateHomeStats();
     });
@@ -3027,12 +3336,13 @@ function renderQuizSettings() {
    HOME SCREEN
    ============================================================ */
 function updateHomeStats() {
-  const words = getWords();
+  const allWords = getWords();
+  const words = currentTagFilter ? allWords.filter(w => (w.tags || []).includes(currentTagFilter)) : allWords;
   const count = words.length;
   const min = currentGameMode === GameMode.FLASHCARD ? 1 : quizSize();
   const countEl = document.getElementById('word-count');
   const chipCount = document.getElementById('lang-chip-count');
-  if (chipCount) chipCount.textContent = count;
+  if (chipCount) chipCount.textContent = allWords.length; // always total, not filtered
   const startBtn = document.getElementById('btn-start-quiz');
   const hintEl = document.getElementById('quiz-hint');
   if (countEl) countEl.textContent = count;
@@ -3053,6 +3363,27 @@ function updateHomeStats() {
 /* ============================================================
    BANK SCREEN — WORD LIST
    ============================================================ */
+function renderTagFilterBar() {
+  const bar = document.getElementById('tag-filter-bar');
+  if (!bar) return;
+  const tags = getAllTags();
+  if (tags.length === 0) { bar.innerHTML = ''; bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  bar.innerHTML = [null, ...tags].map(t =>
+    `<button class="word-tag-chip${currentTagFilter === t ? ' active' : ''}" data-tag="${t === null ? '' : escHtml(t)}">${t === null ? 'Tous' : '#' + escHtml(t)}</button>`
+  ).join('');
+  bar.querySelectorAll('.word-tag-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = btn.dataset.tag;
+      currentTagFilter = v === '' ? null : v;
+      renderTagFilterBar();
+      renderWordList(document.getElementById('search-input').value);
+      renderQuizSettings();
+      updateHomeStats();
+    });
+  });
+}
+
 function renderWordList(filter) {
   filter = (filter || '').toLowerCase().trim();
   const words = getWords();
@@ -3060,12 +3391,17 @@ function renderWordList(filter) {
   const emptyEl = document.getElementById('word-list-empty');
   if (!list) return;
 
-  const filtered = filter
-    ? words.filter(w =>
-        w.native.toLowerCase().includes(filter) ||
-        w.target.toLowerCase().includes(filter)
-      )
+  // Apply tag filter first, then text search
+  let filtered = currentTagFilter
+    ? words.filter(w => (w.tags || []).includes(currentTagFilter))
     : words;
+  if (filter) {
+    filtered = filtered.filter(w =>
+      w.native.toLowerCase().includes(filter) ||
+      w.target.toLowerCase().includes(filter) ||
+      (w.tags || []).some(t => t.includes(filter) || ('#' + t).includes(filter))
+    );
+  }
 
   if (filtered.length === 0) {
     list.innerHTML = '';
@@ -3074,19 +3410,24 @@ function renderWordList(filter) {
   }
   if (emptyEl) emptyEl.classList.add('hidden');
 
-  list.innerHTML = filtered.map(word => `
+  list.innerHTML = filtered.map(word => {
+    const tagsHtml = (word.tags || []).length > 0
+      ? `<div class="word-tags">${(word.tags || []).map(t => `<span class="word-tag-chip sm">#${escHtml(t)}</span>`).join('')}</div>`
+      : '';
+    return `
     <li class="word-item" data-id="${escHtml(word.id)}">
       <div class="word-texts">
         <div class="word-native">${escHtml(word.native)}</div>
         <div class="word-target">${lang().targetFlag} ${escHtml(word.target)}</div>
+        ${tagsHtml}
       </div>
       ${getMasteryBadge(word)}
       <div class="word-actions">
         <button class="btn-icon-sm edit" data-action="edit" data-id="${escHtml(word.id)}" title="Modifier">✏️</button>
         <button class="btn-icon-sm delete" data-action="delete" data-id="${escHtml(word.id)}" title="Supprimer">🗑️</button>
       </div>
-    </li>
-  `).join('');
+    </li>`;
+  }).join('');
 }
 
 function escHtml(str) {
@@ -3126,6 +3467,7 @@ function openAddWordModal() {
   document.getElementById('edit-word-id').value = '';
   document.getElementById('input-native').value = '';
   document.getElementById('input-target').value = '';
+  document.getElementById('input-tags').value   = '';
   document.getElementById('form-error').classList.add('hidden');
   updateFormLabels();
   openModal('modal-add-word');
@@ -3139,6 +3481,7 @@ function openEditWordModal(id) {
   document.getElementById('edit-word-id').value = word.id;
   document.getElementById('input-native').value = word.native;
   document.getElementById('input-target').value = word.target;
+  document.getElementById('input-tags').value   = (word.tags || []).map(t => '#' + t).join(', ');
   document.getElementById('form-error').classList.add('hidden');
   updateFormLabels();
   openModal('modal-add-word');
@@ -3194,23 +3537,33 @@ function updateBackupBadge() {
 function buildExportData() {
   const words = getWords();
   if (words.length === 0) { alert('Votre banque de mots est vide.'); return null; }
-  return words.map(({ native, target }) => ({ native, target }));
+  return words.map(({ native, target, tags }) => {
+    const obj = { native, target };
+    if (tags && tags.length > 0) obj.tags = tags;
+    return obj;
+  });
+}
+
+function downloadJson(json, filename) {
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 function exportWords() {
   const data = buildExportData();
   if (!data) return;
-  const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = lang().filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  downloadJson(JSON.stringify(data, null, 2), lang().filename);
   markBackup();
+}
+
+function exportGrammarCards() {
+  const cards = getGrammarCards();
+  if (cards.length === 0) { alert('Aucune fiche à exporter.'); return; }
+  downloadJson(JSON.stringify(cards, null, 2), 'grammar_' + currentLangKey + '.json');
 }
 
 async function shareWords() {
@@ -3242,6 +3595,19 @@ async function shareWords() {
    IMPORT
    ============================================================ */
 let pendingImportData = null;
+let importContext = 'words'; // 'words' | 'grammar' | 'phrases'
+
+function _openImportModal(file, count, noun, text, mergeDesc, replaceDesc, context, title) {
+  const titleEl = document.getElementById('import-modal-title');
+  if (titleEl) titleEl.textContent = title || 'Importer des mots';
+  document.getElementById('import-filename').textContent = '📄 ' + file.name;
+  document.getElementById('import-count').textContent = `${count} ${noun}`;
+  document.getElementById('import-modal-text').textContent = text;
+  document.getElementById('import-merge-desc').textContent   = mergeDesc;
+  document.getElementById('import-replace-desc').textContent = replaceDesc;
+  importContext = context;
+  openModal('modal-import');
+}
 
 function handleImportFile(file) {
   if (!file) return;
@@ -3253,7 +3619,6 @@ function handleImportFile(file) {
 
     if (!Array.isArray(data)) { alert('Le fichier doit contenir un tableau de mots.'); return; }
 
-    // Support both new (native/target) and old (fr/it) formats
     const valid = data.filter(item =>
       item && typeof item === 'object' &&
       (typeof item.native === 'string' || typeof item.fr === 'string') &&
@@ -3262,48 +3627,125 @@ function handleImportFile(file) {
       id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2),
       native: (item.native || item.fr || '').trim(),
       target: (item.target || item.it || '').trim(),
+      tags: Array.isArray(item.tags) ? item.tags.map(t => String(t).trim().toLowerCase()).filter(Boolean) : [],
       created_at: new Date().toISOString(),
       last_seen: null
     })).filter(w => w.native && w.target);
 
     if (valid.length === 0) { alert('Aucun mot valide trouvé dans ce fichier.'); return; }
-
     pendingImportData = valid;
-    document.getElementById('import-filename').textContent = '📄 ' + file.name;
-    document.getElementById('import-count').textContent = `${valid.length} mot${valid.length > 1 ? 's' : ''} trouvé${valid.length > 1 ? 's' : ''}`;
-    openModal('modal-import');
+    const n = valid.length;
+    _openImportModal(file,
+      `${n} mot${n > 1 ? 's' : ''} trouvé${n > 1 ? 's' : ''}`,
+      '',
+      'Comment souhaitez-vous importer ces mots ?',
+      'Ajoute les nouveaux mots sans supprimer les existants',
+      'Supprime tous les mots existants et importe ceux-ci',
+      'words',
+      'Importer des mots');
+  };
+  reader.readAsText(file);
+}
+
+function handleGrammarImportFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let data;
+    try { data = JSON.parse(e.target.result); }
+    catch { alert('Fichier JSON invalide.'); return; }
+    if (!Array.isArray(data)) { alert('Format invalide.'); return; }
+    const valid = data.filter(c => c && typeof c.lesson === 'string' && typeof c.question === 'string' && typeof c.answer === 'string');
+    if (valid.length === 0) { alert('Aucune fiche valide trouvée.'); return; }
+    pendingImportData = valid;
+    const n = valid.length;
+    _openImportModal(file,
+      `${n} fiche${n > 1 ? 's' : ''} trouvée${n > 1 ? 's' : ''}`,
+      '',
+      'Comment souhaitez-vous importer ces fiches ?',
+      'Ajoute les nouvelles fiches sans supprimer les existantes',
+      'Supprime toutes les fiches existantes et importe celles-ci',
+      'grammar',
+      'Importer des fiches');
   };
   reader.readAsText(file);
 }
 
 function mergeImport() {
   if (!pendingImportData) return;
-  const existing = getWords();
-  const toAdd = pendingImportData.filter(newWord =>
-    !existing.some(e =>
-      e.native.toLowerCase() === newWord.native.toLowerCase() &&
-      e.target.toLowerCase() === newWord.target.toLowerCase()
-    )
-  );
-  saveWords([...toAdd, ...existing]);
-  pendingImportData = null;
   closeModal('modal-import');
-  renderWordList(document.getElementById('search-input').value);
-  updateHomeStats();
-  const msg = toAdd.length === 0
-    ? 'Tous les mots existaient déjà.'
-    : `${toAdd.length} nouveau${toAdd.length > 1 ? 'x' : ''} mot${toAdd.length > 1 ? 's' : ''} ajouté${toAdd.length > 1 ? 's' : ''}.`;
-  alert(msg);
+  if (importContext === 'grammar') {
+    const existing = getGrammarCards();
+    const toAdd = pendingImportData
+      .filter(c => !existing.some(e => e.lesson === c.lesson && e.question === c.question))
+      .map(c => ({ ...c,
+        id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
+        last_known: null, seen_count: c.seen_count || 0, error_count: c.error_count || 0 }));
+    saveGrammarCards([...existing, ...toAdd]);
+    pendingImportData = null;
+    renderGrammarScreen();
+    const n = toAdd.length;
+    alert(n === 0 ? 'Toutes les fiches existaient déjà.' : `${n} nouvelle${n > 1 ? 's' : ''} fiche${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`);
+  } else if (importContext === 'phrases') {
+    const existing = getPhrases();
+    const toAdd = pendingImportData
+      .filter(p => !existing.some(e => e.native.toLowerCase() === p.native.toLowerCase() && e.target.toLowerCase() === p.target.toLowerCase()))
+      .map(p => ({ ...p,
+        id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
+        last_known: null, seen_count: 0, topic: p.topic || '' }));
+    savePhrases([...existing, ...toAdd]);
+    pendingImportData = null;
+    renderPhrasesScreen();
+    const n = toAdd.length;
+    alert(n === 0 ? 'Toutes les phrases existaient déjà.' : `${n} nouvelle${n > 1 ? 's' : ''} phrase${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`);
+  } else {
+    const existing = getWords();
+    const toAdd = pendingImportData.filter(newWord =>
+      !existing.some(e =>
+        e.native.toLowerCase() === newWord.native.toLowerCase() &&
+        e.target.toLowerCase() === newWord.target.toLowerCase()
+      )
+    );
+    saveWords([...toAdd, ...existing]);
+    pendingImportData = null;
+    renderTagFilterBar();
+    renderWordList(document.getElementById('search-input').value);
+    updateHomeStats();
+    const n = toAdd.length;
+    const msg = n === 0
+      ? 'Tous les mots existaient déjà.'
+      : `${n} nouveau${n > 1 ? 'x' : ''} mot${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''}.`;
+    alert(msg);
+  }
 }
 
 function replaceImport() {
   if (!pendingImportData) return;
-  if (!confirm(`Remplacer TOUS vos mots existants par les ${pendingImportData.length} mots importés ?`)) return;
-  saveWords(pendingImportData);
-  pendingImportData = null;
   closeModal('modal-import');
-  renderWordList(document.getElementById('search-input').value);
-  updateHomeStats();
+  if (importContext === 'grammar') {
+    if (!confirm(`Remplacer TOUTES vos fiches existantes par les ${pendingImportData.length} fiches importées ?`)) return;
+    const newCards = pendingImportData.map(c => ({ ...c,
+      id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
+      last_known: null, seen_count: c.seen_count || 0, error_count: c.error_count || 0 }));
+    saveGrammarCards(newCards);
+    pendingImportData = null;
+    renderGrammarScreen();
+  } else if (importContext === 'phrases') {
+    if (!confirm(`Remplacer TOUTES vos phrases existantes par les ${pendingImportData.length} phrases importées ?`)) return;
+    const newPhrases = pendingImportData.map(p => ({ ...p,
+      id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
+      last_known: null, seen_count: 0, topic: p.topic || '' }));
+    savePhrases(newPhrases);
+    pendingImportData = null;
+    renderPhrasesScreen();
+  } else {
+    if (!confirm(`Remplacer TOUS vos mots existants par les ${pendingImportData.length} mots importés ?`)) return;
+    saveWords(pendingImportData);
+    pendingImportData = null;
+    renderTagFilterBar();
+    renderWordList(document.getElementById('search-input').value);
+    updateHomeStats();
+  }
 }
 
 /* ============================================================
@@ -3359,11 +3801,13 @@ function getRevisionPool(allWords) {
 
 let quizState = null;
 let grammarReviewState = null;
-let quitTarget = 'home'; // 'home' | 'grammar'
+let phraseReviewState  = null;
+let quitTarget = 'home'; // 'home' | 'grammar' | 'phrases'
 let chronoTimer = null;
 
 function buildQuiz() {
-  const allWords = getWords();
+  const rawWords = getWords();
+  const allWords = currentTagFilter ? rawWords.filter(w => (w.tags || []).includes(currentTagFilter)) : rawWords;
   const QS = quizSize();
   const MS = matchSize();
 
@@ -4362,12 +4806,157 @@ const DEMO_WORDS = {
   ],
 };
 
+const DEMO_GRAMMAR = {
+  'fr-it': [
+    { lesson: 'Articles définis', question: 'Masculin singulier', answer: 'il (il libro — le livre)\nlo (lo zaino — le sac) devant s+cons, z, gn…\nl\' (l\'uomo — l\'homme) devant voyelle' },
+    { lesson: 'Articles définis', question: 'Féminin singulier',  answer: 'la (la casa — la maison)\nl\' (l\'amica — l\'amie) devant voyelle' },
+    { lesson: 'Articles définis', question: 'Pluriel masculin',   answer: 'i (i libri — les livres)\ngli (gli zaini, gli uomini) devant s+cons, z, voyelle' },
+    { lesson: 'Articles définis', question: 'Pluriel féminin',    answer: 'le (le case — les maisons)' },
+    { lesson: 'Articles indéfinis', question: 'Masculin singulier', answer: 'un (un libro)\nuno (uno zaino) devant s+cons, z, gn…' },
+    { lesson: 'Articles indéfinis', question: 'Féminin singulier',  answer: 'una (una casa)\nun\' (un\'amica) devant voyelle' },
+    { lesson: 'Verbe ESSERE (être)', question: 'Présent indicatif', answer: 'io sono — je suis\ntu sei — tu es\nlui/lei è — il/elle est\nnoi siamo — nous sommes\nvoi siete — vous êtes\nloro sono — ils/elles sont' },
+    { lesson: 'Verbe AVERE (avoir)', question: 'Présent indicatif', answer: 'io ho — j\'ai\ntu hai — tu as\nlui/lei ha — il/elle a\nnoi abbiamo — nous avons\nvoi avete — vous avez\nloro hanno — ils/elles ont' },
+    { lesson: 'Verbe ANDARE (aller)', question: 'Présent indicatif', answer: 'io vado — je vais\ntu vai — tu vas\nlui/lei va — il/elle va\nnoi andiamo — nous allons\nvoi andate — vous allez\nloro vanno — ils/elles vont' },
+  ],
+  'fr-en': [
+    { lesson: 'Temps verbaux', question: 'Present simple (usage)', answer: 'Actions habituelles / vérités générales\nex: I eat breakfast every day.\nex: The sun rises in the east.' },
+    { lesson: 'Temps verbaux', question: 'Present continuous (usage)', answer: 'Action en cours maintenant\nex: I am eating right now.\nex: She is studying for her exam.' },
+    { lesson: 'Temps verbaux', question: 'Past simple (usage)', answer: 'Action terminée dans le passé\nex: I went to Paris last year.\nex: She called me yesterday.' },
+    { lesson: 'Articles', question: 'A / An', answer: 'A + consonne : a book, a car\nAn + voyelle : an apple, an hour\nPour un objet non spécifique' },
+    { lesson: 'Articles', question: 'The', answer: 'Objet spécifique ou déjà mentionné\nex: The book on the table.\nex: The sun, the moon' },
+    { lesson: 'Pronoms', question: 'Pronoms sujets', answer: 'I · you · he / she / it\nwe · you · they' },
+    { lesson: 'Pronoms', question: 'Pronoms compléments', answer: 'me · you · him / her / it\nus · you · them' },
+  ],
+  'fr-es': [
+    { lesson: 'Articles définis', question: 'Singulier', answer: 'el (masculin) : el libro — le livre\nla (féminin) : la casa — la maison' },
+    { lesson: 'Articles définis', question: 'Pluriel', answer: 'los (masculin) : los libros\nlas (féminin) : las casas' },
+    { lesson: 'Verbe SER (être permanent)', question: 'Présent indicatif', answer: 'yo soy — je suis\ntú eres — tu es\nél/ella es — il/elle est\nnosotros somos — nous sommes\nvosotros sois — vous êtes\nellos son — ils/elles sont' },
+    { lesson: 'Verbe ESTAR (être temporaire)', question: 'Présent indicatif', answer: 'yo estoy\ntú estás\nél/ella está\nnosotros estamos\nvosotros estáis\nellos están' },
+    { lesson: 'Verbe TENER (avoir)', question: 'Présent indicatif', answer: 'yo tengo\ntú tienes\nél/ella tiene\nnosotros tenemos\nvosotros tenéis\nellos tienen' },
+    { lesson: 'Genres', question: 'Masculin / Féminin', answer: 'Masculin → souvent en -o : libro, gato\nFéminin → souvent en -a : mesa, gata\nExceptions : el día, la mano' },
+  ],
+  'fr-de': [
+    { lesson: 'Articles définis (nominatif)', question: 'Masculin / Féminin / Neutre / Pluriel', answer: 'der (masc.) : der Mann\ndie (fém.) : die Frau\ndas (neutre) : das Kind\ndie (plur.) : die Kinder' },
+    { lesson: 'Articles indéfinis (nominatif)', question: 'Masculin / Féminin / Neutre', answer: 'ein (masc.) : ein Mann\neine (fém.) : eine Frau\nein (neutre) : ein Kind' },
+    { lesson: 'Verbe SEIN (être)', question: 'Présent', answer: 'ich bin — je suis\ndu bist — tu es\ner/sie/es ist — il/elle est\nwir sind — nous sommes\nihr seid — vous êtes\nsie/Sie sind — ils sont / vous êtes (poli)' },
+    { lesson: 'Verbe HABEN (avoir)', question: 'Présent', answer: 'ich habe\ndu hast\ner/sie/es hat\nwir haben\nihr habt\nsie/Sie haben' },
+    { lesson: 'Genres', question: 'Les 3 genres en allemand', answer: 'Masculin (der) : der Mann, der Hund\nFéminin (die) : die Frau, die Katze\nNeutre (das) : das Kind, das Buch\n→ À apprendre avec chaque nom !' },
+  ],
+  'fr-pt': [
+    { lesson: 'Articles définis', question: 'Singulier', answer: 'o (masculin) : o livro — le livre\na (féminin) : a casa — la maison' },
+    { lesson: 'Articles définis', question: 'Pluriel', answer: 'os (masculin) : os livros\nas (féminin) : as casas' },
+    { lesson: 'Verbe SER (être)', question: 'Présent indicatif', answer: 'eu sou — je suis\ntu és — tu es\nele/ela é — il/elle est\nnós somos — nous sommes\nvós sois — vous êtes\neles são — ils/elles sont' },
+    { lesson: 'Verbe ESTAR (être)', question: 'Présent indicatif', answer: 'eu estou\ntu estás\nele/ela está\nnós estamos\nvós estais\neles estão' },
+    { lesson: 'Verbe TER (avoir)', question: 'Présent indicatif', answer: 'eu tenho\ntu tens\nele/ela tem\nnós temos\nvós tendes\neles têm' },
+  ],
+  'fr-jp': [
+    { lesson: 'Hiragana — voyelles', question: 'Les 5 voyelles de base', answer: 'あ (a)  い (i)  う (u)\nえ (e)  お (o)' },
+    { lesson: 'Hiragana — k', question: 'Rangée か', answer: 'か (ka)  き (ki)  く (ku)\nけ (ke)  こ (ko)' },
+    { lesson: 'Hiragana — s', question: 'Rangée さ', answer: 'さ (sa)  し (shi)  す (su)\nせ (se)  そ (so)' },
+    { lesson: 'Structures de base', question: '〜は〜です (X est Y)', answer: 'わたしはフランスじんです。\n→ Je suis français(e).\n\nこれはほんです。\n→ C\'est un livre.' },
+    { lesson: 'Structures de base', question: '〜が好きです (j\'aime)', answer: 'ねこがすきです。\n→ J\'aime les chats.\n\nにほんごがすきです。\n→ J\'aime le japonais.' },
+    { lesson: 'Chiffres', question: '1 à 10', answer: '1 いち  2 に  3 さん\n4 し/よん  5 ご  6 ろく\n7 しち/なな  8 はち\n9 く/きゅう  10 じゅう' },
+  ],
+};
+
+const DEMO_PHRASES = {
+  'fr-it': [
+    { native: 'Bonjour, comment allez-vous ?',  target: 'Buongiorno, come sta?',         topic: 'Salutations' },
+    { native: 'Je m\'appelle Marie.',            target: 'Mi chiamo Marie.',               topic: 'Salutations' },
+    { native: 'Enchanté(e) de vous rencontrer.', target: 'Piacere di conoscerla.',         topic: 'Salutations' },
+    { native: 'Où sont les toilettes ?',         target: 'Dove sono i bagni?',             topic: 'Pratique' },
+    { native: 'Combien ça coûte ?',              target: 'Quanto costa?',                  topic: 'Pratique' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'Vorrei un caffè, per favore.', topic: 'Restaurant' },
+    { native: 'L\'addition, s\'il vous plaît.', target: 'Il conto, per favore.',           topic: 'Restaurant' },
+    { native: 'Je ne comprends pas.',            target: 'Non capisco.',                   topic: 'Pratique' },
+    { native: 'Pouvez-vous répéter ?',           target: 'Può ripetere?',                  topic: 'Pratique' },
+    { native: 'Je parle un peu italien.',        target: 'Parlo un po\' d\'italiano.',     topic: 'Pratique' },
+  ],
+  'fr-en': [
+    { native: 'Bonjour, comment allez-vous ?',  target: 'Hello, how are you?',            topic: 'Greetings' },
+    { native: 'Je m\'appelle Marie.',            target: 'My name is Marie.',              topic: 'Greetings' },
+    { native: 'Où sont les toilettes ?',         target: 'Where is the bathroom?',         topic: 'Practical' },
+    { native: 'Combien ça coûte ?',              target: 'How much does it cost?',         topic: 'Practical' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'I\'d like a coffee, please.', topic: 'Restaurant' },
+    { native: 'L\'addition, s\'il vous plaît.', target: 'The bill, please.',               topic: 'Restaurant' },
+    { native: 'Je ne comprends pas.',            target: 'I don\'t understand.',           topic: 'Practical' },
+    { native: 'Pouvez-vous répéter ?',           target: 'Could you repeat that?',         topic: 'Practical' },
+    { native: 'Je parle un peu anglais.',        target: 'I speak a little English.',      topic: 'Practical' },
+  ],
+  'fr-es': [
+    { native: 'Bonjour, comment allez-vous ?',  target: '¡Hola! ¿Cómo está usted?',       topic: 'Saludos' },
+    { native: 'Je m\'appelle Marie.',            target: 'Me llamo Marie.',                topic: 'Saludos' },
+    { native: 'Où sont les toilettes ?',         target: '¿Dónde están los baños?',        topic: 'Práctico' },
+    { native: 'Combien ça coûte ?',              target: '¿Cuánto cuesta?',                topic: 'Práctico' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'Quisiera un café, por favor.', topic: 'Restaurante' },
+    { native: 'L\'addition, s\'il vous plaît.', target: 'La cuenta, por favor.',           topic: 'Restaurante' },
+    { native: 'Je ne comprends pas.',            target: 'No entiendo.',                   topic: 'Práctico' },
+    { native: 'Pouvez-vous répéter ?',           target: '¿Puede repetir?',                topic: 'Práctico' },
+    { native: 'Je parle un peu espagnol.',       target: 'Hablo un poco de español.',      topic: 'Práctico' },
+  ],
+  'fr-de': [
+    { native: 'Bonjour, comment allez-vous ?',  target: 'Hallo, wie geht es Ihnen?',       topic: 'Begrüßung' },
+    { native: 'Je m\'appelle Marie.',            target: 'Ich heiße Marie.',               topic: 'Begrüßung' },
+    { native: 'Où sont les toilettes ?',         target: 'Wo ist die Toilette?',            topic: 'Praktisch' },
+    { native: 'Combien ça coûte ?',              target: 'Was kostet das?',                 topic: 'Praktisch' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'Ich hätte gerne einen Kaffee, bitte.', topic: 'Restaurant' },
+    { native: 'L\'addition, s\'il vous plaît.', target: 'Die Rechnung, bitte.',             topic: 'Restaurant' },
+    { native: 'Je ne comprends pas.',            target: 'Ich verstehe nicht.',             topic: 'Praktisch' },
+    { native: 'Pouvez-vous répéter ?',           target: 'Können Sie das wiederholen?',     topic: 'Praktisch' },
+    { native: 'Je parle un peu allemand.',       target: 'Ich spreche ein bisschen Deutsch.', topic: 'Praktisch' },
+  ],
+  'fr-pt': [
+    { native: 'Bonjour, comment allez-vous ?',  target: 'Olá, como está?',                topic: 'Saudações' },
+    { native: 'Je m\'appelle Marie.',            target: 'Chamo-me Marie.',                topic: 'Saudações' },
+    { native: 'Où sont les toilettes ?',         target: 'Onde ficam os banheiros?',        topic: 'Prático' },
+    { native: 'Combien ça coûte ?',              target: 'Quanto custa?',                   topic: 'Prático' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'Eu queria um café, por favor.', topic: 'Restaurante' },
+    { native: 'L\'addition, s\'il vous plaît.', target: 'A conta, por favor.',              topic: 'Restaurante' },
+    { native: 'Je ne comprends pas.',            target: 'Não entendo.',                    topic: 'Prático' },
+    { native: 'Pouvez-vous répéter ?',           target: 'Pode repetir?',                   topic: 'Prático' },
+    { native: 'Je parle un peu portugais.',      target: 'Falo um pouco de português.',     topic: 'Prático' },
+  ],
+  'fr-jp': [
+    { native: 'Bonjour.',                        target: 'こんにちは。',                    topic: 'あいさつ' },
+    { native: 'Je m\'appelle Marie.',            target: 'わたしはマリーです。',             topic: 'あいさつ' },
+    { native: 'Enchanté(e).',                    target: 'はじめまして。よろしくおねがいします。', topic: 'あいさつ' },
+    { native: 'Où sont les toilettes ?',         target: 'トイレはどこですか？',              topic: 'じつよう' },
+    { native: 'Combien ça coûte ?',              target: 'いくらですか？',                   topic: 'じつよう' },
+    { native: 'Je voudrais un café, s\'il vous plaît.', target: 'コーヒーをひとつください。', topic: 'レストラン' },
+    { native: 'Je ne comprends pas.',            target: 'わかりません。',                   topic: 'じつよう' },
+    { native: 'Pouvez-vous répéter ?',           target: 'もういちどいってください。',        topic: 'じつよう' },
+    { native: 'Je parle un peu japonais.',       target: 'にほんごがすこしわかります。',     topic: 'じつよう' },
+  ],
+};
+
 function seedDemoIfEmpty() {
   if (getWords().length === 0) {
     const demos = DEMO_WORDS[currentLangKey] || [];
     saveWords(demos.map(w => createWord(w.native, w.target)));
     updateHomeStats();
     renderWordList('');
+  }
+  if (getGrammarCards().length === 0) {
+    const demos = DEMO_GRAMMAR[currentLangKey] || [];
+    if (demos.length > 0) {
+      saveGrammarCards(demos.map(d => ({
+        id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+        lesson: d.lesson, question: d.question, answer: d.answer,
+        last_known: null, seen_count: 0, error_count: 0
+      })));
+      renderGrammarScreen();
+    }
+  }
+  if (getPhrases().length === 0) {
+    const demos = DEMO_PHRASES[currentLangKey] || [];
+    if (demos.length > 0) {
+      savePhrases(demos.map(d => ({
+        id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+        native: d.native, target: d.target, topic: d.topic || '',
+        last_known: null, seen_count: 0
+      })));
+      renderPhrasesScreen();
+    }
   }
 }
 
@@ -4673,6 +5262,28 @@ function toggleFontSize() {
 /* ============================================================
    GRAMMAR SCREEN
    ============================================================ */
+/* ---- Direction bar for grammar & phrase review ---- */
+function renderReviewDirBar(barId, settingKey, labelA, labelB) {
+  const bar = document.getElementById(barId);
+  if (!bar) return;
+  const dir = getSettings()[settingKey] || 'native-target';
+  bar.innerHTML = `
+    <span class="settings-label">Sens</span>
+    <div class="settings-pills">
+      <button class="settings-pill${dir === 'native-target'  ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="native-target">${labelA}</button>
+      <button class="settings-pill${dir === 'target-native'  ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="target-native">${labelB}</button>
+      <button class="settings-pill${dir === 'mix'            ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="mix">🔀 Mix</button>
+    </div>`;
+  bar.querySelectorAll('[data-reviewdir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = getSettings();
+      s[btn.dataset.reviewdir] = btn.dataset.dirval;
+      saveSettings(s);
+      renderReviewDirBar(barId, settingKey, labelA, labelB);
+    });
+  });
+}
+
 function renderGrammarScreen() {
   const cards = getGrammarCards();
   const listEl = document.getElementById('grammar-list');
@@ -4680,10 +5291,12 @@ function renderGrammarScreen() {
   const reviewAllBar = document.getElementById('grammar-review-all-bar');
   if (!listEl) return;
 
+  const grammarDirBar = document.getElementById('grammar-dir-bar');
   if (cards.length === 0) {
     listEl.innerHTML = '';
     emptyEl && emptyEl.classList.remove('hidden');
     reviewAllBar && reviewAllBar.classList.add('hidden');
+    if (grammarDirBar) grammarDirBar.classList.add('hidden');
     return;
   }
   emptyEl && emptyEl.classList.add('hidden');
@@ -4696,7 +5309,12 @@ function renderGrammarScreen() {
   }
 
   const lessonNames = Object.keys(lessons);
-  if (reviewAllBar) reviewAllBar.classList.toggle('hidden', cards.length < 2);
+  const showGrammarBar = cards.length >= 2;
+  if (reviewAllBar) reviewAllBar.classList.toggle('hidden', !showGrammarBar);
+  if (grammarDirBar) {
+    grammarDirBar.classList.toggle('hidden', !showGrammarBar);
+    if (showGrammarBar) renderReviewDirBar('grammar-dir-bar', 'grammarReviewDir', 'Question → Réponse', 'Réponse → Question');
+  }
   const weakBtn = document.getElementById('btn-grammar-review-weak');
   const weakCards = cards.filter(c => c.last_known === false);
   if (weakBtn) weakBtn.classList.toggle('hidden', weakCards.length === 0);
@@ -4801,8 +5419,12 @@ function startGrammarReview(lesson, weakOnly = false) {
   let pool = lesson ? all.filter(c => c.lesson === lesson) : all;
   if (weakOnly) pool = pool.filter(c => c.last_known === false);
   if (pool.length === 0) { alert('Aucune fiche à revoir pour le moment.'); return; }
+  const dir = getSettings().grammarReviewDir || 'native-target';
   grammarReviewState = {
-    cards: shuffle([...pool]),
+    cards: shuffle([...pool]).map(c => ({
+      ...c,
+      _showReverse: dir === 'target-native' || (dir === 'mix' && Math.random() < 0.5)
+    })),
     lesson: lesson || null,
     weakOnly,
     currentIndex: 0,
@@ -4824,13 +5446,19 @@ function renderGrammarReviewCard() {
   document.getElementById('quiz-counter').textContent = `📖 ${currentIndex + 1} / ${totalCards}`;
 
   const content = document.getElementById('quiz-content');
-  const answerHtml = escHtml(card.answer).replace(/\n/g, '<br>');
+  const rev = !!card._showReverse;
+  const promptText  = rev ? card.answer   : card.question;
+  const revealText  = rev ? card.question : card.answer;
+  const revealHtml  = escHtml(revealText).replace(/\n/g, '<br>');
+  const promptClass = rev ? 'grammar-review-answer'   : 'grammar-review-question';
+  const revealClass = rev ? 'grammar-review-question' : 'grammar-review-answer';
+  const promptHtml  = rev ? escHtml(promptText).replace(/\n/g, '<br>') : escHtml(promptText);
 
   if (!revealed) {
     content.innerHTML = `
       <div class="quiz-type-label">${escHtml(card.lesson)}</div>
       <div class="grammar-review-card">
-        <div class="grammar-review-question">${escHtml(card.question)}</div>
+        <div class="${promptClass}">${promptHtml}</div>
         <button class="btn btn-secondary grammar-reveal-btn" id="gr-reveal">Voir la réponse</button>
       </div>`;
     content.querySelector('#gr-reveal').addEventListener('click', () => {
@@ -4841,9 +5469,9 @@ function renderGrammarReviewCard() {
     content.innerHTML = `
       <div class="quiz-type-label">${escHtml(card.lesson)}</div>
       <div class="grammar-review-card grammar-review-card-revealed">
-        <div class="grammar-review-question">${escHtml(card.question)}</div>
+        <div class="${promptClass}">${promptHtml}</div>
         <div class="grammar-review-sep"></div>
-        <div class="grammar-review-answer">${answerHtml}</div>
+        <div class="${revealClass}">${revealHtml}</div>
         <div class="grammar-review-actions">
           <button class="btn btn-danger  grammar-review-btn-no"  id="gr-no">✗ À revoir</button>
           <button class="btn btn-primary grammar-review-btn-yes" id="gr-yes">✓ Connu</button>
@@ -4908,6 +5536,243 @@ function finishGrammarReview() {
 }
 
 /* ============================================================
+   PHRASES SCREEN
+   ============================================================ */
+function renderPhrasesScreen() {
+  const phrases  = getPhrases();
+  const listEl   = document.getElementById('phrases-list');
+  const emptyEl  = document.getElementById('phrases-empty');
+  const reviewBar = document.getElementById('phrases-review-bar');
+  if (!listEl) return;
+
+  const phrasesDirBar = document.getElementById('phrases-dir-bar');
+  if (phrases.length === 0) {
+    listEl.innerHTML = '';
+    emptyEl  && emptyEl.classList.remove('hidden');
+    reviewBar && reviewBar.classList.add('hidden');
+    if (phrasesDirBar) phrasesDirBar.classList.add('hidden');
+    return;
+  }
+  emptyEl && emptyEl.classList.add('hidden');
+  const showPhrasesBar = phrases.length >= 2;
+  if (reviewBar) reviewBar.classList.toggle('hidden', !showPhrasesBar);
+  if (phrasesDirBar) {
+    phrasesDirBar.classList.toggle('hidden', !showPhrasesBar);
+    if (showPhrasesBar) renderReviewDirBar(
+      'phrases-dir-bar', 'phraseReviewDir',
+      lang().nativeFlag + '→' + lang().targetFlag,
+      lang().targetFlag + '→' + lang().nativeFlag
+    );
+  }
+
+  const weakBtn = document.getElementById('btn-phrases-review-weak');
+  if (weakBtn) weakBtn.classList.toggle('hidden', phrases.filter(p => p.last_known === false).length === 0);
+
+  const reviewed   = phrases.filter(p => p.last_known !== null).length;
+  const knownCount = phrases.filter(p => p.last_known === true).length;
+  const successPct = reviewed > 0 ? Math.round(knownCount / reviewed * 100) : null;
+  const successCls = successPct === null ? '' : successPct >= 80 ? 'stat-card-good' : successPct >= 60 ? 'stat-card-ok' : 'stat-card-bad';
+
+  const statsHtml = `
+    <div class="grammar-stats">
+      <div class="stat-card"><div class="stat-value">${phrases.length}</div><div class="stat-label">Phrases</div></div>
+      <div class="stat-card"><div class="stat-value">${reviewed}</div><div class="stat-label">Révisées</div></div>
+      <div class="stat-card ${successCls}"><div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div><div class="stat-label">Réussite</div></div>
+    </div>`;
+
+  listEl.innerHTML = statsHtml + phrases.map(p => `
+    <div class="phrase-item">
+      <div class="phrase-content">
+        <div class="phrase-native">${escHtml(p.native)}</div>
+        <div class="phrase-target">${lang().targetFlag} ${escHtml(p.target)}</div>
+        ${p.topic ? `<span class="phrase-topic-badge">${escHtml(p.topic)}</span>` : ''}
+      </div>
+      <div class="grammar-card-btns">
+        <button class="grammar-action-btn" data-action="edit"   data-id="${escHtml(p.id)}" title="Modifier">✏️</button>
+        <button class="grammar-action-btn" data-action="delete" data-id="${escHtml(p.id)}" title="Supprimer">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddPhraseModal() {
+  document.getElementById('modal-phrase-title').textContent  = 'Ajouter une phrase';
+  document.getElementById('edit-phrase-id').value            = '';
+  document.getElementById('input-phrase-native').value       = '';
+  document.getElementById('input-phrase-target').value       = '';
+  document.getElementById('input-phrase-topic').value        = '';
+  document.getElementById('form-phrase-error').classList.add('hidden');
+  updatePhraseFormLabels();
+  openModal('modal-add-phrase');
+  setTimeout(() => document.getElementById('input-phrase-native').focus(), 150);
+}
+
+function openEditPhraseModal(id) {
+  const phrase = getPhrases().find(p => p.id === id);
+  if (!phrase) return;
+  document.getElementById('modal-phrase-title').textContent  = 'Modifier la phrase';
+  document.getElementById('edit-phrase-id').value            = id;
+  document.getElementById('input-phrase-native').value       = phrase.native;
+  document.getElementById('input-phrase-target').value       = phrase.target;
+  document.getElementById('input-phrase-topic').value        = phrase.topic || '';
+  document.getElementById('form-phrase-error').classList.add('hidden');
+  updatePhraseFormLabels();
+  openModal('modal-add-phrase');
+}
+
+function updatePhraseFormLabels() {
+  const el = document.getElementById('label-phrase-target');
+  if (el) el.textContent = `${lang().targetFlag} Traduction (${lang().label.split('→')[1].trim()})`;
+}
+
+/* ---- Phrase review (reuses quiz screen) ---- */
+function startPhraseReview(weakOnly = false) {
+  let pool = getPhrases();
+  if (weakOnly) pool = pool.filter(p => p.last_known === false);
+  if (pool.length === 0) { alert('Aucune phrase à revoir pour le moment.'); return; }
+  const dir = getSettings().phraseReviewDir || 'native-target';
+  phraseReviewState = {
+    phrases: shuffle([...pool]).map(p => ({
+      ...p,
+      _showReverse: dir === 'target-native' || (dir === 'mix' && Math.random() < 0.5)
+    })),
+    weakOnly,
+    currentIndex: 0,
+    totalCards: pool.length,
+    knownCount: 0,
+    revealed: false
+  };
+  quitTarget = 'phrases';
+  document.getElementById('quiz-timer-container').classList.add('hidden');
+  showScreen('quiz');
+  renderPhraseReviewCard();
+}
+
+function renderPhraseReviewCard() {
+  if (!phraseReviewState) return;
+  const { phrases, currentIndex, totalCards, revealed } = phraseReviewState;
+  const p = phrases[currentIndex];
+  document.getElementById('quiz-progress-bar').style.width = (currentIndex / totalCards * 100) + '%';
+  document.getElementById('quiz-counter').textContent = `💬 ${currentIndex + 1} / ${totalCards}`;
+
+  const content = document.getElementById('quiz-content');
+  const topicHtml = p.topic ? `<span class="phrase-topic-badge">${escHtml(p.topic)}</span>` : '';
+  const rev = !!p._showReverse;
+  const promptText = rev ? p.target : p.native;
+  const revealText = rev ? p.native : p.target;
+  const promptFlag = rev ? lang().targetFlag : lang().nativeFlag;
+  const revealFlag = rev ? lang().nativeFlag : lang().targetFlag;
+
+  if (!revealed) {
+    content.innerHTML = `
+      <div class="grammar-review-card">
+        ${topicHtml}
+        <div class="quiz-type-label">${promptFlag} → ${revealFlag}</div>
+        <div class="grammar-review-question phrase-review-text">${escHtml(promptText).replace(/\n/g, '<br>')}</div>
+        <button class="btn btn-secondary grammar-reveal-btn" id="pr-reveal">Révéler la traduction</button>
+      </div>`;
+    content.querySelector('#pr-reveal').addEventListener('click', () => {
+      phraseReviewState.revealed = true;
+      renderPhraseReviewCard();
+    });
+  } else {
+    content.innerHTML = `
+      <div class="grammar-review-card grammar-review-card-revealed">
+        ${topicHtml}
+        <div class="quiz-type-label">${promptFlag} → ${revealFlag}</div>
+        <div class="grammar-review-question phrase-review-text">${escHtml(promptText).replace(/\n/g, '<br>')}</div>
+        <div class="grammar-review-sep"></div>
+        <div class="grammar-review-answer">${escHtml(revealText).replace(/\n/g, '<br>')}</div>
+        <div class="grammar-review-actions">
+          <button class="btn btn-danger  grammar-review-btn-no"  id="pr-no">✗ À revoir</button>
+          <button class="btn btn-primary grammar-review-btn-yes" id="pr-yes">✓ Connu</button>
+        </div>
+      </div>`;
+    content.querySelector('#pr-no' ).addEventListener('click', () => advancePhraseReview(false));
+    content.querySelector('#pr-yes').addEventListener('click', () => advancePhraseReview(true));
+  }
+}
+
+function advancePhraseReview(knew) {
+  if (!phraseReviewState) return;
+  const phrase = phraseReviewState.phrases[phraseReviewState.currentIndex];
+  const all = getPhrases();
+  const idx = all.findIndex(p => p.id === phrase.id);
+  if (idx !== -1) {
+    all[idx].last_known  = knew;
+    all[idx].seen_count  = (all[idx].seen_count || 0) + 1;
+    savePhrases(all);
+  }
+  if (knew) phraseReviewState.knownCount++;
+  phraseReviewState.currentIndex++;
+  phraseReviewState.revealed = false;
+  if (phraseReviewState.currentIndex >= phraseReviewState.totalCards) {
+    finishPhraseReview();
+  } else {
+    renderPhraseReviewCard();
+  }
+}
+
+function finishPhraseReview() {
+  const { knownCount, totalCards, weakOnly } = phraseReviewState;
+  phraseReviewState = null;
+  document.getElementById('quiz-progress-bar').style.width = '100%';
+  document.getElementById('quiz-counter').textContent = '';
+
+  const ratio = knownCount / totalCards;
+  let emoji, message;
+  if (ratio === 1)        { emoji = '🏆'; message = 'Parfait ! Toutes les phrases connues !'; }
+  else if (ratio >= 0.75) { emoji = '⭐'; message = 'Très bien ! Quelques phrases à revoir.'; }
+  else if (ratio >= 0.5)  { emoji = '📖'; message = 'Continuez à pratiquer !'; }
+  else                    { emoji = '💪'; message = 'À force de révisions, vous y arriverez !'; }
+
+  const content = document.getElementById('quiz-content');
+  content.innerHTML = `
+    <div class="grammar-finish">
+      <div class="grammar-finish-emoji">${emoji}</div>
+      <div class="grammar-finish-score">${knownCount} / ${totalCards} connues</div>
+      <p class="grammar-finish-message">${escHtml(message)}</p>
+      <div class="grammar-finish-actions">
+        <button class="btn btn-primary   btn-full" id="pr-replay">🔁 Réessayer</button>
+        <button class="btn btn-secondary btn-full" id="pr-back">💬 Retour aux phrases</button>
+      </div>
+    </div>`;
+  quitTarget = 'phrases';
+  content.querySelector('#pr-replay').addEventListener('click', () => startPhraseReview(weakOnly));
+  content.querySelector('#pr-back' ).addEventListener('click', () => { showScreen('phrases'); renderPhrasesScreen(); });
+}
+
+/* ---- Phrase export/import ---- */
+function exportPhrases() {
+  const phrases = getPhrases();
+  if (phrases.length === 0) { alert('Aucune phrase à exporter.'); return; }
+  downloadJson(JSON.stringify(phrases, null, 2), 'phrases_' + currentLangKey + '.json');
+}
+
+function handlePhraseImportFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let data;
+    try { data = JSON.parse(e.target.result); }
+    catch { alert('Fichier JSON invalide.'); return; }
+    if (!Array.isArray(data)) { alert('Format invalide.'); return; }
+    const valid = data.filter(p => p && typeof p.native === 'string' && typeof p.target === 'string');
+    if (valid.length === 0) { alert('Aucune phrase valide trouvée.'); return; }
+    pendingImportData = valid;
+    const n = valid.length;
+    _openImportModal(file,
+      `${n} phrase${n > 1 ? 's' : ''} trouvée${n > 1 ? 's' : ''}`,
+      '',
+      'Comment souhaitez-vous importer ces phrases ?',
+      'Ajoute les nouvelles phrases sans supprimer les existantes',
+      'Supprime toutes les phrases existantes et importe celles-ci',
+      'phrases',
+      'Importer des phrases');
+  };
+  reader.readAsText(file);
+}
+
+/* ============================================================
    EVENT LISTENERS
    ============================================================ */
 function initEventListeners() {
@@ -4916,9 +5781,10 @@ function initEventListeners() {
     tab.addEventListener('click', () => {
       const target = tab.dataset.target;
       showScreen(target);
-      if (target === 'bank')    renderWordList(document.getElementById('search-input').value);
+      if (target === 'bank')    { renderWordList(document.getElementById('search-input').value); renderTagFilterBar(); }
       if (target === 'home')    updateHomeStats();
       if (target === 'grammar') renderGrammarScreen();
+      if (target === 'phrases') renderPhrasesScreen();
       if (target === 'stats')   renderStats();
     });
   });
@@ -4939,20 +5805,22 @@ function initEventListeners() {
   const startBtn = document.getElementById('btn-start-quiz');
   if (startBtn) startBtn.addEventListener('click', () => { if (!startBtn.disabled) startQuiz(); });
 
-  // Quit quiz / grammar review
+  // Quit quiz / grammar / phrase review
   const quitBtn = document.getElementById('btn-quit-quiz');
   if (quitBtn) {
     quitBtn.addEventListener('click', () => {
-      const isActive = quizState || grammarReviewState;
+      const isActive = quizState || grammarReviewState || phraseReviewState;
       if (isActive && !confirm('Quitter ?')) return;
       speechSynthesis && speechSynthesis.cancel();
       stopChronoTimer();
       quizState = null;
       grammarReviewState = null;
+      phraseReviewState  = null;
       const dest = quitTarget;
       quitTarget = 'home';
-      if (dest === 'grammar') { showScreen('grammar'); renderGrammarScreen(); }
-      else { showScreen('home'); updateHomeStats(); }
+      if      (dest === 'grammar') { showScreen('grammar'); renderGrammarScreen(); }
+      else if (dest === 'phrases') { showScreen('phrases'); renderPhrasesScreen(); }
+      else                         { showScreen('home');    updateHomeStats(); }
     });
   }
 
@@ -4979,6 +5847,68 @@ function initEventListeners() {
       if (action === 'edit') openEditGrammarModal(id);
       else if (action === 'delete') {
         if (confirm('Supprimer cette fiche ?')) { deleteGrammarCard(id); renderGrammarScreen(); }
+      }
+    });
+  }
+
+  // Phrases: add button
+  const addPhraseBtn = document.getElementById('btn-add-phrase');
+  if (addPhraseBtn) addPhraseBtn.addEventListener('click', openAddPhraseModal);
+
+  // Phrases: review buttons
+  const phrasesReviewAllBtn = document.getElementById('btn-phrases-review-all');
+  if (phrasesReviewAllBtn) phrasesReviewAllBtn.addEventListener('click', () => startPhraseReview(false));
+  const phrasesReviewWeakBtn = document.getElementById('btn-phrases-review-weak');
+  if (phrasesReviewWeakBtn) phrasesReviewWeakBtn.addEventListener('click', () => startPhraseReview(true));
+
+  // Phrases: list delegation (edit, delete)
+  const phrasesList = document.getElementById('phrases-list');
+  if (phrasesList) {
+    phrasesList.addEventListener('click', (e) => {
+      const actionBtn = e.target.closest('[data-action]');
+      if (!actionBtn) return;
+      const { action, id } = actionBtn.dataset;
+      if (action === 'edit') openEditPhraseModal(id);
+      else if (action === 'delete') {
+        if (confirm('Supprimer cette phrase ?')) { deletePhrase(id); renderPhrasesScreen(); }
+      }
+    });
+  }
+
+  // Phrases: form submit
+  const phraseForm = document.getElementById('form-add-phrase');
+  if (phraseForm) {
+    phraseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const native  = document.getElementById('input-phrase-native').value.trim();
+      const target  = document.getElementById('input-phrase-target').value.trim();
+      const topic   = document.getElementById('input-phrase-topic').value.trim();
+      const errorEl = document.getElementById('form-phrase-error');
+      const editId  = document.getElementById('edit-phrase-id').value;
+      if (!native || !target) {
+        errorEl.textContent = 'Les deux champs de texte sont requis.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+      if (editId) updatePhrase(editId, native, target, topic);
+      else addPhrase(native, target, topic);
+      closeModal('modal-add-phrase');
+      renderPhrasesScreen();
+    });
+  }
+
+  // Phrases: export/import
+  const phrasesExportBtn  = document.getElementById('btn-phrases-export');
+  const phrasesImportBtn  = document.getElementById('btn-phrases-import');
+  const phrasesFileInput  = document.getElementById('phrases-import-file-input');
+  if (phrasesExportBtn)  phrasesExportBtn.addEventListener('click', exportPhrases);
+  if (phrasesImportBtn && phrasesFileInput) {
+    phrasesImportBtn.addEventListener('click', () => phrasesFileInput.click());
+    phrasesFileInput.addEventListener('change', () => {
+      if (phrasesFileInput.files.length > 0) {
+        handlePhraseImportFile(phrasesFileInput.files[0]);
+        phrasesFileInput.value = '';
       }
     });
   }
@@ -5027,6 +5957,7 @@ function initEventListeners() {
       } else if (action === 'delete') {
         if (confirm('Supprimer ce mot ?')) {
           deleteWord(id);
+          renderTagFilterBar();
           renderWordList(document.getElementById('search-input').value);
           updateHomeStats();
         }
@@ -5059,9 +5990,11 @@ function initEventListeners() {
         return;
       }
       errorEl.classList.add('hidden');
-      if (editId) updateWord(editId, native, target);
-      else addWord(native, target);
+      const tags = parseTags(document.getElementById('input-tags').value);
+      if (editId) updateWord(editId, native, target, tags);
+      else addWord(native, target, tags);
       closeModal('modal-add-word');
+      renderTagFilterBar();
       renderWordList(document.getElementById('search-input').value);
       updateHomeStats();
     });
@@ -5083,6 +6016,22 @@ function initEventListeners() {
       if (fileInput.files.length > 0) {
         handleImportFile(fileInput.files[0]);
         fileInput.value = '';
+      }
+    });
+  }
+
+  // Grammar export/import
+  const grammarExportBtn = document.getElementById('btn-grammar-export');
+  if (grammarExportBtn) grammarExportBtn.addEventListener('click', exportGrammarCards);
+
+  const grammarImportBtn  = document.getElementById('btn-grammar-import');
+  const grammarFileInput  = document.getElementById('grammar-import-file-input');
+  if (grammarImportBtn && grammarFileInput) {
+    grammarImportBtn.addEventListener('click', () => grammarFileInput.click());
+    grammarFileInput.addEventListener('change', () => {
+      if (grammarFileInput.files.length > 0) {
+        handleGrammarImportFile(grammarFileInput.files[0]);
+        grammarFileInput.value = '';
       }
     });
   }
