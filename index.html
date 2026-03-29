@@ -701,18 +701,6 @@ body {
 .empty-state p { font-size: 15px; margin-bottom: 6px; }
 .text-muted { color: var(--text-muted); font-size: 13px; }
 
-.bank-actions {
-  display: flex; gap: 10px;
-  flex-shrink: 0;
-  padding: 10px 16px calc(var(--nav-h) + 10px);
-  background: var(--bg);
-  border-top: 1px solid var(--card);
-}
-.bank-actions .btn {
-  flex: 1;
-  font-size: 13px;
-  padding: 12px 8px;
-}
 
 /* ============================================================
    MODALS
@@ -1560,6 +1548,27 @@ body {
 }
 #screen-grammar .screen-title,
 #screen-phrases .screen-title { flex: 1; min-width: 0; }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.btn-hdr-icon {
+  background: var(--card2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-hdr-icon:active { opacity: 0.7; }
 #screen-grammar #btn-add-grammar,
 #screen-phrases #btn-add-phrase { flex-shrink: 0; font-size: 14px; padding: 7px 14px; }
 
@@ -1575,26 +1584,36 @@ body {
 .grammar-review-bar {
   position: sticky;
   bottom: var(--nav-h);
-  padding: 12px 16px;
+  padding: 10px 16px;
   background: var(--bg);
   border-top: 1px solid var(--border);
   display: flex;
-  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 .grammar-bar-btn { flex: 1; }
+.grammar-bar-btn-weak {
+  flex-shrink: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.bar-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  flex-shrink: 0;
+}
 
-.review-dir-bar {
+.review-dir-inline {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
   flex-wrap: wrap;
 }
-.review-dir-bar.hidden { display: none; }
-.review-dir-bar .settings-label {
+.review-dir-inline .settings-label {
   font-size: 11px;
   font-weight: 700;
   color: var(--text-muted);
@@ -1602,11 +1621,12 @@ body {
   letter-spacing: 0.6px;
   flex-shrink: 0;
 }
-.review-dir-bar .settings-pills {
+.review-dir-inline .settings-pills {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
 }
+
 
 .grammar-lesson-group {
   margin-bottom: 14px;
@@ -1914,20 +1934,24 @@ body {
 
 /* Header compact */
 #screen-home .app-header { padding: 10px 14px 8px; }
-#screen-bank .app-header, #screen-stats .app-header {
+#screen-bank .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+#screen-bank .screen-title { flex: 1; min-width: 0; }
+#screen-stats .app-header {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: 8px;
 }
-#screen-bank .screen-title, #screen-stats .screen-title {
+#screen-stats .screen-title {
   grid-column: 1; grid-row: 1;
 }
-#screen-bank #btn-bank-legend {
-  grid-column: 2; grid-row: 1;
-}
-#screen-bank .bank-lang-label, #screen-stats .bank-lang-label {
+#screen-stats .bank-lang-label {
   grid-column: 1 / -1; grid-row: 2;
   margin-top: 2px;
 }
@@ -2301,8 +2325,12 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="screen-bank" class="screen" data-screen="bank">
     <header class="app-header">
       <h1 class="screen-title">Ma banque de mots</h1>
-      <p id="bank-lang-label" class="bank-lang-label"></p>
-      <button id="btn-bank-legend" class="pref-toggle pref-toggle-text" title="Code couleur">?</button>
+      <div class="header-actions">
+        <button id="btn-share" class="btn-hdr-icon" title="Partager">🔗</button>
+        <button id="btn-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
+        <button id="btn-import" class="btn-hdr-icon" title="Importer">⬆️</button>
+        <button id="btn-add-word" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+      </div>
     </header>
 
     <main class="screen-content">
@@ -2319,9 +2347,6 @@ body.large-text .mode-desc         { font-size: 17px; }
             spellcheck="false"
           />
         </div>
-        <button id="btn-add-word" class="btn btn-primary btn-icon-add">
-          + Ajouter
-        </button>
       </div>
 
       <div id="tag-filter-bar" class="tag-filter-bar hidden"></div>
@@ -2336,19 +2361,8 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Ajoutez votre premier mot ci-dessus !</p>
       </div>
 
-        <input type="file" id="import-file-input" accept=".json" style="display:none" />
+      <input type="file" id="import-file-input" accept=".json" style="display:none" />
     </main>
-    <div class="bank-actions">
-      <button id="btn-share" class="btn btn-secondary">
-        🔗 Partager
-      </button>
-      <button id="btn-export" class="btn btn-secondary">
-        ⬇️ Exporter
-      </button>
-      <button id="btn-import" class="btn btn-secondary">
-        ⬆️ Importer
-      </button>
-    </div>
   </div>
 
   <!-- ===== SCREEN: STATS ===== -->
@@ -2366,7 +2380,11 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="screen-grammar" class="screen" data-screen="grammar">
     <header class="app-header">
       <h1 class="screen-title">Fiches de cours</h1>
-      <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+      <div class="header-actions">
+        <button id="btn-grammar-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
+        <button id="btn-grammar-import" class="btn-hdr-icon" title="Importer">⬆️</button>
+        <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+      </div>
     </header>
     <main class="screen-content">
       <div id="grammar-list"></div>
@@ -2376,14 +2394,11 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Créez votre première fiche ci-dessus !</p>
       </div>
     </main>
-    <div id="grammar-dir-bar" class="review-dir-bar hidden"></div>
     <div id="grammar-review-all-bar" class="grammar-review-bar hidden">
-      <button id="btn-grammar-review-all" class="btn btn-secondary grammar-bar-btn">📖 Tout réviser</button>
-      <button id="btn-grammar-review-weak" class="btn btn-danger grammar-bar-btn hidden">⚡ À revoir</button>
-    </div>
-    <div class="bank-actions">
-      <button id="btn-grammar-export" class="btn btn-secondary">⬇️ Exporter</button>
-      <button id="btn-grammar-import" class="btn btn-secondary">⬆️ Importer</button>
+      <div id="grammar-dir-bar" class="review-dir-inline"></div>
+      <div class="bar-sep"></div>
+      <button id="btn-grammar-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
+      <button id="btn-grammar-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
     </div>
     <input type="file" id="grammar-import-file-input" accept=".json" style="display:none" />
   </div>
@@ -2392,7 +2407,11 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="screen-phrases" class="screen" data-screen="phrases">
     <header class="app-header">
       <h1 class="screen-title">Phrases & expressions</h1>
-      <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+      <div class="header-actions">
+        <button id="btn-phrases-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
+        <button id="btn-phrases-import" class="btn-hdr-icon" title="Importer">⬆️</button>
+        <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+      </div>
     </header>
     <main class="screen-content">
       <div id="phrases-list"></div>
@@ -2402,14 +2421,11 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
       </div>
     </main>
-    <div id="phrases-dir-bar" class="review-dir-bar hidden"></div>
     <div id="phrases-review-bar" class="grammar-review-bar hidden">
-      <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Tout réviser</button>
-      <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn hidden">⚡ À revoir</button>
-    </div>
-    <div class="bank-actions">
-      <button id="btn-phrases-export" class="btn btn-secondary">⬇️ Exporter</button>
-      <button id="btn-phrases-import" class="btn btn-secondary">⬆️ Importer</button>
+      <div id="phrases-dir-bar" class="review-dir-inline"></div>
+      <div class="bar-sep"></div>
+      <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
+      <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
     </div>
     <input type="file" id="phrases-import-file-input" accept=".json" style="display:none" />
   </div>
@@ -3862,17 +3878,33 @@ function buildQuiz() {
   const typePool = [];
   for (let i = 0; i < numQ; i++) typePool.push(shuffledOpts[i % shuffledOpts.length]);
 
+  // --- rotating word queue (évite les répétitions entre exercices) ---
+  const wordQueue = shuffle([...sessionWords]);
+  let wIdx = 0;
+  function nextWord() {
+    const w = wordQueue[wIdx % wordQueue.length];
+    wIdx++;
+    return w;
+  }
+  function nextMatchWords(n) {
+    const start = wIdx % wordQueue.length;
+    const words = Array.from({ length: n }, (_, k) => wordQueue[(start + k) % wordQueue.length]);
+    wIdx += n;
+    return words;
+  }
+
   // --- build questions ---
   const questions = [];
   for (let i = 0; i < numQ; i++) {
     const type = typePool[i];
     let q;
     if (type === QuizType.TEXT_MATCH || type === QuizType.AUDIO_MATCH) {
-      q = { type, words: pickRandom(sessionWords, MS) };
+      const words = isSurvival ? pickRandom(sessionWords, MS) : nextMatchWords(MS);
+      q = { type, words };
     } else if (type === QuizType.FREE_INPUT || type === QuizType.DICTEE || type === QuizType.ANAGRAM) {
       let questionWord = isSurvival
         ? sessionWords[Math.floor(Math.random() * sessionWords.length)]
-        : sessionWords[i % sessionWords.length];
+        : nextWord();
       if (type === QuizType.ANAGRAM) {
         const anagramPool = sessionWords.filter(w => Array.from(w.target).filter(c => c !== ' ').length >= 3);
         if (anagramPool.length > 0) {
@@ -3883,7 +3915,7 @@ function buildQuiz() {
     } else {
       const questionWord = isSurvival
         ? sessionWords[Math.floor(Math.random() * sessionWords.length)]
-        : sessionWords[i % sessionWords.length];
+        : nextWord();
       const needed = MS - 1;
       const distractorPool = allWords.filter(w => w.id !== questionWord.id);
       const distractors = pickRandom(distractorPool, needed);
@@ -5268,11 +5300,10 @@ function renderReviewDirBar(barId, settingKey, labelA, labelB) {
   if (!bar) return;
   const dir = getSettings()[settingKey] || 'native-target';
   bar.innerHTML = `
-    <span class="settings-label">Sens</span>
     <div class="settings-pills">
       <button class="settings-pill${dir === 'native-target'  ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="native-target">${labelA}</button>
       <button class="settings-pill${dir === 'target-native'  ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="target-native">${labelB}</button>
-      <button class="settings-pill${dir === 'mix'            ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="mix">🔀 Mix</button>
+      <button class="settings-pill${dir === 'mix'            ? ' active' : ''}" data-reviewdir="${settingKey}" data-dirval="mix">🔀</button>
     </div>`;
   bar.querySelectorAll('[data-reviewdir]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -5291,12 +5322,10 @@ function renderGrammarScreen() {
   const reviewAllBar = document.getElementById('grammar-review-all-bar');
   if (!listEl) return;
 
-  const grammarDirBar = document.getElementById('grammar-dir-bar');
   if (cards.length === 0) {
     listEl.innerHTML = '';
     emptyEl && emptyEl.classList.remove('hidden');
     reviewAllBar && reviewAllBar.classList.add('hidden');
-    if (grammarDirBar) grammarDirBar.classList.add('hidden');
     return;
   }
   emptyEl && emptyEl.classList.add('hidden');
@@ -5311,13 +5340,13 @@ function renderGrammarScreen() {
   const lessonNames = Object.keys(lessons);
   const showGrammarBar = cards.length >= 2;
   if (reviewAllBar) reviewAllBar.classList.toggle('hidden', !showGrammarBar);
-  if (grammarDirBar) {
-    grammarDirBar.classList.toggle('hidden', !showGrammarBar);
-    if (showGrammarBar) renderReviewDirBar('grammar-dir-bar', 'grammarReviewDir', 'Question → Réponse', 'Réponse → Question');
-  }
+  if (showGrammarBar) renderReviewDirBar('grammar-dir-bar', 'grammarReviewDir', 'Q→R', 'R→Q');
   const weakBtn = document.getElementById('btn-grammar-review-weak');
   const weakCards = cards.filter(c => c.last_known === false);
-  if (weakBtn) weakBtn.classList.toggle('hidden', weakCards.length === 0);
+  if (weakBtn) {
+    weakBtn.classList.toggle('hidden', weakCards.length === 0);
+    if (weakCards.length > 0) weakBtn.textContent = `⚡ ${weakCards.length}`;
+  }
 
   // Global stats — basées sur last_known (résultat de la DERNIÈRE révision de chaque fiche)
   const reviewed   = cards.filter(c => c.last_known !== null).length;
@@ -5546,28 +5575,27 @@ function renderPhrasesScreen() {
   const reviewBar = document.getElementById('phrases-review-bar');
   if (!listEl) return;
 
-  const phrasesDirBar = document.getElementById('phrases-dir-bar');
   if (phrases.length === 0) {
     listEl.innerHTML = '';
     emptyEl  && emptyEl.classList.remove('hidden');
     reviewBar && reviewBar.classList.add('hidden');
-    if (phrasesDirBar) phrasesDirBar.classList.add('hidden');
     return;
   }
   emptyEl && emptyEl.classList.add('hidden');
   const showPhrasesBar = phrases.length >= 2;
   if (reviewBar) reviewBar.classList.toggle('hidden', !showPhrasesBar);
-  if (phrasesDirBar) {
-    phrasesDirBar.classList.toggle('hidden', !showPhrasesBar);
-    if (showPhrasesBar) renderReviewDirBar(
-      'phrases-dir-bar', 'phraseReviewDir',
-      lang().nativeFlag + '→' + lang().targetFlag,
-      lang().targetFlag + '→' + lang().nativeFlag
-    );
-  }
+  if (showPhrasesBar) renderReviewDirBar(
+    'phrases-dir-bar', 'phraseReviewDir',
+    lang().nativeFlag + '→' + lang().targetFlag,
+    lang().targetFlag + '→' + lang().nativeFlag
+  );
 
   const weakBtn = document.getElementById('btn-phrases-review-weak');
-  if (weakBtn) weakBtn.classList.toggle('hidden', phrases.filter(p => p.last_known === false).length === 0);
+  const weakPhrases = phrases.filter(p => p.last_known === false);
+  if (weakBtn) {
+    weakBtn.classList.toggle('hidden', weakPhrases.length === 0);
+    if (weakPhrases.length > 0) weakBtn.textContent = `⚡ ${weakPhrases.length}`;
+  }
 
   const reviewed   = phrases.filter(p => p.last_known !== null).length;
   const knownCount = phrases.filter(p => p.last_known === true).length;
