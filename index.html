@@ -1776,6 +1776,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .grammar-card-item:last-child { border-bottom: none; }
+.grammar-card-item .phrase-content { align-self: flex-start; }
 
 .grammar-card-content {
   flex: 1;
@@ -2468,6 +2469,7 @@ body.large-text .mode-desc         { font-size: 17px; }
     <header class="app-header">
       <h1 class="screen-title">Fiches de cours</h1>
       <div class="header-actions">
+        <button id="btn-grammar-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-grammar-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-grammar-import" class="btn-hdr-icon" title="Importer">⬆️</button>
         <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
@@ -2495,6 +2497,7 @@ body.large-text .mode-desc         { font-size: 17px; }
     <header class="app-header">
       <h1 class="screen-title">Phrases & expressions</h1>
       <div class="header-actions">
+        <button id="btn-phrases-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-phrases-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-phrases-import" class="btn-hdr-icon" title="Importer">⬆️</button>
         <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
@@ -2508,14 +2511,11 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
       </div>
     </main>
-    <div id="phrases-review-bar" class="grammar-review-bar phrases-review-bar hidden">
-      <div id="phrases-count-row" class="phrases-count-row"></div>
-      <div class="phrases-bar-main">
-        <div id="phrases-dir-bar" class="review-dir-inline"></div>
-        <div class="bar-sep"></div>
-        <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
-        <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
-      </div>
+    <div id="phrases-review-bar" class="grammar-review-bar hidden">
+      <div id="phrases-dir-bar" class="review-dir-inline"></div>
+      <div class="bar-sep"></div>
+      <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
+      <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
     </div>
     <input type="file" id="phrases-import-file-input" accept=".json" style="display:none" />
   </div>
@@ -2788,6 +2788,17 @@ body.large-text .mode-desc         { font-size: 17px; }
         <button class="modal-close" data-close="modal-lesson-picker">✕</button>
       </div>
       <div id="lesson-picker-list" class="lesson-picker-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: TOPIC PICKER ===== -->
+  <div id="modal-topic-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Choisir les thèmes</h2>
+        <button class="modal-close" data-close="modal-topic-picker">✕</button>
+      </div>
+      <div id="topic-picker-list" class="lesson-picker-list"></div>
     </div>
   </div>
 
@@ -3681,6 +3692,28 @@ function exportGrammarCards() {
   const cards = getGrammarCards();
   if (cards.length === 0) { alert('Aucune fiche à exporter.'); return; }
   downloadJson(JSON.stringify(cards, null, 2), 'grammar_' + currentLangKey + '.json');
+}
+
+async function shareGrammarCards() {
+  const cards = getGrammarCards();
+  if (cards.length === 0) { alert('Aucune fiche à partager.'); return; }
+  const json = JSON.stringify(cards, null, 2);
+  const filename = 'grammar_' + currentLangKey + '.txt';
+  if (navigator.share) {
+    const file = new File([json], filename, { type: 'text/plain' });
+    const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
+    try {
+      if (canShareFile) {
+        await navigator.share({ files: [file], title: 'Fiches de cours — ' + lang().title });
+      } else {
+        await navigator.share({ title: 'Fiches de cours — ' + lang().title, text: json });
+      }
+    } catch(e) {
+      if (e.name !== 'AbortError') exportGrammarCards();
+    }
+  } else {
+    exportGrammarCards();
+  }
 }
 
 async function shareWords() {
@@ -5737,26 +5770,68 @@ function finishGrammarReview() {
 /* ============================================================
    PHRASES SCREEN
    ============================================================ */
-function renderPhraseCountBar() {
-  const bar = document.getElementById('phrases-count-row');
-  if (!bar) return;
-  const total = getPhrases().length;
-  const s = getSettings();
-  const cur = s.phraseReviewCount !== undefined ? s.phraseReviewCount : 0;
-  const counts = [5, 10, 20, 50].filter(n => n < total);
-  if (counts.length === 0) { bar.innerHTML = ''; return; }
-  bar.innerHTML = `<div class="settings-pills">
-    ${counts.map(n => `<button class="settings-pill${cur === n ? ' active' : ''}" data-phrasecount="${n}">${n}</button>`).join('')}
-    <button class="settings-pill${cur === 0 ? ' active' : ''}" data-phrasecount="0">Tout (${total})</button>
-  </div>`;
-  bar.querySelectorAll('[data-phrasecount]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const s = getSettings();
-      s.phraseReviewCount = parseInt(btn.dataset.phrasecount);
-      saveSettings(s);
-      renderPhraseCountBar();
-    });
+/* ---- Topic picker modal (phrases) ---- */
+function openTopicPickerModal(weakOnly) {
+  const phrases = getPhrases();
+  const availableTopics = [...new Set(phrases.map(p => p.topic || ''))].sort((a, b) => {
+    if (a === '') return 1; if (b === '') return -1; return a.localeCompare(b);
+  }).filter(t => {
+    if (!weakOnly) return true;
+    return phrases.some(p => (p.topic || '') === t && p.last_known === false);
   });
+  const selected = new Set(availableTopics);
+  const list = document.getElementById('topic-picker-list');
+
+  function countSelected() {
+    let pool = phrases.filter(p => selected.has(p.topic || ''));
+    if (weakOnly) pool = pool.filter(p => p.last_known === false);
+    return pool.length;
+  }
+
+  function render() {
+    const n = countSelected();
+    const allSel = selected.size === availableTopics.length;
+    list.innerHTML = `
+      <div class="lesson-picker-actions">
+        <button class="settings-pill${allSel ? ' active' : ''}" id="tp-sel-all">Tout</button>
+        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="tp-sel-none">Aucun</button>
+      </div>
+      ${availableTopics.map(t => {
+        const tPhrases = phrases.filter(p => (p.topic || '') === t);
+        const count = weakOnly ? tPhrases.filter(p => p.last_known === false).length : tPhrases.length;
+        const isSel = selected.has(t);
+        return `<div class="lesson-picker-item${isSel ? ' selected' : ''}" data-topic="${escHtml(t)}">
+          <div class="lesson-picker-check">${isSel ? '✓' : ''}</div>
+          <span class="lesson-picker-name">${escHtml(t || 'Sans thème')}</span>
+          <span class="lesson-picker-count">${count} phrase${count > 1 ? 's' : ''}</span>
+        </div>`;
+      }).join('')}
+      <div class="lesson-picker-sep"></div>
+      <button class="btn btn-primary btn-full" id="tp-start" ${n === 0 ? 'disabled' : ''}>
+        📖 Réviser — ${n} phrase${n > 1 ? 's' : ''}
+      </button>
+    `;
+    list.querySelector('#tp-sel-all').addEventListener('click', () => { availableTopics.forEach(t => selected.add(t)); render(); });
+    list.querySelector('#tp-sel-none').addEventListener('click', () => { selected.clear(); render(); });
+    list.querySelectorAll('.lesson-picker-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const t = item.dataset.topic;
+        if (selected.has(t)) selected.delete(t); else selected.add(t);
+        render();
+      });
+    });
+    const startBtn = list.querySelector('#tp-start');
+    if (startBtn && !startBtn.disabled) {
+      startBtn.addEventListener('click', () => {
+        closeModal('modal-topic-picker');
+        const sel = [...selected];
+        startPhraseReview(weakOnly, sel.length === availableTopics.length ? null : sel);
+      });
+    }
+  }
+
+  render();
+  openModal('modal-topic-picker');
 }
 
 function renderPhrasesScreen() {
@@ -5775,14 +5850,11 @@ function renderPhrasesScreen() {
   emptyEl && emptyEl.classList.add('hidden');
   const showPhrasesBar = phrases.length >= 2;
   if (reviewBar) reviewBar.classList.toggle('hidden', !showPhrasesBar);
-  if (showPhrasesBar) {
-    renderReviewDirBar(
-      'phrases-dir-bar', 'phraseReviewDir',
-      lang().nativeFlag + '→' + lang().targetFlag,
-      lang().targetFlag + '→' + lang().nativeFlag
-    );
-    renderPhraseCountBar();
-  }
+  if (showPhrasesBar) renderReviewDirBar(
+    'phrases-dir-bar', 'phraseReviewDir',
+    lang().nativeFlag + '→' + lang().targetFlag,
+    lang().targetFlag + '→' + lang().nativeFlag
+  );
 
   const weakBtn = document.getElementById('btn-phrases-review-weak');
   const weakPhrases = phrases.filter(p => p.last_known === false);
@@ -5796,25 +5868,62 @@ function renderPhrasesScreen() {
   const successPct = reviewed > 0 ? Math.round(knownCount / reviewed * 100) : null;
   const successCls = successPct === null ? '' : successPct >= 80 ? 'stat-card-good' : successPct >= 60 ? 'stat-card-ok' : 'stat-card-bad';
 
+  // Group by topic (preserve insertion order, '' = Sans thème at end)
+  const topicMap = {};
+  for (const p of phrases) {
+    const key = p.topic || '';
+    if (!topicMap[key]) topicMap[key] = [];
+    topicMap[key].push(p);
+  }
+  const topicKeys = Object.keys(topicMap).sort((a, b) => {
+    if (a === '') return 1;
+    if (b === '') return -1;
+    return a.localeCompare(b);
+  });
+  const namedTopicCount = topicKeys.filter(t => t !== '').length;
+
   const statsHtml = `
     <div class="grammar-stats">
+      <div class="stat-card"><div class="stat-value">${namedTopicCount || '—'}</div><div class="stat-label">Thèmes</div></div>
       <div class="stat-card"><div class="stat-value">${phrases.length}</div><div class="stat-label">Phrases</div></div>
       <div class="stat-card"><div class="stat-value">${reviewed}</div><div class="stat-label">Révisées</div></div>
       <div class="stat-card ${successCls}"><div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div><div class="stat-label">Réussite</div></div>
     </div>`;
 
-  listEl.innerHTML = statsHtml + phrases.map(p => `
-    <div class="phrase-item">
-      <div class="phrase-content">
-        <div class="phrase-native">${escHtml(p.native)}</div>
-        <div class="phrase-target">${lang().targetFlag} ${escHtml(p.target)}</div>
-        ${p.topic ? `<span class="phrase-topic-badge">${escHtml(p.topic)}</span>` : ''}
-      </div>
-      <div class="grammar-card-btns">
-        <button class="grammar-action-btn" data-action="edit"   data-id="${escHtml(p.id)}" title="Modifier">✏️</button>
-        <button class="grammar-action-btn" data-action="delete" data-id="${escHtml(p.id)}" title="Supprimer">🗑️</button>
-      </div>
-    </div>`).join('');
+  listEl.innerHTML = statsHtml + topicKeys.map(topic => {
+    const tPhrases = topicMap[topic];
+    const tReviewed = tPhrases.filter(p => p.last_known !== null).length;
+    const tKnown    = tPhrases.filter(p => p.last_known === true).length;
+    const tRate     = tReviewed > 0 ? Math.round(tKnown / tReviewed * 100) : null;
+    const tStatHtml = tRate !== null
+      ? `<span class="grammar-lesson-stat">${tKnown}/${tReviewed} réussies</span>` : '';
+    const topicLabel = topic || 'Sans thème';
+    const topicIcon  = topic ? '💬' : '📂';
+
+    const itemsHtml = tPhrases.map(p => `
+      <div class="grammar-card-item">
+        <div class="phrase-content">
+          <div class="phrase-native">${escHtml(p.native)}</div>
+          <div class="phrase-target">${lang().targetFlag} ${escHtml(p.target)}</div>
+        </div>
+        <div class="grammar-card-btns">
+          <button class="grammar-action-btn" data-action="edit"   data-id="${escHtml(p.id)}" title="Modifier">✏️</button>
+          <button class="grammar-action-btn" data-action="delete" data-id="${escHtml(p.id)}" title="Supprimer">🗑️</button>
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="grammar-lesson-group">
+        <div class="grammar-lesson-header">
+          <div class="grammar-lesson-title-wrap">
+            <span class="grammar-lesson-title">${topicIcon} ${escHtml(topicLabel)}</span>
+            ${tStatHtml}
+          </div>
+          <button class="btn btn-primary grammar-review-btn" data-topic="${escHtml(topic)}">Réviser</button>
+        </div>
+        <div class="grammar-cards-list">${itemsHtml}</div>
+      </div>`;
+  }).join('');
 }
 
 function openAddPhraseModal() {
@@ -5848,14 +5957,14 @@ function updatePhraseFormLabels() {
 }
 
 /* ---- Phrase review (reuses quiz screen) ---- */
-function startPhraseReview(weakOnly = false) {
+function startPhraseReview(weakOnly = false, topic = null) {
   let pool = getPhrases();
+  if (topic !== null) {
+    if (Array.isArray(topic)) pool = pool.filter(p => topic.includes(p.topic || ''));
+    else pool = pool.filter(p => (p.topic || '') === topic);
+  }
   if (weakOnly) pool = pool.filter(p => p.last_known === false);
   if (pool.length === 0) { alert('Aucune phrase à revoir pour le moment.'); return; }
-  if (!weakOnly) {
-    const count = getSettings().phraseReviewCount || 0;
-    if (count > 0 && count < pool.length) pool = shuffle([...pool]).slice(0, count);
-  }
   const dir = getSettings().phraseReviewDir || 'native-target';
   phraseReviewState = {
     phrases: shuffle([...pool]).map(p => ({
@@ -5976,6 +6085,28 @@ function exportPhrases() {
   downloadJson(JSON.stringify(phrases, null, 2), 'phrases_' + currentLangKey + '.json');
 }
 
+async function sharePhrases() {
+  const phrases = getPhrases();
+  if (phrases.length === 0) { alert('Aucune phrase à partager.'); return; }
+  const json = JSON.stringify(phrases, null, 2);
+  const filename = 'phrases_' + currentLangKey + '.txt';
+  if (navigator.share) {
+    const file = new File([json], filename, { type: 'text/plain' });
+    const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
+    try {
+      if (canShareFile) {
+        await navigator.share({ files: [file], title: 'Phrases — ' + lang().title });
+      } else {
+        await navigator.share({ title: 'Phrases — ' + lang().title, text: json });
+      }
+    } catch(e) {
+      if (e.name !== 'AbortError') exportPhrases();
+    }
+  } else {
+    exportPhrases();
+  }
+}
+
 function handlePhraseImportFile(file) {
   if (!file) return;
   const reader = new FileReader();
@@ -6093,14 +6224,24 @@ function initEventListeners() {
 
   // Phrases: review buttons
   const phrasesReviewAllBtn = document.getElementById('btn-phrases-review-all');
-  if (phrasesReviewAllBtn) phrasesReviewAllBtn.addEventListener('click', () => startPhraseReview(false));
+  if (phrasesReviewAllBtn) phrasesReviewAllBtn.addEventListener('click', () => {
+    const topics = [...new Set(getPhrases().map(p => p.topic || ''))];
+    if (topics.length > 1) openTopicPickerModal(false);
+    else startPhraseReview(false);
+  });
   const phrasesReviewWeakBtn = document.getElementById('btn-phrases-review-weak');
-  if (phrasesReviewWeakBtn) phrasesReviewWeakBtn.addEventListener('click', () => startPhraseReview(true));
+  if (phrasesReviewWeakBtn) phrasesReviewWeakBtn.addEventListener('click', () => {
+    const topics = [...new Set(getPhrases().map(p => p.topic || ''))];
+    if (topics.length > 1) openTopicPickerModal(true);
+    else startPhraseReview(true);
+  });
 
-  // Phrases: list delegation (edit, delete)
+  // Phrases: list delegation (review by topic, edit, delete)
   const phrasesList = document.getElementById('phrases-list');
   if (phrasesList) {
     phrasesList.addEventListener('click', (e) => {
+      const reviewBtn = e.target.closest('.grammar-review-btn');
+      if (reviewBtn) { startPhraseReview(false, reviewBtn.dataset.topic); return; }
       const actionBtn = e.target.closest('[data-action]');
       if (!actionBtn) return;
       const { action, id } = actionBtn.dataset;
@@ -6134,7 +6275,9 @@ function initEventListeners() {
     });
   }
 
-  // Phrases: export/import
+  // Phrases: share/export/import
+  const phrasesShareBtn   = document.getElementById('btn-phrases-share');
+  if (phrasesShareBtn) phrasesShareBtn.addEventListener('click', sharePhrases);
   const phrasesExportBtn  = document.getElementById('btn-phrases-export');
   const phrasesImportBtn  = document.getElementById('btn-phrases-import');
   const phrasesFileInput  = document.getElementById('phrases-import-file-input');
@@ -6256,7 +6399,9 @@ function initEventListeners() {
     });
   }
 
-  // Grammar export/import
+  // Grammar share/export/import
+  const grammarShareBtn  = document.getElementById('btn-grammar-share');
+  if (grammarShareBtn) grammarShareBtn.addEventListener('click', shareGrammarCards);
   const grammarExportBtn = document.getElementById('btn-grammar-export');
   if (grammarExportBtn) grammarExportBtn.addEventListener('click', exportGrammarCards);
 
