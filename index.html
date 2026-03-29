@@ -1627,6 +1627,93 @@ body {
   flex-wrap: wrap;
 }
 
+/* Phrases review bar — 2 rows */
+.phrases-review-bar {
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+.phrases-bar-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phrases-bar-main .review-dir-inline { flex: 1; }
+.phrases-count-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.phrases-count-row .settings-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Lesson picker modal */
+.lesson-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lesson-picker-actions {
+  display: flex;
+  gap: 6px;
+}
+.lesson-picker-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+.lesson-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lesson-picker-item:active { opacity: 0.8; }
+.lesson-picker-item.selected {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+.lesson-picker-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: transparent;
+  flex-shrink: 0;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.lesson-picker-item.selected .lesson-picker-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a1a00;
+}
+.lesson-picker-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lesson-picker-item.selected .lesson-picker-name { color: var(--accent); }
+.lesson-picker-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
 
 .grammar-lesson-group {
   margin-bottom: 14px;
@@ -2421,11 +2508,14 @@ body.large-text .mode-desc         { font-size: 17px; }
         <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
       </div>
     </main>
-    <div id="phrases-review-bar" class="grammar-review-bar hidden">
-      <div id="phrases-dir-bar" class="review-dir-inline"></div>
-      <div class="bar-sep"></div>
-      <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
-      <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
+    <div id="phrases-review-bar" class="grammar-review-bar phrases-review-bar hidden">
+      <div id="phrases-count-row" class="phrases-count-row"></div>
+      <div class="phrases-bar-main">
+        <div id="phrases-dir-bar" class="review-dir-inline"></div>
+        <div class="bar-sep"></div>
+        <button id="btn-phrases-review-all" class="btn btn-secondary grammar-bar-btn">📖 Réviser</button>
+        <button id="btn-phrases-review-weak" class="btn btn-danger grammar-bar-btn-weak hidden">⚡ 0</button>
+      </div>
     </div>
     <input type="file" id="phrases-import-file-input" accept=".json" style="display:none" />
   </div>
@@ -2687,6 +2777,17 @@ body.large-text .mode-desc         { font-size: 17px; }
         <div id="form-grammar-error" class="form-error hidden"></div>
         <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
       </form>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: LESSON PICKER ===== -->
+  <div id="modal-lesson-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Choisir les leçons</h2>
+        <button class="modal-close" data-close="modal-lesson-picker">✕</button>
+      </div>
+      <div id="lesson-picker-list" class="lesson-picker-list"></div>
     </div>
   </div>
 
@@ -5294,6 +5395,72 @@ function toggleFontSize() {
 /* ============================================================
    GRAMMAR SCREEN
    ============================================================ */
+/* ---- Lesson picker modal ---- */
+function openLessonPickerModal(weakOnly) {
+  const cards = getGrammarCards();
+  const availableLessons = [...new Set(cards.map(c => c.lesson))].filter(l => {
+    if (!weakOnly) return true;
+    return cards.some(c => c.lesson === l && c.last_known === false);
+  });
+  const selected = new Set(availableLessons); // tout sélectionné par défaut
+  const list = document.getElementById('lesson-picker-list');
+
+  function countSelected() {
+    let pool = cards.filter(c => selected.has(c.lesson));
+    if (weakOnly) pool = pool.filter(c => c.last_known === false);
+    return pool.length;
+  }
+
+  function render() {
+    const n = countSelected();
+    const allSel = selected.size === availableLessons.length;
+    list.innerHTML = `
+      <div class="lesson-picker-actions">
+        <button class="settings-pill${allSel ? ' active' : ''}" id="lp-sel-all">Tout</button>
+        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="lp-sel-none">Aucun</button>
+      </div>
+      ${availableLessons.map(l => {
+        const lCards = cards.filter(c => c.lesson === l);
+        const count = weakOnly ? lCards.filter(c => c.last_known === false).length : lCards.length;
+        const isSel = selected.has(l);
+        return `<div class="lesson-picker-item${isSel ? ' selected' : ''}" data-lesson="${escHtml(l)}">
+          <div class="lesson-picker-check">${isSel ? '✓' : ''}</div>
+          <span class="lesson-picker-name">${escHtml(l)}</span>
+          <span class="lesson-picker-count">${count} fiche${count > 1 ? 's' : ''}</span>
+        </div>`;
+      }).join('')}
+      <div class="lesson-picker-sep"></div>
+      <button class="btn btn-primary btn-full" id="lp-start" ${n === 0 ? 'disabled' : ''}>
+        📖 Réviser — ${n} fiche${n > 1 ? 's' : ''}
+      </button>
+    `;
+    list.querySelector('#lp-sel-all').addEventListener('click', () => {
+      availableLessons.forEach(l => selected.add(l)); render();
+    });
+    list.querySelector('#lp-sel-none').addEventListener('click', () => {
+      selected.clear(); render();
+    });
+    list.querySelectorAll('.lesson-picker-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const l = item.dataset.lesson;
+        if (selected.has(l)) selected.delete(l); else selected.add(l);
+        render();
+      });
+    });
+    const startBtn = list.querySelector('#lp-start');
+    if (startBtn && !startBtn.disabled) {
+      startBtn.addEventListener('click', () => {
+        closeModal('modal-lesson-picker');
+        const sel = [...selected];
+        startGrammarReview(sel.length === availableLessons.length ? null : sel, weakOnly);
+      });
+    }
+  }
+
+  render();
+  openModal('modal-lesson-picker');
+}
+
 /* ---- Direction bar for grammar & phrase review ---- */
 function renderReviewDirBar(barId, settingKey, labelA, labelB) {
   const bar = document.getElementById(barId);
@@ -5445,7 +5612,9 @@ function openEditGrammarModal(id) {
 /* ---- Grammar review (uses quiz screen) ---- */
 function startGrammarReview(lesson, weakOnly = false) {
   const all  = getGrammarCards();
-  let pool = lesson ? all.filter(c => c.lesson === lesson) : all;
+  let pool = lesson === null ? all
+    : Array.isArray(lesson) ? all.filter(c => lesson.includes(c.lesson))
+    : all.filter(c => c.lesson === lesson);
   if (weakOnly) pool = pool.filter(c => c.last_known === false);
   if (pool.length === 0) { alert('Aucune fiche à revoir pour le moment.'); return; }
   const dir = getSettings().grammarReviewDir || 'native-target';
@@ -5568,6 +5737,28 @@ function finishGrammarReview() {
 /* ============================================================
    PHRASES SCREEN
    ============================================================ */
+function renderPhraseCountBar() {
+  const bar = document.getElementById('phrases-count-row');
+  if (!bar) return;
+  const total = getPhrases().length;
+  const s = getSettings();
+  const cur = s.phraseReviewCount !== undefined ? s.phraseReviewCount : 0;
+  const counts = [5, 10, 20, 50].filter(n => n < total);
+  if (counts.length === 0) { bar.innerHTML = ''; return; }
+  bar.innerHTML = `<div class="settings-pills">
+    ${counts.map(n => `<button class="settings-pill${cur === n ? ' active' : ''}" data-phrasecount="${n}">${n}</button>`).join('')}
+    <button class="settings-pill${cur === 0 ? ' active' : ''}" data-phrasecount="0">Tout (${total})</button>
+  </div>`;
+  bar.querySelectorAll('[data-phrasecount]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = getSettings();
+      s.phraseReviewCount = parseInt(btn.dataset.phrasecount);
+      saveSettings(s);
+      renderPhraseCountBar();
+    });
+  });
+}
+
 function renderPhrasesScreen() {
   const phrases  = getPhrases();
   const listEl   = document.getElementById('phrases-list');
@@ -5584,11 +5775,14 @@ function renderPhrasesScreen() {
   emptyEl && emptyEl.classList.add('hidden');
   const showPhrasesBar = phrases.length >= 2;
   if (reviewBar) reviewBar.classList.toggle('hidden', !showPhrasesBar);
-  if (showPhrasesBar) renderReviewDirBar(
-    'phrases-dir-bar', 'phraseReviewDir',
-    lang().nativeFlag + '→' + lang().targetFlag,
-    lang().targetFlag + '→' + lang().nativeFlag
-  );
+  if (showPhrasesBar) {
+    renderReviewDirBar(
+      'phrases-dir-bar', 'phraseReviewDir',
+      lang().nativeFlag + '→' + lang().targetFlag,
+      lang().targetFlag + '→' + lang().nativeFlag
+    );
+    renderPhraseCountBar();
+  }
 
   const weakBtn = document.getElementById('btn-phrases-review-weak');
   const weakPhrases = phrases.filter(p => p.last_known === false);
@@ -5658,6 +5852,10 @@ function startPhraseReview(weakOnly = false) {
   let pool = getPhrases();
   if (weakOnly) pool = pool.filter(p => p.last_known === false);
   if (pool.length === 0) { alert('Aucune phrase à revoir pour le moment.'); return; }
+  if (!weakOnly) {
+    const count = getSettings().phraseReviewCount || 0;
+    if (count > 0 && count < pool.length) pool = shuffle([...pool]).slice(0, count);
+  }
   const dir = getSettings().phraseReviewDir || 'native-target';
   phraseReviewState = {
     phrases: shuffle([...pool]).map(p => ({
@@ -5860,10 +6058,18 @@ function initEventListeners() {
 
   // Grammar: review all
   const reviewAllBtn = document.getElementById('btn-grammar-review-all');
-  if (reviewAllBtn) reviewAllBtn.addEventListener('click', () => startGrammarReview(null, false));
+  if (reviewAllBtn) reviewAllBtn.addEventListener('click', () => {
+    const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
+    if (lessons.length > 1) openLessonPickerModal(false);
+    else startGrammarReview(null, false);
+  });
 
   const reviewWeakBtn = document.getElementById('btn-grammar-review-weak');
-  if (reviewWeakBtn) reviewWeakBtn.addEventListener('click', () => startGrammarReview(null, true));
+  if (reviewWeakBtn) reviewWeakBtn.addEventListener('click', () => {
+    const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
+    if (lessons.length > 1) openLessonPickerModal(true);
+    else startGrammarReview(null, true);
+  });
 
   // Grammar: list delegation (review per lesson, edit, delete)
   const grammarList = document.getElementById('grammar-list');
