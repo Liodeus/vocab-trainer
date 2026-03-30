@@ -7,13 +7,13 @@ PWA mobile pour apprendre du vocabulaire en langues étrangères. Fonctionne ent
 ## Langues disponibles
 
 | Code    | Paire                      |
-| ---------| ----------------------------|
-| `fr-it` | 🇫🇷 Français → 🇮🇹 Italien   |
-| `fr-en` | 🇫🇷 Français → 🇬🇧 Anglais   |
-| `fr-es` | 🇫🇷 Français → 🇪🇸 Espagnol  |
-| `fr-de` | 🇫🇷 Français → 🇩🇪 Allemand  |
-| `fr-pt` | 🇫🇷 Français → 🇵🇹 Portugais |
-| `fr-jp` | 🇫🇷 Français → 🇯🇵 Japonais  |
+|---------|----------------------------|
+| `fr-it` | 🇫🇷 Français → 🇮🇹 Italien    |
+| `fr-en` | 🇫🇷 Français → 🇬🇧 Anglais    |
+| `fr-es` | 🇫🇷 Français → 🇪🇸 Espagnol   |
+| `fr-de` | 🇫🇷 Français → 🇩🇪 Allemand   |
+| `fr-pt` | 🇫🇷 Français → 🇵🇹 Portugais  |
+| `fr-jp` | 🇫🇷 Français → 🇯🇵 Japonais   |
 
 Chaque langue a ses propres données (mots, fiches, phrases) stockées séparément dans `localStorage`.
 
