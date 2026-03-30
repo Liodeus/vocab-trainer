@@ -14,7 +14,7 @@
 <body>
 
   <!-- TTS Warning Banner -->
-  <div id="tts-warning" class="tts-warning hidden">
+  <div id="tts-warning" class="tts-warning hidden" data-i18n="tts_warning">
     ⚠️ La synthèse vocale n'est pas disponible sur ce navigateur. Les exercices audio seront remplacés.
   </div>
 
@@ -30,6 +30,7 @@
           <span id="lang-chip-count" class="lang-chip-count">0</span>
           <span class="lang-chip-arrow">▾</span>
         </button>
+        <button id="btn-ui-lang" class="pref-toggle pref-toggle-text" title="Switch language / Changer de langue">EN</button>
         <button id="btn-help" class="pref-toggle pref-toggle-text" title="Aide">?</button>
         <button id="btn-theme" class="pref-toggle" title="Thème clair / sombre">☀️</button>
         <button id="btn-font-size" class="pref-toggle pref-toggle-text" title="Texte plus grand">Aa</button>
@@ -44,12 +45,12 @@
       <div id="quiz-settings" class="quiz-settings"></div>
       <div id="home-backup-bar" class="home-backup-bar hidden">
         <span>💾</span>
-        <span>Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !</span>
+        <span data-i18n-html="backup_bar">Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !</span>
       </div>
     </main>
 
     <div class="home-start-bar">
-      <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled>
+      <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled data-i18n="start_quiz">
         Commencer le quiz
       </button>
       <p id="quiz-hint" class="hint-text hidden"></p>
@@ -59,12 +60,12 @@
   <!-- ===== SCREEN: BANK ===== -->
   <div id="screen-bank" class="screen" data-screen="bank">
     <header class="app-header">
-      <h1 class="screen-title">Ma banque de mots</h1>
+      <h1 class="screen-title" data-i18n="bank_title">Ma banque de mots</h1>
       <div class="header-actions">
         <button id="btn-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-word" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-word" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
 
@@ -77,6 +78,7 @@
             id="search-input"
             class="search-input"
             placeholder="Rechercher un mot..."
+            data-i18n-placeholder="search_placeholder"
             autocomplete="off"
             autocorrect="off"
             spellcheck="false"
@@ -92,8 +94,8 @@
 
       <div id="word-list-empty" class="empty-state hidden">
         <div class="empty-icon">📭</div>
-        <p>Aucun mot trouvé</p>
-        <p class="text-muted">Ajoutez votre premier mot ci-dessus !</p>
+        <p data-i18n="empty_bank">Aucun mot trouvé</p>
+        <p class="text-muted" data-i18n="empty_bank2">Ajoutez votre premier mot ci-dessus !</p>
       </div>
 
       <input type="file" id="import-file-input" accept=".json" style="display:none" />
@@ -103,7 +105,7 @@
   <!-- ===== SCREEN: STATS ===== -->
   <div id="screen-stats" class="screen" data-screen="stats">
     <header class="app-header">
-      <h1 class="screen-title">Statistiques</h1>
+      <h1 class="screen-title" data-i18n="stats_title">Statistiques</h1>
       <p id="stats-lang-label" class="bank-lang-label"></p>
     </header>
     <main class="screen-content">
@@ -114,20 +116,20 @@
   <!-- ===== SCREEN: GRAMMAR ===== -->
   <div id="screen-grammar" class="screen" data-screen="grammar">
     <header class="app-header">
-      <h1 class="screen-title">Fiches de cours</h1>
+      <h1 class="screen-title" data-i18n="grammar_title">Fiches de cours</h1>
       <div class="header-actions">
         <button id="btn-grammar-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-grammar-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-grammar-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-grammar" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
     <main class="screen-content">
       <div id="grammar-list"></div>
       <div id="grammar-empty" class="empty-state hidden">
         <div class="empty-icon">📖</div>
-        <p>Aucune fiche de cours</p>
-        <p class="text-muted">Créez votre première fiche ci-dessus !</p>
+        <p data-i18n="grammar_no_cards">Aucune fiche de cours</p>
+        <p class="text-muted" data-i18n="grammar_no_cards2">Créez votre première fiche ci-dessus !</p>
       </div>
     </main>
     <div id="grammar-review-all-bar" class="grammar-review-bar hidden">
@@ -142,20 +144,20 @@
   <!-- ===== SCREEN: PHRASES ===== -->
   <div id="screen-phrases" class="screen" data-screen="phrases">
     <header class="app-header">
-      <h1 class="screen-title">Phrases & expressions</h1>
+      <h1 class="screen-title" data-i18n="phrases_title">Phrases & expressions</h1>
       <div class="header-actions">
         <button id="btn-phrases-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-phrases-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-phrases-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-phrase" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
     <main class="screen-content">
       <div id="phrases-list"></div>
       <div id="phrases-empty" class="empty-state hidden">
         <div class="empty-icon">💬</div>
-        <p>Aucune phrase</p>
-        <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
+        <p data-i18n="phrases_no_phrases">Aucune phrase</p>
+        <p class="text-muted" data-i18n="phrases_no_phrases2">Ajoutez votre première phrase ci-dessus !</p>
       </div>
     </main>
     <div id="phrases-review-bar" class="grammar-review-bar hidden">
@@ -191,23 +193,23 @@
   <nav class="bottom-nav" id="bottom-nav">
     <button class="nav-tab active" data-target="home">
       <span class="nav-icon">🏠</span>
-      <span class="nav-label">Accueil</span>
+      <span class="nav-label" data-i18n="nav_home">Accueil</span>
     </button>
     <button class="nav-tab" data-target="bank">
       <span class="nav-icon">📚</span>
-      <span class="nav-label">Banque</span>
+      <span class="nav-label" data-i18n="nav_bank">Banque</span>
     </button>
     <button class="nav-tab" data-target="grammar">
       <span class="nav-icon">📖</span>
-      <span class="nav-label">Cours</span>
+      <span class="nav-label" data-i18n="nav_grammar">Cours</span>
     </button>
     <button class="nav-tab" data-target="phrases">
       <span class="nav-icon">💬</span>
-      <span class="nav-label">Phrases</span>
+      <span class="nav-label" data-i18n="nav_phrases">Phrases</span>
     </button>
     <button class="nav-tab" data-target="stats">
       <span class="nav-icon">📊</span>
-      <span class="nav-label">Stats</span>
+      <span class="nav-label" data-i18n="nav_stats">Stats</span>
     </button>
   </nav>
 
@@ -243,19 +245,23 @@
           />
         </div>
         <div class="form-group">
-          <label for="input-tags" class="form-label">🏷️ Tags <span class="form-label-hint">(optionnel, ex: chapitre1, couleurs)</span></label>
+          <label for="input-tags" class="form-label">
+            <span data-i18n="label_tags">🏷️ Tags</span>
+            <span class="form-label-hint" data-i18n="label_tags_hint">(optionnel, ex: chapitre1, couleurs)</span>
+          </label>
           <input
             type="text"
             id="input-tags"
             class="form-input"
             placeholder="ex: #chapitre1, #couleurs"
+            data-i18n-placeholder="placeholder_tags"
             autocomplete="off"
             autocorrect="off"
             spellcheck="false"
           />
         </div>
         <div id="form-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">
           💾 Sauvegarder
         </button>
       </form>
@@ -291,23 +297,21 @@
   <div id="modal-score" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card score-card">
       <div class="score-emoji" id="score-emoji">🏆</div>
-      <h2 class="score-title">Quiz terminé !</h2>
+      <h2 class="score-title" id="score-title" data-i18n="quiz_done">Quiz terminé !</h2>
       <div class="score-display">
         <span id="score-value" class="score-number">8</span>
         <span class="score-total" id="score-total">/ 8</span>
       </div>
       <p id="score-message" class="score-message">Excellent !</p>
-      <div id="score-backup-reminder" class="score-backup-reminder hidden">
-        💾 Pensez à sauvegarder vos mots via <strong>Partager</strong> ou <strong>Exporter</strong> dans la Banque !
-      </div>
+      <div id="score-backup-reminder" class="score-backup-reminder hidden"></div>
       <div class="score-actions">
         <button id="btn-retry-errors" class="btn btn-retry btn-full hidden">
           ⚡ Réviser les ratés
         </button>
-        <button id="btn-replay" class="btn btn-primary btn-full">
+        <button id="btn-replay" class="btn btn-primary btn-full" data-i18n="score_replay">
           🔁 Rejouer
         </button>
-        <button id="btn-go-home" class="btn btn-secondary btn-full">
+        <button id="btn-go-home" class="btn btn-secondary btn-full" data-i18n="score_home">
           🏠 Accueil
         </button>
       </div>
@@ -318,7 +322,7 @@
   <div id="modal-lang" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir une langue</h2>
+        <h2 class="modal-title" data-i18n="modal_choose_lang">Choisir une langue</h2>
         <button class="modal-close" data-close="modal-lang">✕</button>
       </div>
       <div id="lang-modal-grid" class="lang-modal-grid"></div>
@@ -329,16 +333,16 @@
   <div id="modal-help" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Comment ça marche</h2>
+        <h2 class="modal-title" data-i18n="modal_help">Comment ça marche</h2>
         <button class="modal-close" data-close="modal-help">✕</button>
       </div>
       <div class="modal-body">
         <ul class="tip-list">
-          <li><span>📝</span><span>Ajoutez des paires de mots dans la <strong>Banque</strong></span></li>
-          <li><span>🎯</span><span>Choisissez un mode de jeu et lancez un quiz</span></li>
-          <li><span>🔊</span><span>Exercices variés : écoute, association, traduction, anagramme…</span></li>
-          <li><span>📈</span><span>Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
-          <li><span>💾</span><span>Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
+          <li><span>📝</span><span data-i18n-html="help_tip1">Ajoutez des paires de mots dans la <strong>Banque</strong></span></li>
+          <li><span>🎯</span><span data-i18n="help_tip2">Choisissez un mode de jeu et lancez un quiz</span></li>
+          <li><span>🔊</span><span data-i18n="help_tip3">Exercices variés : écoute, association, traduction, anagramme…</span></li>
+          <li><span>📈</span><span data-i18n-html="help_tip4">Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
+          <li><span>💾</span><span data-i18n="help_tip5">Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
         </ul>
       </div>
     </div>
@@ -348,15 +352,15 @@
   <div id="modal-bank-legend" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Code couleur des mots</h2>
+        <h2 class="modal-title" data-i18n="modal_legend">Code couleur des mots</h2>
         <button class="modal-close" data-close="modal-bank-legend">✕</button>
       </div>
       <div class="modal-body">
         <ul class="tip-list">
-          <li><span class="word-mastery word-mastery-mastered"></span><span>Maîtrisé — vu ≥ 3 fois, moins de 25 % d'erreurs</span></li>
-          <li><span class="word-mastery word-mastery-learning"></span><span>En apprentissage — vu au moins une fois</span></li>
-          <li><span class="word-mastery word-mastery-review"></span><span>À revoir — plus de 50 % d'erreurs</span></li>
-          <li><span class="word-mastery word-mastery-never"></span><span>Jamais pratiqué — pas encore vu en quiz</span></li>
+          <li><span class="word-mastery word-mastery-mastered"></span><span data-i18n="legend_mastered">Maîtrisé — vu ≥ 3 fois, moins de 25 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-learning"></span><span data-i18n="legend_learning">En apprentissage — vu au moins une fois</span></li>
+          <li><span class="word-mastery word-mastery-review"></span><span data-i18n="legend_review">À revoir — plus de 50 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-never"></span><span data-i18n="legend_never">Jamais pratiqué — pas encore vu en quiz</span></li>
         </ul>
       </div>
     </div>
@@ -372,24 +376,28 @@
       <form id="form-add-phrase" class="modal-form" novalidate>
         <input type="hidden" id="edit-phrase-id" value="" />
         <div class="form-group">
-          <label for="input-phrase-native" class="form-label">🇫🇷 Phrase en français</label>
+          <label for="input-phrase-native" class="form-label" data-i18n="label_phrase_native">🇫🇷 Phrase en français</label>
           <textarea id="input-phrase-native" class="form-input form-textarea"
-                    placeholder="ex: Comment allez-vous ?" rows="3"
-                    autocorrect="off" spellcheck="false"></textarea>
+                    placeholder="ex: Comment allez-vous ?" data-i18n-placeholder="placeholder_phrase_native"
+                    rows="3" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div class="form-group">
           <label for="input-phrase-target" id="label-phrase-target" class="form-label">🇮🇹 Traduction</label>
           <textarea id="input-phrase-target" class="form-input form-textarea"
-                    placeholder="ex: Come state?" rows="3"
-                    autocorrect="off" spellcheck="false"></textarea>
+                    placeholder="ex: Come state?" data-i18n-placeholder="placeholder_phrase_target"
+                    rows="3" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div class="form-group">
-          <label for="input-phrase-topic" class="form-label">📌 Thème <span class="form-label-hint">(optionnel)</span></label>
+          <label for="input-phrase-topic" class="form-label">
+            <span data-i18n="label_phrase_topic">📌 Thème</span>
+            <span class="form-label-hint" data-i18n="label_phrase_topic_hint">(optionnel)</span>
+          </label>
           <input type="text" id="input-phrase-topic" class="form-input"
-                 placeholder="ex: Salutations" autocomplete="off" autocorrect="off" spellcheck="false" />
+                 placeholder="ex: Salutations" data-i18n-placeholder="placeholder_phrase_topic"
+                 autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
         <div id="form-phrase-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">💾 Sauvegarder</button>
       </form>
     </div>
   </div>
@@ -404,25 +412,26 @@
       <form id="form-add-grammar" class="modal-form" novalidate>
         <input type="hidden" id="edit-grammar-id" value="" />
         <div class="form-group">
-          <label for="input-grammar-lesson" class="form-label">Leçon</label>
+          <label for="input-grammar-lesson" class="form-label" data-i18n="label_lesson">Leçon</label>
           <input type="text" id="input-grammar-lesson" class="form-input"
-                 placeholder="ex: Articles définis"
+                 placeholder="ex: Articles définis" data-i18n-placeholder="placeholder_lesson"
                  list="grammar-lessons-list" autocomplete="off" autocorrect="off" spellcheck="false" />
           <datalist id="grammar-lessons-list"></datalist>
         </div>
         <div class="form-group">
-          <label for="input-grammar-question" class="form-label">Question / Titre</label>
+          <label for="input-grammar-question" class="form-label" data-i18n="label_question">Question / Titre</label>
           <input type="text" id="input-grammar-question" class="form-input"
-                 placeholder="ex: Masculin singulier" autocomplete="off" autocorrect="off" spellcheck="false" />
+                 placeholder="ex: Masculin singulier" data-i18n-placeholder="placeholder_question"
+                 autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
         <div class="form-group">
-          <label for="input-grammar-answer" class="form-label">Réponse</label>
+          <label for="input-grammar-answer" class="form-label" data-i18n="label_answer">Réponse</label>
           <textarea id="input-grammar-answer" class="form-input form-textarea"
                     placeholder="ex: il (il libro)&#10;lo (lo zaino)&#10;l' (l'uomo)"
                     rows="5" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div id="form-grammar-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">💾 Sauvegarder</button>
       </form>
     </div>
   </div>
@@ -431,7 +440,7 @@
   <div id="modal-lesson-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir les leçons</h2>
+        <h2 class="modal-title" data-i18n="modal_lessons">Choisir les leçons</h2>
         <button class="modal-close" data-close="modal-lesson-picker">✕</button>
       </div>
       <div id="lesson-picker-list" class="lesson-picker-list"></div>
@@ -442,7 +451,7 @@
   <div id="modal-topic-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir les thèmes</h2>
+        <h2 class="modal-title" data-i18n="modal_topics">Choisir les thèmes</h2>
         <button class="modal-close" data-close="modal-topic-picker">✕</button>
       </div>
       <div id="topic-picker-list" class="lesson-picker-list"></div>

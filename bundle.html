@@ -2367,7 +2367,7 @@ body.large-text .mode-desc         { font-size: 17px; }
 <body>
 
   <!-- TTS Warning Banner -->
-  <div id="tts-warning" class="tts-warning hidden">
+  <div id="tts-warning" class="tts-warning hidden" data-i18n="tts_warning">
     ⚠️ La synthèse vocale n'est pas disponible sur ce navigateur. Les exercices audio seront remplacés.
   </div>
 
@@ -2383,6 +2383,7 @@ body.large-text .mode-desc         { font-size: 17px; }
           <span id="lang-chip-count" class="lang-chip-count">0</span>
           <span class="lang-chip-arrow">▾</span>
         </button>
+        <button id="btn-ui-lang" class="pref-toggle pref-toggle-text" title="Switch language / Changer de langue">EN</button>
         <button id="btn-help" class="pref-toggle pref-toggle-text" title="Aide">?</button>
         <button id="btn-theme" class="pref-toggle" title="Thème clair / sombre">☀️</button>
         <button id="btn-font-size" class="pref-toggle pref-toggle-text" title="Texte plus grand">Aa</button>
@@ -2397,12 +2398,12 @@ body.large-text .mode-desc         { font-size: 17px; }
       <div id="quiz-settings" class="quiz-settings"></div>
       <div id="home-backup-bar" class="home-backup-bar hidden">
         <span>💾</span>
-        <span>Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !</span>
+        <span data-i18n-html="backup_bar">Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !</span>
       </div>
     </main>
 
     <div class="home-start-bar">
-      <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled>
+      <button id="btn-start-quiz" class="btn btn-primary btn-large" disabled data-i18n="start_quiz">
         Commencer le quiz
       </button>
       <p id="quiz-hint" class="hint-text hidden"></p>
@@ -2412,12 +2413,12 @@ body.large-text .mode-desc         { font-size: 17px; }
   <!-- ===== SCREEN: BANK ===== -->
   <div id="screen-bank" class="screen" data-screen="bank">
     <header class="app-header">
-      <h1 class="screen-title">Ma banque de mots</h1>
+      <h1 class="screen-title" data-i18n="bank_title">Ma banque de mots</h1>
       <div class="header-actions">
         <button id="btn-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-word" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-word" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
 
@@ -2430,6 +2431,7 @@ body.large-text .mode-desc         { font-size: 17px; }
             id="search-input"
             class="search-input"
             placeholder="Rechercher un mot..."
+            data-i18n-placeholder="search_placeholder"
             autocomplete="off"
             autocorrect="off"
             spellcheck="false"
@@ -2445,8 +2447,8 @@ body.large-text .mode-desc         { font-size: 17px; }
 
       <div id="word-list-empty" class="empty-state hidden">
         <div class="empty-icon">📭</div>
-        <p>Aucun mot trouvé</p>
-        <p class="text-muted">Ajoutez votre premier mot ci-dessus !</p>
+        <p data-i18n="empty_bank">Aucun mot trouvé</p>
+        <p class="text-muted" data-i18n="empty_bank2">Ajoutez votre premier mot ci-dessus !</p>
       </div>
 
       <input type="file" id="import-file-input" accept=".json" style="display:none" />
@@ -2456,7 +2458,7 @@ body.large-text .mode-desc         { font-size: 17px; }
   <!-- ===== SCREEN: STATS ===== -->
   <div id="screen-stats" class="screen" data-screen="stats">
     <header class="app-header">
-      <h1 class="screen-title">Statistiques</h1>
+      <h1 class="screen-title" data-i18n="stats_title">Statistiques</h1>
       <p id="stats-lang-label" class="bank-lang-label"></p>
     </header>
     <main class="screen-content">
@@ -2467,20 +2469,20 @@ body.large-text .mode-desc         { font-size: 17px; }
   <!-- ===== SCREEN: GRAMMAR ===== -->
   <div id="screen-grammar" class="screen" data-screen="grammar">
     <header class="app-header">
-      <h1 class="screen-title">Fiches de cours</h1>
+      <h1 class="screen-title" data-i18n="grammar_title">Fiches de cours</h1>
       <div class="header-actions">
         <button id="btn-grammar-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-grammar-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-grammar-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-grammar" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-grammar" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
     <main class="screen-content">
       <div id="grammar-list"></div>
       <div id="grammar-empty" class="empty-state hidden">
         <div class="empty-icon">📖</div>
-        <p>Aucune fiche de cours</p>
-        <p class="text-muted">Créez votre première fiche ci-dessus !</p>
+        <p data-i18n="grammar_no_cards">Aucune fiche de cours</p>
+        <p class="text-muted" data-i18n="grammar_no_cards2">Créez votre première fiche ci-dessus !</p>
       </div>
     </main>
     <div id="grammar-review-all-bar" class="grammar-review-bar hidden">
@@ -2495,20 +2497,20 @@ body.large-text .mode-desc         { font-size: 17px; }
   <!-- ===== SCREEN: PHRASES ===== -->
   <div id="screen-phrases" class="screen" data-screen="phrases">
     <header class="app-header">
-      <h1 class="screen-title">Phrases & expressions</h1>
+      <h1 class="screen-title" data-i18n="phrases_title">Phrases & expressions</h1>
       <div class="header-actions">
         <button id="btn-phrases-share" class="btn-hdr-icon" title="Partager">🔗</button>
         <button id="btn-phrases-export" class="btn-hdr-icon" title="Exporter">⬇️</button>
         <button id="btn-phrases-import" class="btn-hdr-icon" title="Importer">⬆️</button>
-        <button id="btn-add-phrase" class="btn btn-primary btn-icon-add">+ Ajouter</button>
+        <button id="btn-add-phrase" class="btn btn-primary btn-icon-add" data-i18n="btn_add">+ Ajouter</button>
       </div>
     </header>
     <main class="screen-content">
       <div id="phrases-list"></div>
       <div id="phrases-empty" class="empty-state hidden">
         <div class="empty-icon">💬</div>
-        <p>Aucune phrase</p>
-        <p class="text-muted">Ajoutez votre première phrase ci-dessus !</p>
+        <p data-i18n="phrases_no_phrases">Aucune phrase</p>
+        <p class="text-muted" data-i18n="phrases_no_phrases2">Ajoutez votre première phrase ci-dessus !</p>
       </div>
     </main>
     <div id="phrases-review-bar" class="grammar-review-bar hidden">
@@ -2544,23 +2546,23 @@ body.large-text .mode-desc         { font-size: 17px; }
   <nav class="bottom-nav" id="bottom-nav">
     <button class="nav-tab active" data-target="home">
       <span class="nav-icon">🏠</span>
-      <span class="nav-label">Accueil</span>
+      <span class="nav-label" data-i18n="nav_home">Accueil</span>
     </button>
     <button class="nav-tab" data-target="bank">
       <span class="nav-icon">📚</span>
-      <span class="nav-label">Banque</span>
+      <span class="nav-label" data-i18n="nav_bank">Banque</span>
     </button>
     <button class="nav-tab" data-target="grammar">
       <span class="nav-icon">📖</span>
-      <span class="nav-label">Cours</span>
+      <span class="nav-label" data-i18n="nav_grammar">Cours</span>
     </button>
     <button class="nav-tab" data-target="phrases">
       <span class="nav-icon">💬</span>
-      <span class="nav-label">Phrases</span>
+      <span class="nav-label" data-i18n="nav_phrases">Phrases</span>
     </button>
     <button class="nav-tab" data-target="stats">
       <span class="nav-icon">📊</span>
-      <span class="nav-label">Stats</span>
+      <span class="nav-label" data-i18n="nav_stats">Stats</span>
     </button>
   </nav>
 
@@ -2596,19 +2598,23 @@ body.large-text .mode-desc         { font-size: 17px; }
           />
         </div>
         <div class="form-group">
-          <label for="input-tags" class="form-label">🏷️ Tags <span class="form-label-hint">(optionnel, ex: chapitre1, couleurs)</span></label>
+          <label for="input-tags" class="form-label">
+            <span data-i18n="label_tags">🏷️ Tags</span>
+            <span class="form-label-hint" data-i18n="label_tags_hint">(optionnel, ex: chapitre1, couleurs)</span>
+          </label>
           <input
             type="text"
             id="input-tags"
             class="form-input"
             placeholder="ex: #chapitre1, #couleurs"
+            data-i18n-placeholder="placeholder_tags"
             autocomplete="off"
             autocorrect="off"
             spellcheck="false"
           />
         </div>
         <div id="form-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">
           💾 Sauvegarder
         </button>
       </form>
@@ -2644,23 +2650,21 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-score" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card score-card">
       <div class="score-emoji" id="score-emoji">🏆</div>
-      <h2 class="score-title">Quiz terminé !</h2>
+      <h2 class="score-title" id="score-title" data-i18n="quiz_done">Quiz terminé !</h2>
       <div class="score-display">
         <span id="score-value" class="score-number">8</span>
         <span class="score-total" id="score-total">/ 8</span>
       </div>
       <p id="score-message" class="score-message">Excellent !</p>
-      <div id="score-backup-reminder" class="score-backup-reminder hidden">
-        💾 Pensez à sauvegarder vos mots via <strong>Partager</strong> ou <strong>Exporter</strong> dans la Banque !
-      </div>
+      <div id="score-backup-reminder" class="score-backup-reminder hidden"></div>
       <div class="score-actions">
         <button id="btn-retry-errors" class="btn btn-retry btn-full hidden">
           ⚡ Réviser les ratés
         </button>
-        <button id="btn-replay" class="btn btn-primary btn-full">
+        <button id="btn-replay" class="btn btn-primary btn-full" data-i18n="score_replay">
           🔁 Rejouer
         </button>
-        <button id="btn-go-home" class="btn btn-secondary btn-full">
+        <button id="btn-go-home" class="btn btn-secondary btn-full" data-i18n="score_home">
           🏠 Accueil
         </button>
       </div>
@@ -2671,7 +2675,7 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-lang" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir une langue</h2>
+        <h2 class="modal-title" data-i18n="modal_choose_lang">Choisir une langue</h2>
         <button class="modal-close" data-close="modal-lang">✕</button>
       </div>
       <div id="lang-modal-grid" class="lang-modal-grid"></div>
@@ -2682,16 +2686,16 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-help" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Comment ça marche</h2>
+        <h2 class="modal-title" data-i18n="modal_help">Comment ça marche</h2>
         <button class="modal-close" data-close="modal-help">✕</button>
       </div>
       <div class="modal-body">
         <ul class="tip-list">
-          <li><span>📝</span><span>Ajoutez des paires de mots dans la <strong>Banque</strong></span></li>
-          <li><span>🎯</span><span>Choisissez un mode de jeu et lancez un quiz</span></li>
-          <li><span>🔊</span><span>Exercices variés : écoute, association, traduction, anagramme…</span></li>
-          <li><span>📈</span><span>Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
-          <li><span>💾</span><span>Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
+          <li><span>📝</span><span data-i18n-html="help_tip1">Ajoutez des paires de mots dans la <strong>Banque</strong></span></li>
+          <li><span>🎯</span><span data-i18n="help_tip2">Choisissez un mode de jeu et lancez un quiz</span></li>
+          <li><span>🔊</span><span data-i18n="help_tip3">Exercices variés : écoute, association, traduction, anagramme…</span></li>
+          <li><span>📈</span><span data-i18n-html="help_tip4">Consultez vos <strong>Stats</strong> pour suivre votre progression</span></li>
+          <li><span>💾</span><span data-i18n="help_tip5">Exportez régulièrement depuis la Banque pour ne pas perdre vos mots</span></li>
         </ul>
       </div>
     </div>
@@ -2701,15 +2705,15 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-bank-legend" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Code couleur des mots</h2>
+        <h2 class="modal-title" data-i18n="modal_legend">Code couleur des mots</h2>
         <button class="modal-close" data-close="modal-bank-legend">✕</button>
       </div>
       <div class="modal-body">
         <ul class="tip-list">
-          <li><span class="word-mastery word-mastery-mastered"></span><span>Maîtrisé — vu ≥ 3 fois, moins de 25 % d'erreurs</span></li>
-          <li><span class="word-mastery word-mastery-learning"></span><span>En apprentissage — vu au moins une fois</span></li>
-          <li><span class="word-mastery word-mastery-review"></span><span>À revoir — plus de 50 % d'erreurs</span></li>
-          <li><span class="word-mastery word-mastery-never"></span><span>Jamais pratiqué — pas encore vu en quiz</span></li>
+          <li><span class="word-mastery word-mastery-mastered"></span><span data-i18n="legend_mastered">Maîtrisé — vu ≥ 3 fois, moins de 25 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-learning"></span><span data-i18n="legend_learning">En apprentissage — vu au moins une fois</span></li>
+          <li><span class="word-mastery word-mastery-review"></span><span data-i18n="legend_review">À revoir — plus de 50 % d'erreurs</span></li>
+          <li><span class="word-mastery word-mastery-never"></span><span data-i18n="legend_never">Jamais pratiqué — pas encore vu en quiz</span></li>
         </ul>
       </div>
     </div>
@@ -2725,24 +2729,28 @@ body.large-text .mode-desc         { font-size: 17px; }
       <form id="form-add-phrase" class="modal-form" novalidate>
         <input type="hidden" id="edit-phrase-id" value="" />
         <div class="form-group">
-          <label for="input-phrase-native" class="form-label">🇫🇷 Phrase en français</label>
+          <label for="input-phrase-native" class="form-label" data-i18n="label_phrase_native">🇫🇷 Phrase en français</label>
           <textarea id="input-phrase-native" class="form-input form-textarea"
-                    placeholder="ex: Comment allez-vous ?" rows="3"
-                    autocorrect="off" spellcheck="false"></textarea>
+                    placeholder="ex: Comment allez-vous ?" data-i18n-placeholder="placeholder_phrase_native"
+                    rows="3" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div class="form-group">
           <label for="input-phrase-target" id="label-phrase-target" class="form-label">🇮🇹 Traduction</label>
           <textarea id="input-phrase-target" class="form-input form-textarea"
-                    placeholder="ex: Come state?" rows="3"
-                    autocorrect="off" spellcheck="false"></textarea>
+                    placeholder="ex: Come state?" data-i18n-placeholder="placeholder_phrase_target"
+                    rows="3" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div class="form-group">
-          <label for="input-phrase-topic" class="form-label">📌 Thème <span class="form-label-hint">(optionnel)</span></label>
+          <label for="input-phrase-topic" class="form-label">
+            <span data-i18n="label_phrase_topic">📌 Thème</span>
+            <span class="form-label-hint" data-i18n="label_phrase_topic_hint">(optionnel)</span>
+          </label>
           <input type="text" id="input-phrase-topic" class="form-input"
-                 placeholder="ex: Salutations" autocomplete="off" autocorrect="off" spellcheck="false" />
+                 placeholder="ex: Salutations" data-i18n-placeholder="placeholder_phrase_topic"
+                 autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
         <div id="form-phrase-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">💾 Sauvegarder</button>
       </form>
     </div>
   </div>
@@ -2757,25 +2765,26 @@ body.large-text .mode-desc         { font-size: 17px; }
       <form id="form-add-grammar" class="modal-form" novalidate>
         <input type="hidden" id="edit-grammar-id" value="" />
         <div class="form-group">
-          <label for="input-grammar-lesson" class="form-label">Leçon</label>
+          <label for="input-grammar-lesson" class="form-label" data-i18n="label_lesson">Leçon</label>
           <input type="text" id="input-grammar-lesson" class="form-input"
-                 placeholder="ex: Articles définis"
+                 placeholder="ex: Articles définis" data-i18n-placeholder="placeholder_lesson"
                  list="grammar-lessons-list" autocomplete="off" autocorrect="off" spellcheck="false" />
           <datalist id="grammar-lessons-list"></datalist>
         </div>
         <div class="form-group">
-          <label for="input-grammar-question" class="form-label">Question / Titre</label>
+          <label for="input-grammar-question" class="form-label" data-i18n="label_question">Question / Titre</label>
           <input type="text" id="input-grammar-question" class="form-input"
-                 placeholder="ex: Masculin singulier" autocomplete="off" autocorrect="off" spellcheck="false" />
+                 placeholder="ex: Masculin singulier" data-i18n-placeholder="placeholder_question"
+                 autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
         <div class="form-group">
-          <label for="input-grammar-answer" class="form-label">Réponse</label>
+          <label for="input-grammar-answer" class="form-label" data-i18n="label_answer">Réponse</label>
           <textarea id="input-grammar-answer" class="form-input form-textarea"
                     placeholder="ex: il (il libro)&#10;lo (lo zaino)&#10;l' (l'uomo)"
                     rows="5" autocorrect="off" spellcheck="false"></textarea>
         </div>
         <div id="form-grammar-error" class="form-error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-full">💾 Sauvegarder</button>
+        <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_save">💾 Sauvegarder</button>
       </form>
     </div>
   </div>
@@ -2784,7 +2793,7 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-lesson-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir les leçons</h2>
+        <h2 class="modal-title" data-i18n="modal_lessons">Choisir les leçons</h2>
         <button class="modal-close" data-close="modal-lesson-picker">✕</button>
       </div>
       <div id="lesson-picker-list" class="lesson-picker-list"></div>
@@ -2795,7 +2804,7 @@ body.large-text .mode-desc         { font-size: 17px; }
   <div id="modal-topic-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">Choisir les thèmes</h2>
+        <h2 class="modal-title" data-i18n="modal_topics">Choisir les thèmes</h2>
         <button class="modal-close" data-close="modal-topic-picker">✕</button>
       </div>
       <div id="topic-picker-list" class="lesson-picker-list"></div>
@@ -2812,13 +2821,340 @@ body.large-text .mode-desc         { font-size: 17px; }
    LANGUAGE CONFIG
    ============================================================ */
 const LANGUAGES = {
-  'fr-it': { label: 'Français → Italien',    nativeFlag: '🇫🇷', targetFlag: '🇮🇹', ttsLang: 'it-IT', ttsPfx: 'it', filename: 'mots_it.json', title: '🇮🇹 Italiano',   subtitle: 'Apprentissage de l\'italien'    },
-  'fr-en': { label: 'Français → Anglais',    nativeFlag: '🇫🇷', targetFlag: '🇬🇧', ttsLang: 'en-US', ttsPfx: 'en', filename: 'mots_en.json', title: '🇬🇧 English',    subtitle: 'Apprentissage de l\'anglais'    },
-  'fr-es': { label: 'Français → Espagnol',   nativeFlag: '🇫🇷', targetFlag: '🇪🇸', ttsLang: 'es-ES', ttsPfx: 'es', filename: 'mots_es.json', title: '🇪🇸 Español',    subtitle: 'Apprentissage de l\'espagnol'   },
-  'fr-de': { label: 'Français → Allemand',   nativeFlag: '🇫🇷', targetFlag: '🇩🇪', ttsLang: 'de-DE', ttsPfx: 'de', filename: 'mots_de.json', title: '🇩🇪 Deutsch',    subtitle: 'Apprentissage de l\'allemand'   },
-  'fr-pt': { label: 'Français → Portugais',  nativeFlag: '🇫🇷', targetFlag: '🇵🇹', ttsLang: 'pt-PT', ttsPfx: 'pt', filename: 'mots_pt.json', title: '🇵🇹 Português',  subtitle: 'Apprentissage du portugais'     },
-  'fr-jp': { label: 'Français → Japonais',   nativeFlag: '🇫🇷', targetFlag: '🇯🇵', ttsLang: 'ja-JP', ttsPfx: 'ja', filename: 'mots_jp.json', title: '🇯🇵 日本語',      subtitle: 'Apprentissage du japonais'      },
+  'fr-it': { label: 'Français → Italien',    labelEn: 'French → Italian',    nativeFlag: '🇫🇷', targetFlag: '🇮🇹', ttsLang: 'it-IT', ttsPfx: 'it', filename: 'mots_it.json', title: '🇮🇹 Italiano',   subtitle: 'Apprentissage de l\'italien'    },
+  'fr-en': { label: 'Français → Anglais',    labelEn: 'French → English',    nativeFlag: '🇫🇷', targetFlag: '🇬🇧', ttsLang: 'en-US', ttsPfx: 'en', filename: 'mots_en.json', title: '🇬🇧 English',    subtitle: 'Apprentissage de l\'anglais'    },
+  'fr-es': { label: 'Français → Espagnol',   labelEn: 'French → Spanish',    nativeFlag: '🇫🇷', targetFlag: '🇪🇸', ttsLang: 'es-ES', ttsPfx: 'es', filename: 'mots_es.json', title: '🇪🇸 Español',    subtitle: 'Apprentissage de l\'espagnol'   },
+  'fr-de': { label: 'Français → Allemand',   labelEn: 'French → German',     nativeFlag: '🇫🇷', targetFlag: '🇩🇪', ttsLang: 'de-DE', ttsPfx: 'de', filename: 'mots_de.json', title: '🇩🇪 Deutsch',    subtitle: 'Apprentissage de l\'allemand'   },
+  'fr-pt': { label: 'Français → Portugais',  labelEn: 'French → Portuguese', nativeFlag: '🇫🇷', targetFlag: '🇵🇹', ttsLang: 'pt-PT', ttsPfx: 'pt', filename: 'mots_pt.json', title: '🇵🇹 Português',  subtitle: 'Apprentissage du portugais'     },
+  'fr-jp': { label: 'Français → Japonais',   labelEn: 'French → Japanese',   nativeFlag: '🇫🇷', targetFlag: '🇯🇵', ttsLang: 'ja-JP', ttsPfx: 'ja', filename: 'mots_jp.json', title: '🇯🇵 日本語',      subtitle: 'Apprentissage du japonais'      },
 };
+
+/* ============================================================
+   UI LANGUAGE (i18n)
+   ============================================================ */
+const UI_LANG_KEY = 'app_ui_lang';
+function detectUILang() {
+  const saved = localStorage.getItem(UI_LANG_KEY);
+  if (saved === 'fr' || saved === 'en') return saved;
+  return (navigator.language || '').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+}
+let uiLang = detectUILang();
+
+const T = {
+  fr: {
+    nav_home: 'Accueil', nav_bank: 'Banque', nav_grammar: 'Cours', nav_phrases: 'Phrases', nav_stats: 'Stats',
+    start_quiz: 'Commencer le quiz',
+    backup_bar: 'Pensez à sauvegarder vos mots depuis la <strong>Banque</strong> !',
+    backup_score: 'Pensez à sauvegarder vos mots via <strong>Partager</strong> ou <strong>Exporter</strong> dans la Banque !',
+    bank_title: 'Ma banque de mots', search_placeholder: 'Rechercher un mot…',
+    empty_bank: 'Aucun mot trouvé', empty_bank2: 'Ajoutez votre premier mot ci-dessus !',
+    btn_add: '+ Ajouter', stats_title: 'Statistiques',
+    grammar_title: 'Fiches de cours', phrases_title: 'Phrases & expressions',
+    modal_add_word: 'Ajouter un mot', modal_edit_word: 'Modifier le mot',
+    modal_add_phrase: 'Ajouter une phrase', modal_edit_phrase: 'Modifier la phrase',
+    modal_add_grammar: 'Ajouter une fiche', modal_edit_grammar: 'Modifier la fiche',
+    modal_choose_lang: 'Choisir une langue', modal_help: 'Comment ça marche',
+    modal_legend: 'Code couleur des mots', modal_lessons: 'Choisir les leçons',
+    modal_topics: 'Choisir les thèmes',
+    modal_import_words: 'Importer des mots', modal_import_grammar: 'Importer des fiches', modal_import_phrases: 'Importer des phrases',
+    quiz_done: 'Quiz terminé !', score_replay: '🔁 Rejouer', score_home: '🏠 Accueil',
+    label_tags: '🏷️ Tags', label_tags_hint: '(optionnel, ex: chapitre1, couleurs)',
+    placeholder_tags: 'ex: #chapitre1, #couleurs', btn_save: '💾 Sauvegarder',
+    native_lang: 'Français',
+    label_lesson: 'Leçon', label_question: 'Question / Titre', label_answer: 'Réponse',
+    placeholder_lesson: 'ex: Articles définis', placeholder_question: 'ex: Masculin singulier',
+    label_phrase_native: '🇫🇷 Phrase en français', placeholder_phrase_native: 'ex: Comment allez-vous ?',
+    placeholder_phrase_target: 'ex: Come state?',
+    label_phrase_topic: '📌 Thème', label_phrase_topic_hint: '(optionnel)', placeholder_phrase_topic: 'ex: Salutations',
+    import_how_words: 'Comment souhaitez-vous importer ces mots ?',
+    import_how_grammar: 'Comment souhaitez-vous importer ces fiches ?',
+    import_how_phrases: 'Comment souhaitez-vous importer ces phrases ?',
+    btn_merge: '🔀 Fusionner', btn_replace: '🔄 Remplacer',
+    merge_words_desc: 'Ajoute les nouveaux mots sans supprimer les existants',
+    replace_words_desc: 'Supprime tous les mots existants et importe ceux-ci',
+    merge_grammar_desc: 'Ajoute les nouvelles fiches sans supprimer les existantes',
+    replace_grammar_desc: 'Supprime toutes les fiches existantes et importe celles-ci',
+    merge_phrases_desc: 'Ajoute les nouvelles phrases sans supprimer les existantes',
+    replace_phrases_desc: 'Supprime toutes les phrases existantes et importe celles-ci',
+    help_tip1: 'Ajoutez des paires de mots dans la <strong>Banque</strong>',
+    help_tip2: 'Choisissez un mode de jeu et lancez un quiz',
+    help_tip3: 'Exercices variés : écoute, association, traduction, anagramme…',
+    help_tip4: 'Consultez vos <strong>Stats</strong> pour suivre votre progression',
+    help_tip5: 'Exportez régulièrement depuis la Banque pour ne pas perdre vos mots',
+    legend_mastered: 'Maîtrisé — vu ≥ 3 fois, moins de 25 % d\'erreurs',
+    legend_learning: 'En apprentissage — vu au moins une fois',
+    legend_review: 'À revoir — plus de 50 % d\'erreurs',
+    legend_never: 'Jamais pratiqué — pas encore vu en quiz',
+    tts_warning: '⚠️ La synthèse vocale n\'est pas disponible sur ce navigateur. Les exercices audio seront remplacés.',
+    mastery_mastered: 'Maîtrisé', mastery_learning: 'En apprentissage',
+    mastery_review: 'À revoir', mastery_never: 'Jamais pratiqué',
+    mode_normal: 'Normal', mode_revision: 'Révision', mode_survival: 'Survie',
+    mode_chrono: 'Chrono', mode_flashcard: 'Flashcards', mode_dictee: 'Dictée', mode_anagram: 'Anagramme',
+    mode_desc_0: 'Les mots à réviser en priorité selon votre historique (répétition espacée).',
+    mode_desc_1: 'Seulement vos mots avec le plus d\'erreurs — ciblez vos points faibles.',
+    mode_desc_2: 'Répondez sans vous tromper — une seule erreur et c\'est terminé !',
+    mode_desc_3: 'Répondez avant que le temps ne s\'écoule — restez concentré !',
+    mode_desc_4: 'Parcourez toutes vos cartes à votre rythme — tapez pour voir la traduction.',
+    mode_desc_5: 'Écoutez le mot prononcé et tapez ce que vous entendez (synthèse vocale requise).',
+    mode_desc_6: 'Les lettres du mot sont mélangées — remettez-les dans le bon ordre.',
+    settings_questions: 'Questions par quiz', settings_pairs: 'Paires par exercice',
+    settings_filter_tag: 'Filtrer par tag', settings_all: 'Tous',
+    settings_time: 'Temps par question', settings_direction: 'Sens', settings_cards: 'Nombre de cartes',
+    quiz_text_match: 'Association — Texte', quiz_audio_match: 'Association — Écoute',
+    quiz_match_instr: 'Associez chaque mot français à sa traduction.',
+    quiz_audio_instr: 'Associez chaque son à la bonne traduction française.',
+    quiz_listen_instr: 'Quelle est la traduction française ?',
+    quiz_free_placeholder: 'Tapez la traduction…', btn_validate: 'Valider ✓',
+    quiz_dictee_instr: 'Tapez ce que vous entendez dans la langue cible.',
+    quiz_dictee_placeholder: 'Tapez ce que vous entendez…',
+    fc_tap_hint: 'Tapez pour retourner', fc_prev: '← Préc.', fc_next: 'Suivant →', fc_finish: '✓ Terminer',
+    score_excellent: 'Excellent ! Vous maîtrisez ce vocabulaire !',
+    score_good: 'Très bien ! Continuez comme ça !',
+    score_ok: 'Continuez vos efforts, vous progressez !',
+    score_low: 'Entraînez-vous encore, vous pouvez y arriver !',
+    score_flashcard: 'Révision terminée !', score_cards: 'cartes',
+    reveal_answer: 'Voir la réponse', reveal_question: 'Voir la question',
+    btn_to_review: '✗ À revoir', btn_known: '✓ Connu',
+    gr_perfect: 'Parfait ! Toutes les fiches maîtrisées !',
+    gr_good: 'Très bien ! Quelques fiches à revoir.',
+    gr_ok: 'Continuez à pratiquer !', gr_low: 'À force de révisions, vous y arriverez !',
+    btn_retry: '🔁 Réessayer', btn_back_grammar: '📖 Retour aux cours',
+    reveal_translation: 'Révéler la traduction', reveal_original: 'Révéler la phrase originale',
+    pr_perfect: 'Parfait ! Toutes les phrases connues !',
+    pr_good: 'Très bien ! Quelques phrases à revoir.',
+    pr_ok: 'Continuez à pratiquer !', pr_low: 'À force de révisions, vous y arriverez !',
+    btn_back_phrases: '💬 Retour aux phrases',
+    stat_streak1: 'jour de suite', stat_streakN: 'jours de suite',
+    stat_today: 'mots vus auj.', stat_mastery: 'maîtrise globale', stat_accuracy: 'réussite quiz',
+    stat_activity: '📅 Activité des 12 dernières semaines',
+    stat_vocab_section: '📊 Répartition du vocabulaire',
+    stat_by_mode: '🎮 Par mode de jeu',
+    stat_to_review: '🔴 Mots à revoir', stat_to_review_hint: '— classés par taux d\'erreurs',
+    stat_mastered_section: '✅ Mots maîtrisés',
+    stat_practiced: '🔵 Les plus pratiqués', stat_practiced_hint: '— nombre de fois vus en quiz',
+    stat_never_section: '😶 Jamais pratiqués',
+    stat_empty: 'Aucune donnée', stat_empty_hint: 'Faites des quiz pour voir vos statistiques !',
+    seg_mastered: 'Maîtrisés', seg_learning: 'En cours', seg_review: 'À revoir', seg_never: 'Nouveaux',
+    stat_best: 'Meilleur', stat_avg_prefix: 'moy.',
+    pct_failed: '% raté', pct_correct: '% juste', stat_times: 'fois',
+    session1: 'session', sessionN: 'sessions',
+    grammar_stat_lessons: 'Leçons', grammar_stat_cards: 'Fiches',
+    grammar_stat_reviewed: 'Révisées', grammar_stat_success: 'Réussite',
+    grammar_btn_review: 'Réviser',
+    grammar_no_cards: 'Aucune fiche de cours', grammar_no_cards2: 'Créez votre première fiche ci-dessus !',
+    phrases_stat_topics: 'Thèmes', phrases_stat_count: 'Phrases',
+    phrases_stat_reviewed: 'Révisées', phrases_stat_success: 'Réussite',
+    phrases_no_phrases: 'Aucune phrase', phrases_no_phrases2: 'Ajoutez votre première phrase ci-dessus !',
+    phrases_none_topic: 'Sans thème', phrases_btn_review: 'Réviser',
+    picker_all: 'Tout', picker_none: 'Aucun',
+    months: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
+    heatmap_less: 'Moins', heatmap_more: 'Plus',
+    alert_bank_empty: 'Votre banque de mots est vide.',
+    alert_no_grammar_export: 'Aucune fiche à exporter.',
+    alert_no_grammar_share: 'Aucune fiche à partager.',
+    alert_no_phrase_export: 'Aucune phrase à exporter.',
+    alert_no_phrase_share: 'Aucune phrase à partager.',
+    alert_invalid_json: 'Fichier JSON invalide.',
+    alert_invalid_array: 'Le fichier doit contenir un tableau de mots.',
+    alert_no_valid_words: 'Aucun mot valide trouvé dans ce fichier.',
+    alert_no_valid_grammar: 'Aucune fiche valide trouvée.',
+    alert_no_valid_phrases: 'Aucune phrase valide trouvée.',
+    alert_invalid_format: 'Format invalide.',
+    alert_no_grammar_review: 'Aucune fiche à revoir pour le moment.',
+    alert_no_phrase_review: 'Aucune phrase à revoir pour le moment.',
+    alert_dictee_no_tts: 'La dictée nécessite la synthèse vocale, qui n\'est pas disponible sur ce navigateur.',
+    alert_revision_no_words: 'Pas assez de mots à revoir pour ce mode. Faites d\'abord des quiz en mode Normal !',
+    alert_flashcard_empty: 'Ajoutez des mots dans votre banque pour utiliser les flashcards.',
+    confirm_quit: 'Quitter ?',
+    confirm_delete_word: 'Supprimer ce mot ?',
+    confirm_delete_grammar: 'Supprimer cette fiche ?',
+    confirm_delete_phrase: 'Supprimer cette phrase ?',
+    err_fields_required: 'Les deux champs sont requis.',
+    err_word_exists: 'Ce mot existe déjà dans votre banque.',
+    err_all_fields: 'Tous les champs sont requis.',
+    err_phrase_fields: 'Les deux champs de texte sont requis.',
+    merge_all_existed_words: 'Tous les mots existaient déjà.',
+    merge_all_existed_grammar: 'Toutes les fiches existaient déjà.',
+    merge_all_existed_phrases: 'Toutes les phrases existaient déjà.',
+  },
+  en: {
+    nav_home: 'Home', nav_bank: 'Bank', nav_grammar: 'Lessons', nav_phrases: 'Phrases', nav_stats: 'Stats',
+    start_quiz: 'Start quiz',
+    backup_bar: 'Remember to save your words from the <strong>Bank</strong>!',
+    backup_score: 'Remember to save your words via <strong>Share</strong> or <strong>Export</strong> in the Bank!',
+    bank_title: 'My word bank', search_placeholder: 'Search a word…',
+    empty_bank: 'No words found', empty_bank2: 'Add your first word above!',
+    btn_add: '+ Add', stats_title: 'Statistics',
+    grammar_title: 'Lesson cards', phrases_title: 'Phrases & expressions',
+    modal_add_word: 'Add a word', modal_edit_word: 'Edit word',
+    modal_add_phrase: 'Add a phrase', modal_edit_phrase: 'Edit phrase',
+    modal_add_grammar: 'Add a card', modal_edit_grammar: 'Edit card',
+    modal_choose_lang: 'Choose a language', modal_help: 'How it works',
+    modal_legend: 'Word color code', modal_lessons: 'Choose lessons',
+    modal_topics: 'Choose topics',
+    modal_import_words: 'Import words', modal_import_grammar: 'Import cards', modal_import_phrases: 'Import phrases',
+    quiz_done: 'Quiz done!', score_replay: '🔁 Play again', score_home: '🏠 Home',
+    label_tags: '🏷️ Tags', label_tags_hint: '(optional, e.g. chapter1, colors)',
+    placeholder_tags: 'e.g. #chapter1, #colors', btn_save: '💾 Save',
+    native_lang: 'French',
+    label_lesson: 'Lesson', label_question: 'Question / Title', label_answer: 'Answer',
+    placeholder_lesson: 'e.g. Definite articles', placeholder_question: 'e.g. Masculine singular',
+    label_phrase_native: '🇫🇷 Phrase in French', placeholder_phrase_native: 'e.g. How are you?',
+    placeholder_phrase_target: 'e.g. Come state?',
+    label_phrase_topic: '📌 Topic', label_phrase_topic_hint: '(optional)', placeholder_phrase_topic: 'e.g. Greetings',
+    import_how_words: 'How would you like to import these words?',
+    import_how_grammar: 'How would you like to import these cards?',
+    import_how_phrases: 'How would you like to import these phrases?',
+    btn_merge: '🔀 Merge', btn_replace: '🔄 Replace',
+    merge_words_desc: 'Add new words without deleting existing ones',
+    replace_words_desc: 'Delete all existing words and import these',
+    merge_grammar_desc: 'Add new cards without deleting existing ones',
+    replace_grammar_desc: 'Delete all existing cards and import these',
+    merge_phrases_desc: 'Add new phrases without deleting existing ones',
+    replace_phrases_desc: 'Delete all existing phrases and import these',
+    help_tip1: 'Add word pairs in the <strong>Bank</strong>',
+    help_tip2: 'Choose a game mode and start a quiz',
+    help_tip3: 'Varied exercises: listening, matching, translation, anagram…',
+    help_tip4: 'Check your <strong>Stats</strong> to track your progress',
+    help_tip5: 'Export regularly from the Bank to keep your words safe',
+    legend_mastered: 'Mastered — seen ≥ 3 times, less than 25% errors',
+    legend_learning: 'Learning — seen at least once',
+    legend_review: 'To review — more than 50% errors',
+    legend_never: 'Never practiced — not yet seen in a quiz',
+    tts_warning: '⚠️ Text-to-speech is not available on this browser. Audio exercises will be replaced.',
+    mastery_mastered: 'Mastered', mastery_learning: 'Learning',
+    mastery_review: 'To review', mastery_never: 'Never practiced',
+    mode_normal: 'Normal', mode_revision: 'Review', mode_survival: 'Survival',
+    mode_chrono: 'Chrono', mode_flashcard: 'Flashcards', mode_dictee: 'Dictation', mode_anagram: 'Anagram',
+    mode_desc_0: 'Words to review first based on your history (spaced repetition).',
+    mode_desc_1: 'Only your most error-prone words — target your weak points.',
+    mode_desc_2: 'Answer without mistakes — one error and it\'s over!',
+    mode_desc_3: 'Answer before time runs out — stay focused!',
+    mode_desc_4: 'Browse all your cards at your own pace — tap to see the translation.',
+    mode_desc_5: 'Listen to the word and type what you hear (text-to-speech required).',
+    mode_desc_6: 'The word\'s letters are shuffled — put them back in the right order.',
+    settings_questions: 'Questions per quiz', settings_pairs: 'Pairs per exercise',
+    settings_filter_tag: 'Filter by tag', settings_all: 'All',
+    settings_time: 'Time per question', settings_direction: 'Direction', settings_cards: 'Number of cards',
+    quiz_text_match: 'Matching — Text', quiz_audio_match: 'Matching — Listen',
+    quiz_match_instr: 'Match each French word to its translation.',
+    quiz_audio_instr: 'Match each sound to the correct French translation.',
+    quiz_listen_instr: 'What is the French translation?',
+    quiz_free_placeholder: 'Type the translation…', btn_validate: 'Submit ✓',
+    quiz_dictee_instr: 'Type what you hear in the target language.',
+    quiz_dictee_placeholder: 'Type what you hear…',
+    fc_tap_hint: 'Tap to flip', fc_prev: '← Prev', fc_next: 'Next →', fc_finish: '✓ Finish',
+    score_excellent: 'Excellent! You\'ve mastered this vocabulary!',
+    score_good: 'Well done! Keep it up!',
+    score_ok: 'Keep at it, you\'re improving!',
+    score_low: 'Keep practicing, you can do it!',
+    score_flashcard: 'Review done!', score_cards: 'cards',
+    reveal_answer: 'Show answer', reveal_question: 'Show question',
+    btn_to_review: '✗ Review', btn_known: '✓ Known',
+    gr_perfect: 'Perfect! All cards mastered!',
+    gr_good: 'Great! A few cards to review.',
+    gr_ok: 'Keep practicing!', gr_low: 'With practice, you\'ll get there!',
+    btn_retry: '🔁 Try again', btn_back_grammar: '📖 Back to lessons',
+    reveal_translation: 'Reveal translation', reveal_original: 'Reveal original phrase',
+    pr_perfect: 'Perfect! All phrases known!',
+    pr_good: 'Great! A few phrases to review.',
+    pr_ok: 'Keep practicing!', pr_low: 'With practice, you\'ll get there!',
+    btn_back_phrases: '💬 Back to phrases',
+    stat_streak1: 'day in a row', stat_streakN: 'days in a row',
+    stat_today: 'words seen today', stat_mastery: 'overall mastery', stat_accuracy: 'quiz accuracy',
+    stat_activity: '📅 Activity over the last 12 weeks',
+    stat_vocab_section: '📊 Vocabulary breakdown',
+    stat_by_mode: '🎮 By game mode',
+    stat_to_review: '🔴 Words to review', stat_to_review_hint: '— ranked by error rate',
+    stat_mastered_section: '✅ Mastered words',
+    stat_practiced: '🔵 Most practiced', stat_practiced_hint: '— number of times seen in quizzes',
+    stat_never_section: '😶 Never practiced',
+    stat_empty: 'No data', stat_empty_hint: 'Take some quizzes to see your stats!',
+    seg_mastered: 'Mastered', seg_learning: 'Learning', seg_review: 'Review', seg_never: 'New',
+    stat_best: 'Best', stat_avg_prefix: 'avg.',
+    pct_failed: '% missed', pct_correct: '% correct', stat_times: 'times',
+    session1: 'session', sessionN: 'sessions',
+    grammar_stat_lessons: 'Lessons', grammar_stat_cards: 'Cards',
+    grammar_stat_reviewed: 'Reviewed', grammar_stat_success: 'Success',
+    grammar_btn_review: 'Review',
+    grammar_no_cards: 'No lesson cards', grammar_no_cards2: 'Create your first card above!',
+    phrases_stat_topics: 'Topics', phrases_stat_count: 'Phrases',
+    phrases_stat_reviewed: 'Reviewed', phrases_stat_success: 'Success',
+    phrases_no_phrases: 'No phrases', phrases_no_phrases2: 'Add your first phrase above!',
+    phrases_none_topic: 'No topic', phrases_btn_review: 'Review',
+    picker_all: 'All', picker_none: 'None',
+    months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    heatmap_less: 'Less', heatmap_more: 'More',
+    alert_bank_empty: 'Your word bank is empty.',
+    alert_no_grammar_export: 'No cards to export.',
+    alert_no_grammar_share: 'No cards to share.',
+    alert_no_phrase_export: 'No phrases to export.',
+    alert_no_phrase_share: 'No phrases to share.',
+    alert_invalid_json: 'Invalid JSON file.',
+    alert_invalid_array: 'The file must contain an array of words.',
+    alert_no_valid_words: 'No valid words found in this file.',
+    alert_no_valid_grammar: 'No valid cards found.',
+    alert_no_valid_phrases: 'No valid phrases found.',
+    alert_invalid_format: 'Invalid format.',
+    alert_no_grammar_review: 'No cards to review at the moment.',
+    alert_no_phrase_review: 'No phrases to review at the moment.',
+    alert_dictee_no_tts: 'Dictation requires text-to-speech, which is not available on this browser.',
+    alert_revision_no_words: 'Not enough words to review for this mode. First do some quizzes in Normal mode!',
+    alert_flashcard_empty: 'Add words to your bank to use flashcards.',
+    confirm_quit: 'Quit?',
+    confirm_delete_word: 'Delete this word?',
+    confirm_delete_grammar: 'Delete this card?',
+    confirm_delete_phrase: 'Delete this phrase?',
+    err_fields_required: 'Both fields are required.',
+    err_word_exists: 'This word already exists in your bank.',
+    err_all_fields: 'All fields are required.',
+    err_phrase_fields: 'Both text fields are required.',
+    merge_all_existed_words: 'All words already existed.',
+    merge_all_existed_grammar: 'All cards already existed.',
+    merge_all_existed_phrases: 'All phrases already existed.',
+  }
+};
+
+function t(key) { return (T[uiLang] || T.fr)[key] || key; }
+
+function langLabel() { return uiLang === 'en' ? (lang().labelEn || lang().label) : lang().label; }
+function langTargetName() { return langLabel().split('→')[1].trim(); }
+
+/* Pluralization helpers */
+function pWords(n)   { return uiLang === 'en' ? `${n} word${n !== 1 ? 's' : ''}` : `${n} mot${n !== 1 ? 's' : ''}`; }
+function pCards(n)   { return uiLang === 'en' ? `${n} card${n !== 1 ? 's' : ''}` : `${n} fiche${n !== 1 ? 's' : ''}`; }
+function pPhrases(n) { return `${n} phrase${n !== 1 ? 's' : ''}`; }
+function pSessions(n){ return `${n} ${n !== 1 ? t('sessionN') : t('session1')}`; }
+
+function setUILang(newLang) {
+  uiLang = newLang;
+  localStorage.setItem(UI_LANG_KEY, newLang);
+  translatePage();
+  updateLangToggle();
+  renderModeSelector();
+  renderQuizSettings();
+  updateHomeStats();
+  renderWordList(document.getElementById('search-input')?.value || '');
+  renderTagFilterBar();
+  renderStats();
+  renderGrammarScreen();
+  renderPhrasesScreen();
+  updateFormLabels();
+  updatePhraseFormLabels();
+  renderLanguageSelector();
+  updateBankHeader();
+}
+
+function updateLangToggle() {
+  const btn = document.getElementById('btn-ui-lang');
+  if (btn) btn.textContent = uiLang === 'fr' ? 'EN' : 'FR';
+}
+
+function translatePage() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+}
 
 const LANG_KEY = 'app_current_lang';
 let currentLangKey = localStorage.getItem(LANG_KEY) || 'fr-it';
@@ -3247,13 +3583,13 @@ function renderModeSelector() {
   const container = document.getElementById('mode-selector');
   if (!container) return;
   const modes = [
-    { id: GameMode.NORMAL,    label: 'Normal',     icon: '🎯', cls: '' },
-    { id: GameMode.REVISION,  label: 'Révision',   icon: '🔴', cls: 'mode-revision' },
-    { id: GameMode.SURVIVAL,  label: 'Survie',     icon: '💀', cls: 'mode-danger' },
-    { id: GameMode.CHRONO,    label: 'Chrono',     icon: '⏱️', cls: 'mode-chrono' },
-    { id: GameMode.FLASHCARD, label: 'Flashcards', icon: '🃏', cls: 'mode-flashcard' },
-    { id: GameMode.DICTEE,    label: 'Dictée',     icon: '🎧', cls: 'mode-dictee' },
-    { id: GameMode.ANAGRAM,   label: 'Anagramme',  icon: '🔀', cls: 'mode-anagram' },
+    { id: GameMode.NORMAL,    label: t('mode_normal'),    icon: '🎯', cls: '' },
+    { id: GameMode.REVISION,  label: t('mode_revision'),  icon: '🔴', cls: 'mode-revision' },
+    { id: GameMode.SURVIVAL,  label: t('mode_survival'),  icon: '💀', cls: 'mode-danger' },
+    { id: GameMode.CHRONO,    label: t('mode_chrono'),    icon: '⏱️', cls: 'mode-chrono' },
+    { id: GameMode.FLASHCARD, label: t('mode_flashcard'), icon: '🃏', cls: 'mode-flashcard' },
+    { id: GameMode.DICTEE,    label: t('mode_dictee'),    icon: '🎧', cls: 'mode-dictee' },
+    { id: GameMode.ANAGRAM,   label: t('mode_anagram'),   icon: '🔀', cls: 'mode-anagram' },
   ];
   container.innerHTML = modes.map(m => `
     <button class="mode-pill ${m.cls}${currentGameMode === m.id ? ' active' : ''}" data-mode="${m.id}">
@@ -3279,15 +3615,7 @@ function renderModeSelector() {
 }
 
 // Index matches GameMode: 0=NORMAL, 1=REVISION, 2=SURVIVAL, 3=CHRONO, 4=FLASHCARD, 5=DICTEE, 6=ANAGRAM
-const MODE_DESCS = [
-  'Les mots à réviser en priorité selon votre historique (répétition espacée).',
-  'Seulement vos mots avec le plus d\'erreurs — ciblez vos points faibles.',
-  'Répondez sans vous tromper — une seule erreur et c\'est terminé !',
-  'Répondez avant que le temps ne s\'écoule — restez concentré !',
-  'Parcourez toutes vos cartes à votre rythme — tapez pour voir la traduction.',
-  'Écoutez le mot prononcé et tapez ce que vous entendez (synthèse vocale requise).',
-  'Les lettres du mot sont mélangées — remettez-les dans le bon ordre.',
-];
+function getModeDesc(modeId) { return t('mode_desc_' + modeId); }
 
 function renderModeDesc() {
   const container = document.getElementById('mode-desc');
@@ -3303,17 +3631,17 @@ function renderModeDesc() {
   const fcCounts   = [10, 25, 50, 100].filter(n => n < wordCount);
 
   container.innerHTML = `
-    <p class="mode-desc-text">${MODE_DESCS[currentGameMode]}</p>
+    <p class="mode-desc-text">${getModeDesc(currentGameMode)}</p>
     ${isChrono ? `
     <div class="mode-desc-chrono">
-      <span class="settings-label">Temps par question</span>
+      <span class="settings-label">${t('settings_time')}</span>
       <div class="settings-pills">
-        ${times.map(t => `<button class="settings-pill${cur === t ? ' active' : ''}" data-chrono="${t}">${t}s</button>`).join('')}
+        ${times.map(n => `<button class="settings-pill${cur === n ? ' active' : ''}" data-chrono="${n}">${n}s</button>`).join('')}
       </div>
     </div>` : ''}
     ${isFC ? `
     <div class="mode-desc-chrono">
-      <span class="settings-label">Sens</span>
+      <span class="settings-label">${t('settings_direction')}</span>
       <div class="settings-pills">
         <button class="settings-pill${fcDir === 'mix'          ? ' active' : ''}" data-fcdir="mix">🔀 Mix</button>
         <button class="settings-pill${fcDir === 'native-target'? ' active' : ''}" data-fcdir="native-target">${lang().nativeFlag}→${lang().targetFlag}</button>
@@ -3321,10 +3649,10 @@ function renderModeDesc() {
       </div>
     </div>
     <div class="mode-desc-chrono">
-      <span class="settings-label">Nombre de cartes</span>
+      <span class="settings-label">${t('settings_cards')}</span>
       <div class="settings-pills">
         ${fcCounts.map(n => `<button class="settings-pill${fcCount === n ? ' active' : ''}" data-fccount="${n}">${n}</button>`).join('')}
-        <button class="settings-pill${fcCount === 0 ? ' active' : ''}" data-fccount="0">Tout (${wordCount})</button>
+        <button class="settings-pill${fcCount === 0 ? ' active' : ''}" data-fccount="0">${t('settings_all')} (${wordCount})</button>
       </div>
     </div>` : ''}
   `;
@@ -3355,9 +3683,9 @@ function renderLanguageSelector() {
     try { const r = localStorage.getItem('grammar_' + key); grammar = r ? JSON.parse(r).length : 0; } catch(e) {}
     try { const r = localStorage.getItem('phrases_' + key); phrases = r ? JSON.parse(r).length : 0; } catch(e) {}
     const parts = [
-      `${words} mot${words !== 1 ? 's' : ''}`,
-      grammar > 0 ? `${grammar} fiche${grammar !== 1 ? 's' : ''}` : null,
-      phrases > 0 ? `${phrases} phrase${phrases !== 1 ? 's' : ''}` : null,
+      pWords(words),
+      grammar > 0 ? pCards(grammar) : null,
+      phrases > 0 ? pPhrases(phrases) : null,
     ].filter(Boolean).join(' · ');
     return `
       <button class="lang-modal-card${key === currentLangKey ? ' active' : ''}" data-lang="${key}">
@@ -3380,17 +3708,17 @@ function updateAppHeader() {
 
 function updateBankHeader() {
   const el = document.getElementById('bank-lang-label');
-  if (el) el.textContent = lang().label;
+  if (el) el.textContent = langLabel();
   const el2 = document.getElementById('stats-lang-label');
-  if (el2) el2.textContent = lang().label;
+  if (el2) el2.textContent = langLabel();
 }
 
 function updateFormLabels() {
   const labelNative = document.getElementById('label-native');
   const labelTarget = document.getElementById('label-target');
   const inputTarget = document.getElementById('input-target');
-  if (labelNative) labelNative.textContent = `${lang().nativeFlag} Français`;
-  if (labelTarget) labelTarget.textContent = `${lang().targetFlag} ${lang().label.split('→')[1].trim()}`;
+  if (labelNative) labelNative.textContent = `${lang().nativeFlag} ${t('native_lang')}`;
+  if (labelTarget) labelTarget.textContent = `${lang().targetFlag} ${langTargetName()}`;
   const placeholders = { 'fr-it': 'il gatto', 'fr-en': 'the cat', 'fr-es': 'el gato', 'fr-pt': 'o gato', 'fr-jp': 'ねこ' };
   if (inputTarget) inputTarget.placeholder = `ex: ${placeholders[currentLangKey] || '...'}`;
 }
@@ -3410,23 +3738,23 @@ function renderQuizSettings() {
   const allTags = getAllTags();
   const tagRow = allTags.length > 0 ? `
     <div class="settings-row">
-      <span class="settings-label">Filtrer par tag</span>
+      <span class="settings-label">${t('settings_filter_tag')}</span>
       <div class="settings-pills">
-        <button class="settings-pill${currentTagFilter === null ? ' active' : ''}" data-tag-filter="">Tous</button>
-        ${allTags.map(t => `<button class="settings-pill${currentTagFilter === t ? ' active' : ''}" data-tag-filter="${escHtml(t)}">#${escHtml(t)}</button>`).join('')}
+        <button class="settings-pill${currentTagFilter === null ? ' active' : ''}" data-tag-filter="">${t('settings_all')}</button>
+        ${allTags.map(tag => `<button class="settings-pill${currentTagFilter === tag ? ' active' : ''}" data-tag-filter="${escHtml(tag)}">#${escHtml(tag)}</button>`).join('')}
       </div>
     </div>` : '';
 
   container.innerHTML = `
     <div class="settings-row">
-      <span class="settings-label">Questions par quiz</span>
+      <span class="settings-label">${t('settings_questions')}</span>
       <div class="settings-pills">
         ${qSizes.map(n => `<button class="settings-pill${s.quizSize === n ? ' active' : ''}" data-setting="quizSize" data-value="${n}">${n}</button>`).join('')}
       </div>
     </div>
     ${hidePairs ? '' : `
     <div class="settings-row">
-      <span class="settings-label">Paires par exercice</span>
+      <span class="settings-label">${t('settings_pairs')}</span>
       <div class="settings-pills">
         ${mSizes.map(n => `<button class="settings-pill${s.matchSize === n ? ' active' : ''}${n > s.quizSize ? ' disabled' : ''}" data-setting="matchSize" data-value="${n}" ${n > s.quizSize ? 'disabled' : ''}>${n}</button>`).join('')}
       </div>
@@ -3480,7 +3808,9 @@ function updateHomeStats() {
       if (count < min) {
         hintEl.classList.remove('hidden');
         const remaining = min - count;
-        hintEl.innerHTML = `Ajoutez encore <strong>${remaining} mot${remaining > 1 ? 's' : ''}</strong> pour commencer un quiz.`;
+        hintEl.innerHTML = uiLang === 'en'
+          ? `Add <strong>${remaining} more word${remaining !== 1 ? 's' : ''}</strong> to start a quiz.`
+          : `Ajoutez encore <strong>${remaining} mot${remaining > 1 ? 's' : ''}</strong> pour commencer un quiz.`;
       } else {
         hintEl.classList.add('hidden');
       }
@@ -3497,8 +3827,8 @@ function renderTagFilterBar() {
   const tags = getAllTags();
   if (tags.length === 0) { bar.innerHTML = ''; bar.classList.add('hidden'); return; }
   bar.classList.remove('hidden');
-  bar.innerHTML = [null, ...tags].map(t =>
-    `<button class="word-tag-chip${currentTagFilter === t ? ' active' : ''}" data-tag="${t === null ? '' : escHtml(t)}">${t === null ? 'Tous' : '#' + escHtml(t)}</button>`
+  bar.innerHTML = [null, ...tags].map(tag =>
+    `<button class="word-tag-chip${currentTagFilter === tag ? ' active' : ''}" data-tag="${tag === null ? '' : escHtml(tag)}">${tag === null ? t('settings_all') : '#' + escHtml(tag)}</button>`
   ).join('');
   bar.querySelectorAll('.word-tag-chip').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -3571,10 +3901,10 @@ function getMasteryBadge(word) {
   const seen   = word.seen_count  || 0;
   const errors = word.error_count || 0;
   let cls, title;
-  if (seen === 0)                                  { cls = 'never';    title = 'Jamais pratiqué'; }
-  else if (seen >= 3 && errors / seen <= 0.25)     { cls = 'mastered'; title = 'Maîtrisé'; }
-  else if (errors / seen > 0.5)                    { cls = 'review';   title = 'À revoir'; }
-  else                                             { cls = 'learning'; title = 'En apprentissage'; }
+  if (seen === 0)                                  { cls = 'never';    title = t('mastery_never'); }
+  else if (seen >= 3 && errors / seen <= 0.25)     { cls = 'mastered'; title = t('mastery_mastered'); }
+  else if (errors / seen > 0.5)                    { cls = 'review';   title = t('mastery_review'); }
+  else                                             { cls = 'learning'; title = t('mastery_learning'); }
   return `<span class="word-mastery word-mastery-${cls}" title="${title}"></span>`;
 }
 
@@ -3591,7 +3921,7 @@ function closeModal(id) {
 }
 
 function openAddWordModal() {
-  document.getElementById('modal-word-title').textContent = 'Ajouter un mot';
+  document.getElementById('modal-word-title').textContent = t('modal_add_word');
   document.getElementById('edit-word-id').value = '';
   document.getElementById('input-native').value = '';
   document.getElementById('input-target').value = '';
@@ -3605,7 +3935,7 @@ function openAddWordModal() {
 function openEditWordModal(id) {
   const word = getWords().find(w => w.id === id);
   if (!word) return;
-  document.getElementById('modal-word-title').textContent = 'Modifier le mot';
+  document.getElementById('modal-word-title').textContent = t('modal_edit_word');
   document.getElementById('edit-word-id').value = word.id;
   document.getElementById('input-native').value = word.native;
   document.getElementById('input-target').value = word.target;
@@ -3664,7 +3994,7 @@ function updateBackupBadge() {
    ============================================================ */
 function buildExportData() {
   const words = getWords();
-  if (words.length === 0) { alert('Votre banque de mots est vide.'); return null; }
+  if (words.length === 0) { alert(t('alert_bank_empty')); return null; }
   return words.map(({ native, target, tags }) => {
     const obj = { native, target };
     if (tags && tags.length > 0) obj.tags = tags;
@@ -3690,13 +4020,13 @@ function exportWords() {
 
 function exportGrammarCards() {
   const cards = getGrammarCards();
-  if (cards.length === 0) { alert('Aucune fiche à exporter.'); return; }
+  if (cards.length === 0) { alert(t('alert_no_grammar_export')); return; }
   downloadJson(JSON.stringify(cards, null, 2), 'grammar_' + currentLangKey + '.json');
 }
 
 async function shareGrammarCards() {
   const cards = getGrammarCards();
-  if (cards.length === 0) { alert('Aucune fiche à partager.'); return; }
+  if (cards.length === 0) { alert(t('alert_no_grammar_share')); return; }
   const json = JSON.stringify(cards, null, 2);
   const filename = 'grammar_' + currentLangKey + '.txt';
   if (navigator.share) {
@@ -3704,9 +4034,9 @@ async function shareGrammarCards() {
     const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
     try {
       if (canShareFile) {
-        await navigator.share({ files: [file], title: 'Fiches de cours — ' + lang().title });
+        await navigator.share({ files: [file], title: t('grammar_title') + ' — ' + lang().title });
       } else {
-        await navigator.share({ title: 'Fiches de cours — ' + lang().title, text: json });
+        await navigator.share({ title: t('grammar_title') + ' — ' + lang().title, text: json });
       }
     } catch(e) {
       if (e.name !== 'AbortError') exportGrammarCards();
@@ -3728,9 +4058,9 @@ async function shareWords() {
     const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
     try {
       if (canShareFile) {
-        await navigator.share({ files: [file], title: 'Ma banque de mots — ' + lang().title });
+        await navigator.share({ files: [file], title: t('bank_title') + ' — ' + lang().title });
       } else {
-        await navigator.share({ title: 'Ma banque de mots — ' + lang().title, text: json });
+        await navigator.share({ title: t('bank_title') + ' — ' + lang().title, text: json });
       }
       markBackup();
     } catch(e) {
@@ -3765,9 +4095,9 @@ function handleImportFile(file) {
   reader.onload = (e) => {
     let data;
     try { data = JSON.parse(e.target.result); }
-    catch (err) { alert('Fichier JSON invalide.'); return; }
+    catch (err) { alert(t('alert_invalid_json')); return; }
 
-    if (!Array.isArray(data)) { alert('Le fichier doit contenir un tableau de mots.'); return; }
+    if (!Array.isArray(data)) { alert(t('alert_invalid_array')); return; }
 
     const valid = data.filter(item =>
       item && typeof item === 'object' &&
@@ -3782,17 +4112,17 @@ function handleImportFile(file) {
       last_seen: null
     })).filter(w => w.native && w.target);
 
-    if (valid.length === 0) { alert('Aucun mot valide trouvé dans ce fichier.'); return; }
+    if (valid.length === 0) { alert(t('alert_no_valid_words')); return; }
     pendingImportData = valid;
     const n = valid.length;
     _openImportModal(file,
-      `${n} mot${n > 1 ? 's' : ''} trouvé${n > 1 ? 's' : ''}`,
+      pWords(n),
       '',
-      'Comment souhaitez-vous importer ces mots ?',
-      'Ajoute les nouveaux mots sans supprimer les existants',
-      'Supprime tous les mots existants et importe ceux-ci',
+      t('import_how_words'),
+      t('merge_words_desc'),
+      t('replace_words_desc'),
       'words',
-      'Importer des mots');
+      t('modal_import_words'));
   };
   reader.readAsText(file);
 }
@@ -3803,20 +4133,20 @@ function handleGrammarImportFile(file) {
   reader.onload = (e) => {
     let data;
     try { data = JSON.parse(e.target.result); }
-    catch { alert('Fichier JSON invalide.'); return; }
-    if (!Array.isArray(data)) { alert('Format invalide.'); return; }
+    catch { alert(t('alert_invalid_json')); return; }
+    if (!Array.isArray(data)) { alert(t('alert_invalid_format')); return; }
     const valid = data.filter(c => c && typeof c.lesson === 'string' && typeof c.question === 'string' && typeof c.answer === 'string');
-    if (valid.length === 0) { alert('Aucune fiche valide trouvée.'); return; }
+    if (valid.length === 0) { alert(t('alert_no_valid_grammar')); return; }
     pendingImportData = valid;
     const n = valid.length;
     _openImportModal(file,
-      `${n} fiche${n > 1 ? 's' : ''} trouvée${n > 1 ? 's' : ''}`,
+      pCards(n),
       '',
-      'Comment souhaitez-vous importer ces fiches ?',
-      'Ajoute les nouvelles fiches sans supprimer les existantes',
-      'Supprime toutes les fiches existantes et importe celles-ci',
+      t('import_how_grammar'),
+      t('merge_grammar_desc'),
+      t('replace_grammar_desc'),
       'grammar',
-      'Importer des fiches');
+      t('modal_import_grammar'));
   };
   reader.readAsText(file);
 }
@@ -3835,7 +4165,7 @@ function mergeImport() {
     pendingImportData = null;
     renderGrammarScreen();
     const n = toAdd.length;
-    alert(n === 0 ? 'Toutes les fiches existaient déjà.' : `${n} nouvelle${n > 1 ? 's' : ''} fiche${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`);
+    alert(n === 0 ? t('merge_all_existed_grammar') : (uiLang === 'en' ? `${n} new card${n !== 1 ? 's' : ''} added.` : `${n} nouvelle${n > 1 ? 's' : ''} fiche${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`));
   } else if (importContext === 'phrases') {
     const existing = getPhrases();
     const toAdd = pendingImportData
@@ -3847,7 +4177,7 @@ function mergeImport() {
     pendingImportData = null;
     renderPhrasesScreen();
     const n = toAdd.length;
-    alert(n === 0 ? 'Toutes les phrases existaient déjà.' : `${n} nouvelle${n > 1 ? 's' : ''} phrase${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`);
+    alert(n === 0 ? t('merge_all_existed_phrases') : (uiLang === 'en' ? `${n} new phrase${n !== 1 ? 's' : ''} added.` : `${n} nouvelle${n > 1 ? 's' : ''} phrase${n > 1 ? 's' : ''} ajoutée${n > 1 ? 's' : ''}.`));
   } else {
     const existing = getWords();
     const toAdd = pendingImportData.filter(newWord =>
@@ -3863,8 +4193,8 @@ function mergeImport() {
     updateHomeStats();
     const n = toAdd.length;
     const msg = n === 0
-      ? 'Tous les mots existaient déjà.'
-      : `${n} nouveau${n > 1 ? 'x' : ''} mot${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''}.`;
+      ? t('merge_all_existed_words')
+      : (uiLang === 'en' ? `${n} new word${n !== 1 ? 's' : ''} added.` : `${n} nouveau${n > 1 ? 'x' : ''} mot${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''}.`);
     alert(msg);
   }
 }
@@ -3873,7 +4203,7 @@ function replaceImport() {
   if (!pendingImportData) return;
   closeModal('modal-import');
   if (importContext === 'grammar') {
-    if (!confirm(`Remplacer TOUTES vos fiches existantes par les ${pendingImportData.length} fiches importées ?`)) return;
+    if (!confirm(uiLang === 'en' ? `Replace ALL your existing cards with the ${pendingImportData.length} imported cards?` : `Remplacer TOUTES vos fiches existantes par les ${pendingImportData.length} fiches importées ?`)) return;
     const newCards = pendingImportData.map(c => ({ ...c,
       id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
       last_known: null, seen_count: c.seen_count || 0, error_count: c.error_count || 0 }));
@@ -3881,7 +4211,7 @@ function replaceImport() {
     pendingImportData = null;
     renderGrammarScreen();
   } else if (importContext === 'phrases') {
-    if (!confirm(`Remplacer TOUTES vos phrases existantes par les ${pendingImportData.length} phrases importées ?`)) return;
+    if (!confirm(uiLang === 'en' ? `Replace ALL your existing phrases with the ${pendingImportData.length} imported phrases?` : `Remplacer TOUTES vos phrases existantes par les ${pendingImportData.length} phrases importées ?`)) return;
     const newPhrases = pendingImportData.map(p => ({ ...p,
       id: (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)),
       last_known: null, seen_count: 0, topic: p.topic || '' }));
@@ -3889,7 +4219,7 @@ function replaceImport() {
     pendingImportData = null;
     renderPhrasesScreen();
   } else {
-    if (!confirm(`Remplacer TOUS vos mots existants par les ${pendingImportData.length} mots importés ?`)) return;
+    if (!confirm(uiLang === 'en' ? `Replace ALL your existing words with the ${pendingImportData.length} imported words?` : `Remplacer TOUS vos mots existants par les ${pendingImportData.length} mots importés ?`)) return;
     saveWords(pendingImportData);
     pendingImportData = null;
     renderTagFilterBar();
@@ -4067,15 +4397,15 @@ function buildQuiz() {
 function startQuiz() {
   if (currentGameMode === GameMode.FLASHCARD) { startFlashcard(); return; }
   if (currentGameMode === GameMode.DICTEE && !ttsSupported) {
-    alert('La dictée nécessite la synthèse vocale, qui n\'est pas disponible sur ce navigateur.');
+    alert(t('alert_dictee_no_tts'));
     return;
   }
   const state = buildQuiz();
   if (!state) {
     if (currentGameMode === GameMode.REVISION) {
-      alert('Pas assez de mots à revoir pour ce mode. Faites d\'abord des quiz en mode Normal !');
+      alert(t('alert_revision_no_words'));
     } else {
-      alert(`Vous avez besoin d'au moins ${quizSize()} mots pour commencer un quiz.`);
+      alert(uiLang === 'en' ? `You need at least ${quizSize()} words to start a quiz.` : `Vous avez besoin d'au moins ${quizSize()} mots pour commencer un quiz.`);
     }
     return;
   }
@@ -4122,8 +4452,8 @@ function renderTextMatch(q, container) {
   const shuffledNative = shuffle(words.map(w => ({ id: w.id, text: w.native })));
 
   container.innerHTML = `
-    <div class="quiz-type-label">Association — Texte</div>
-    <p class="match-instruction">Associez chaque mot français à sa traduction.</p>
+    <div class="quiz-type-label">${t('quiz_text_match')}</div>
+    <p class="match-instruction">${t('quiz_match_instr')}</p>
     <div class="match-grid" id="match-grid">
       ${shuffledNative.map((n, i) => `
         <div class="match-card" data-id="${escHtml(n.id)}" data-side="left">${escHtml(n.text)}</div>
@@ -4141,8 +4471,8 @@ function renderAudioMatch(q, container) {
   const shuffledAudio  = shuffle(words.map(w => ({ id: w.id, tts: w.target })));
 
   container.innerHTML = `
-    <div class="quiz-type-label">Association — Écoute</div>
-    <p class="match-instruction">Associez chaque son à la bonne traduction française.</p>
+    <div class="quiz-type-label">${t('quiz_audio_match')}</div>
+    <p class="match-instruction">${t('quiz_audio_instr')}</p>
     <div class="match-grid" id="match-grid">
       ${shuffledAudio.map((audio, i) => `
         <div class="match-card audio-card" data-id="${escHtml(audio.id)}" data-it="${escHtml(audio.tts)}" data-side="left">🔊</div>
@@ -4246,7 +4576,7 @@ function renderMCQTranslate(q, container) {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
   container.innerHTML = `
-    <div class="quiz-type-label">Traduction — FR → ${lang().targetFlag}</div>
+    <div class="quiz-type-label">${uiLang === 'en' ? 'Translation' : 'Traduction'} — FR → ${lang().targetFlag}</div>
     <div class="mcq-question">
       <div class="mcq-word">${escHtml(word.native)}</div>
     </div>
@@ -4269,11 +4599,11 @@ function renderMCQListen(q, container) {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
   container.innerHTML = `
-    <div class="quiz-type-label">Écoute &amp; Traduction — ${lang().targetFlag} → FR</div>
+    <div class="quiz-type-label">${uiLang === 'en' ? 'Listen &amp; Translate' : 'Écoute &amp; Traduction'} — ${lang().targetFlag} → FR</div>
     <div class="audio-btn-wrapper">
       <button class="btn-audio" id="btn-play-audio" title="Écouter">🔊</button>
     </div>
-    <p class="match-instruction">Quelle est la traduction française ?</p>
+    <p class="match-instruction">${t('quiz_listen_instr')}</p>
     <div class="mcq-options">
       ${options.map((opt, i) => `
         <button class="mcq-option" data-correct="${opt.id === word.id}" data-id="${escHtml(opt.id)}">
@@ -4299,15 +4629,15 @@ function renderMCQListen(q, container) {
 function renderFreeInput(q, container) {
   const { word } = q;
   container.innerHTML = `
-    <div class="quiz-type-label">Saisie libre — FR → ${lang().targetFlag}</div>
+    <div class="quiz-type-label">${uiLang === 'en' ? 'Free input' : 'Saisie libre'} — FR → ${lang().targetFlag}</div>
     <div class="mcq-question">
       <div class="mcq-word">${escHtml(word.native)}</div>
     </div>
     <div class="free-input-area">
       <input type="text" id="free-input" class="free-input-field"
-        placeholder="Tapez la traduction…"
+        placeholder="${t('quiz_free_placeholder')}"
         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <button id="free-input-submit" class="btn btn-primary btn-full">Valider ✓</button>
+      <button id="free-input-submit" class="btn btn-primary btn-full">${t('btn_validate')}</button>
       <div id="free-input-hint" class="free-input-hint hidden"></div>
     </div>
   `;
@@ -4342,16 +4672,16 @@ function renderFreeInput(q, container) {
 function renderDictee(q, container) {
   const { word } = q;
   container.innerHTML = `
-    <div class="quiz-type-label">Dictée — Écoutez &amp; Écrivez en ${lang().targetFlag}</div>
+    <div class="quiz-type-label">${uiLang === 'en' ? 'Dictation' : 'Dictée'} — ${uiLang === 'en' ? 'Listen &amp; Write in' : 'Écoutez &amp; Écrivez en'} ${lang().targetFlag}</div>
     <div class="audio-btn-wrapper">
       <button class="btn-audio" id="btn-play-dictee" title="Écouter">🔊</button>
     </div>
-    <p class="match-instruction">Tapez ce que vous entendez dans la langue cible.</p>
+    <p class="match-instruction">${t('quiz_dictee_instr')}</p>
     <div class="free-input-area">
       <input type="text" id="dictee-input" class="free-input-field"
-        placeholder="Tapez ce que vous entendez…"
+        placeholder="${t('quiz_dictee_placeholder')}"
         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <button id="dictee-submit" class="btn btn-primary btn-full">Valider ✓</button>
+      <button id="dictee-submit" class="btn btn-primary btn-full">${t('btn_validate')}</button>
       <div id="dictee-hint" class="free-input-hint hidden"></div>
     </div>
   `;
@@ -4408,7 +4738,7 @@ function renderAnagram(q, container) {
   }
 
   container.innerHTML = `
-    <div class="quiz-type-label">Anagramme — FR → ${lang().targetFlag}</div>
+    <div class="quiz-type-label">${uiLang === 'en' ? 'Anagram' : 'Anagramme'} — FR → ${lang().targetFlag}</div>
     <div class="mcq-question">
       <div class="mcq-word">${escHtml(word.native)}</div>
     </div>
@@ -4500,7 +4830,7 @@ function startFlashcard() {
   const fcDir   = s.fcDirection || 'mix';
   const fcCount = s.fcCount !== undefined ? s.fcCount : 0;
   const all     = shuffle(getWords());
-  if (all.length === 0) { alert('Ajoutez des mots dans votre banque pour utiliser les flashcards.'); return; }
+  if (all.length === 0) { alert(t('alert_flashcard_empty')); return; }
   const selected = (fcCount === 0 || fcCount >= all.length) ? all : all.slice(0, fcCount);
   const cards = selected.map(w => {
     const dir = fcDir === 'mix' ? (Math.random() < 0.5 ? 'native-target' : 'target-native') : fcDir;
@@ -4534,7 +4864,7 @@ function renderFlashcard() {
         <div class="flashcard-face flashcard-front">
           <div class="flashcard-lang">${frontFlag}</div>
           <div class="flashcard-word">${escHtml(frontWord)}</div>
-          <div class="flashcard-tap-hint">Tapez pour retourner</div>
+          <div class="flashcard-tap-hint">${t('fc_tap_hint')}</div>
         </div>
         <div class="flashcard-face flashcard-back">
           <div class="flashcard-lang">${backFlag}</div>
@@ -4544,9 +4874,9 @@ function renderFlashcard() {
       </div>
     </div>
     <div class="flashcard-nav">
-      ${currentIndex > 0 ? `<button class="btn btn-secondary flashcard-btn" id="fc-prev">← Préc.</button>` : ''}
+      ${currentIndex > 0 ? `<button class="btn btn-secondary flashcard-btn" id="fc-prev">${t('fc_prev')}</button>` : ''}
       <button class="btn btn-primary flashcard-btn" id="fc-next">
-        ${currentIndex + 1 >= totalQuestions ? '✓ Terminer' : 'Suivant →'}
+        ${currentIndex + 1 >= totalQuestions ? t('fc_finish') : t('fc_next')}
       </button>
     </div>
   `;
@@ -4605,8 +4935,8 @@ function finishFlashcard() {
   document.getElementById('quiz-progress-bar').style.width = '100%';
   document.getElementById('score-emoji').textContent = '🃏';
   document.getElementById('score-value').textContent = total;
-  document.getElementById('score-total').textContent = ' cartes';
-  document.getElementById('score-message').textContent = 'Révision terminée !';
+  document.getElementById('score-total').textContent = ' ' + t('score_cards');
+  document.getElementById('score-message').textContent = t('score_flashcard');
   const backupEl = document.getElementById('score-backup-reminder');
   if (backupEl) backupEl.classList.add('hidden');
   const retryBtnFC = document.getElementById('btn-retry-errors');
@@ -4738,18 +5068,18 @@ function finishQuiz() {
 
   let emoji, message;
   if (quizState.isSurvival) {
-    if (score >= 20)     { emoji = '🏆'; message = `Incroyable ! ${score} mots sans faute !`; }
-    else if (score >= 10) { emoji = '🔥'; message = `Excellent ! ${score} mots consécutifs !`; }
-    else if (score >= 5)  { emoji = '👍'; message = `Bien joué ! ${score} mots d'affilée !`; }
-    else                  { emoji = '💀'; message = `${score} mot${score > 1 ? 's' : ''} — réessayez !`; }
+    if (score >= 20)      { emoji = '🏆'; message = uiLang === 'en' ? `Incredible! ${score} words without a mistake!` : `Incroyable ! ${score} mots sans faute !`; }
+    else if (score >= 10) { emoji = '🔥'; message = uiLang === 'en' ? `Excellent! ${score} words in a row!` : `Excellent ! ${score} mots consécutifs !`; }
+    else if (score >= 5)  { emoji = '👍'; message = uiLang === 'en' ? `Well done! ${score} consecutive words!` : `Bien joué ! ${score} mots d'affilée !`; }
+    else                  { emoji = '💀'; message = uiLang === 'en' ? `${score} word${score !== 1 ? 's' : ''} — try again!` : `${score} mot${score > 1 ? 's' : ''} — réessayez !`; }
     document.getElementById('score-value').textContent = score;
     document.getElementById('score-total').textContent = ' 🔥';
   } else {
     const ratio = score / total;
-    if (ratio >= 0.875)      { emoji = '🏆'; message = 'Excellent ! Vous maîtrisez ce vocabulaire !'; }
-    else if (ratio >= 0.625) { emoji = '⭐'; message = 'Très bien ! Continuez comme ça !'; }
-    else if (ratio >= 0.375) { emoji = '👍'; message = 'Continuez vos efforts, vous progressez !'; }
-    else                     { emoji = '💪'; message = 'Entraînez-vous encore, vous pouvez y arriver !'; }
+    if (ratio >= 0.875)      { emoji = '🏆'; message = t('score_excellent'); }
+    else if (ratio >= 0.625) { emoji = '⭐'; message = t('score_good'); }
+    else if (ratio >= 0.375) { emoji = '👍'; message = t('score_ok'); }
+    else                     { emoji = '💪'; message = t('score_low'); }
     document.getElementById('score-value').textContent = score;
     document.getElementById('score-total').textContent = `/ ${total}`;
   }
@@ -4758,7 +5088,7 @@ function finishQuiz() {
   document.getElementById('score-message').textContent = message;
 
   const backupEl = document.getElementById('score-backup-reminder');
-  if (backupEl) backupEl.classList.toggle('hidden', !needsBackup());
+  if (backupEl) { backupEl.innerHTML = t('backup_score'); backupEl.classList.toggle('hidden', !needsBackup()); }
 
   const failedIds = quizState ? (quizState.failedWordIds || []) : [];
   const retryBtn = document.getElementById('btn-retry-errors');
@@ -4766,7 +5096,7 @@ function finishQuiz() {
     const showRetry = failedIds.length > 0 && !quizState.isSurvival && !quizState.isRetry;
     retryBtn.classList.toggle('hidden', !showRetry);
     if (showRetry) {
-      retryBtn.textContent = `⚡ Réviser les ${failedIds.length} raté${failedIds.length > 1 ? 's' : ''}`;
+      retryBtn.textContent = uiLang === 'en' ? `⚡ Retry ${failedIds.length} missed` : `⚡ Réviser les ${failedIds.length} raté${failedIds.length > 1 ? 's' : ''}`;
       retryBtn._failedIds = failedIds.slice();
     }
   }
@@ -5167,13 +5497,13 @@ function renderStats() {
 
   // Stats par mode
   const modeInfo = [
-    { id: 0, label: '🎯 Normal',    cls: 'stat-mode-normal'   },
-    { id: 1, label: '🔴 Révision',  cls: 'stat-mode-revision' },
-    { id: 2, label: '💀 Survie',    cls: 'stat-mode-survival' },
-    { id: 3, label: '⏱️ Chrono',    cls: 'stat-mode-chrono'   },
-    { id: 4, label: '🃏 Flashcard', cls: 'stat-mode-flashcard' },
-    { id: 5, label: '🎧 Dictée',    cls: 'stat-mode-dictee'   },
-    { id: 6, label: '🔀 Anagramme', cls: 'stat-mode-anagram'  },
+    { id: 0, label: `🎯 ${t('mode_normal')}`,    cls: 'stat-mode-normal'   },
+    { id: 1, label: `🔴 ${t('mode_revision')}`,  cls: 'stat-mode-revision' },
+    { id: 2, label: `💀 ${t('mode_survival')}`,  cls: 'stat-mode-survival' },
+    { id: 3, label: `⏱️ ${t('mode_chrono')}`,    cls: 'stat-mode-chrono'   },
+    { id: 4, label: `🃏 ${t('mode_flashcard')}`, cls: 'stat-mode-flashcard' },
+    { id: 5, label: `🎧 ${t('mode_dictee')}`,    cls: 'stat-mode-dictee'   },
+    { id: 6, label: `🔀 ${t('mode_anagram')}`,   cls: 'stat-mode-anagram'  },
   ];
   const modeStats = modeInfo.map(m => {
     const sessions = history.filter(s => (s.mode ?? 0) === m.id);
@@ -5181,11 +5511,11 @@ function renderStats() {
     if (m.id === 2) { // Survie : score = nb consécutifs
       const best = Math.max(...sessions.map(s => s.score));
       const avg  = Math.round(sessions.reduce((a, s) => a + s.score, 0) / sessions.length);
-      return { ...m, sessions: sessions.length, best: `${best} 🔥`, avg: `moy. ${avg}` };
+      return { ...m, sessions: sessions.length, best: `${best} 🔥`, avg: `${t('stat_avg_prefix')} ${avg}` };
     }
     const best    = sessions.reduce((b, s) => s.score / s.total > b.score / b.total ? s : b);
     const avgPct  = Math.round(sessions.reduce((a, s) => a + s.score / s.total, 0) / sessions.length * 100);
-    return { ...m, sessions: sessions.length, best: `${best.score}/${best.total}`, avg: `moy. ${avgPct}%` };
+    return { ...m, sessions: sessions.length, best: `${best.score}/${best.total}`, avg: `${t('stat_avg_prefix')} ${avgPct}%` };
   }).filter(Boolean);
 
   const barRow = (w, value, max, cls, unit) => `
@@ -5208,59 +5538,59 @@ function renderStats() {
     <div class="stats-summary stats-summary-4">
       <div class="stat-card ${streak > 0 ? 'stat-card-streak' : ''}">
         <div class="stat-value">${streak > 0 ? '🔥 ' : ''}${streak}</div>
-        <div class="stat-label">jour${streak > 1 ? 's' : ''} de suite</div>
+        <div class="stat-label">${streak !== 1 ? t('stat_streakN') : t('stat_streak1')}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">${todaySeen}</div>
-        <div class="stat-label">mots vus auj.</div>
+        <div class="stat-label">${t('stat_today')}</div>
       </div>
       <div class="stat-card ${scoreCls}">
         <div class="stat-value">${score !== null ? score + '%' : '—'}</div>
-        <div class="stat-label">maîtrise globale</div>
+        <div class="stat-label">${t('stat_mastery')}</div>
       </div>
       <div class="stat-card ${accuracyCls}">
         <div class="stat-value">${accuracy !== null ? accuracy + '%' : '—'}</div>
-        <div class="stat-label">réussite quiz</div>
+        <div class="stat-label">${t('stat_accuracy')}</div>
       </div>
     </div>
 
     <!-- Heatmap d'activité -->
     ${history.length > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">📅 Activité des 12 dernières semaines</h3>
+      <h3 class="stats-section-title">${t('stat_activity')}</h3>
       ${buildHeatmapHTML(history)}
     </div>` : ''}
 
     <!-- Répartition du vocabulaire -->
     ${total > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">📊 Répartition du vocabulaire
-        <span class="stats-section-hint"> — ${total} mot${total > 1 ? 's' : ''} au total</span>
+      <h3 class="stats-section-title">${t('stat_vocab_section')}
+        <span class="stats-section-hint"> — ${pWords(total)} ${uiLang === 'en' ? 'total' : 'au total'}</span>
       </h3>
       <div class="stat-seg-bar">
-        ${cats.mastered.length ? `<div class="stat-seg seg-mastered" style="width:${pct(cats.mastered.length)}%" title="Maîtrisés"></div>` : ''}
-        ${cats.learning.length ? `<div class="stat-seg seg-learning" style="width:${pct(cats.learning.length)}%" title="En apprentissage"></div>` : ''}
-        ${cats.toReview.length ? `<div class="stat-seg seg-review"   style="width:${pct(cats.toReview.length)}%" title="À revoir"></div>` : ''}
-        ${cats.never.length    ? `<div class="stat-seg seg-never"    style="width:${pct(cats.never.length)}%"    title="Jamais vus"></div>` : ''}
+        ${cats.mastered.length ? `<div class="stat-seg seg-mastered" style="width:${pct(cats.mastered.length)}%" title="${t('seg_mastered')}"></div>` : ''}
+        ${cats.learning.length ? `<div class="stat-seg seg-learning" style="width:${pct(cats.learning.length)}%" title="${t('seg_learning')}"></div>` : ''}
+        ${cats.toReview.length ? `<div class="stat-seg seg-review"   style="width:${pct(cats.toReview.length)}%" title="${t('seg_review')}"></div>` : ''}
+        ${cats.never.length    ? `<div class="stat-seg seg-never"    style="width:${pct(cats.never.length)}%"    title="${t('seg_never')}"></div>` : ''}
       </div>
       <div class="stat-seg-legend">
-        ${cats.mastered.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-mastered"></span>Maîtrisés : ${cats.mastered.length}</span>` : ''}
-        ${cats.learning.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-learning"></span>En cours : ${cats.learning.length}</span>` : ''}
-        ${cats.toReview.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-review"></span>À revoir : ${cats.toReview.length}</span>` : ''}
-        ${cats.never.length    ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-never"></span>Nouveaux : ${cats.never.length}</span>` : ''}
+        ${cats.mastered.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-mastered"></span>${t('seg_mastered')} : ${cats.mastered.length}</span>` : ''}
+        ${cats.learning.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-learning"></span>${t('seg_learning')} : ${cats.learning.length}</span>` : ''}
+        ${cats.toReview.length ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-review"></span>${t('seg_review')} : ${cats.toReview.length}</span>` : ''}
+        ${cats.never.length    ? `<span class="stat-seg-item"><span class="stat-seg-dot seg-never"></span>${t('seg_never')} : ${cats.never.length}</span>` : ''}
       </div>
     </div>` : ''}
 
     <!-- Stats par mode -->
     ${modeStats.length > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">🎮 Par mode de jeu</h3>
+      <h3 class="stats-section-title">${t('stat_by_mode')}</h3>
       <div class="stat-mode-list">
         ${modeStats.map(m => `
         <div class="stat-mode-row ${m.cls}">
           <span class="stat-mode-name">${m.label}</span>
-          <span class="stat-mode-sessions">${m.sessions} session${m.sessions > 1 ? 's' : ''}</span>
-          <span class="stat-mode-best">Meilleur&nbsp;: ${m.best}</span>
+          <span class="stat-mode-sessions">${pSessions(m.sessions)}</span>
+          <span class="stat-mode-best">${t('stat_best')}&nbsp;: ${m.best}</span>
           <span class="stat-mode-avg">${m.avg}</span>
         </div>`).join('')}
       </div>
@@ -5269,13 +5599,13 @@ function renderStats() {
     <!-- Mots à revoir -->
     ${withErrors.length > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">🔴 Mots à revoir
-        <span class="stats-section-hint"> — classés par taux d'erreurs</span>
+      <h3 class="stats-section-title">${t('stat_to_review')}
+        <span class="stats-section-hint"> ${t('stat_to_review_hint')}</span>
       </h3>
       <div class="stat-bars">
         ${withErrors.map(w => {
           const rate = Math.round((w.error_count / w.seen_count) * 100);
-          return barRow(w, rate, 100, 'stat-fill-red', '% raté');
+          return barRow(w, rate, 100, 'stat-fill-red', t('pct_failed'));
         }).join('')}
       </div>
     </div>` : ''}
@@ -5283,11 +5613,11 @@ function renderStats() {
     <!-- Mots maîtrisés -->
     ${cats.mastered.length > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">✅ Mots maîtrisés</h3>
+      <h3 class="stats-section-title">${t('stat_mastered_section')}</h3>
       <div class="stat-bars">
         ${cats.mastered.slice(0, 8).map(w => {
           const acc = Math.round(((w.seen_count - (w.error_count || 0)) / w.seen_count) * 100);
-          return barRow(w, acc, 100, 'stat-fill-green', '% juste');
+          return barRow(w, acc, 100, 'stat-fill-green', t('pct_correct'));
         }).join('')}
       </div>
     </div>` : ''}
@@ -5295,30 +5625,30 @@ function renderStats() {
     <!-- Les plus pratiqués -->
     ${mostPracticed.length > 0 ? `
     <div class="stats-section">
-      <h3 class="stats-section-title">🔵 Les plus pratiqués
-        <span class="stats-section-hint"> — nombre de fois vus en quiz</span>
+      <h3 class="stats-section-title">${t('stat_practiced')}
+        <span class="stats-section-hint"> ${t('stat_practiced_hint')}</span>
       </h3>
       <div class="stat-bars">
-        ${mostPracticed.map(w => barRow(w, w.seen_count, maxSeen, 'stat-fill-blue', 'fois')).join('')}
+        ${mostPracticed.map(w => barRow(w, w.seen_count, maxSeen, 'stat-fill-blue', t('stat_times'))).join('')}
       </div>
     </div>` : `
     <div class="empty-state">
       <div class="empty-icon">📊</div>
-      <p>Aucune donnée</p>
-      <p class="text-muted">Faites des quiz pour voir vos statistiques !</p>
+      <p>${t('stat_empty')}</p>
+      <p class="text-muted">${t('stat_empty_hint')}</p>
     </div>`}
 
     <!-- Jamais pratiqués -->
     ${cats.never.length > 0 ? `
     <div class="stats-section stats-section-muted">
-      <h3 class="stats-section-title">😶 Jamais pratiqués
-        <span class="stats-section-hint"> — ${cats.never.length} mot${cats.never.length > 1 ? 's' : ''}</span>
+      <h3 class="stats-section-title">${t('stat_never_section')}
+        <span class="stats-section-hint"> — ${pWords(cats.never.length)}</span>
       </h3>
       <div class="stat-never-list">
         ${cats.never.slice(0, 12).map(w => `
           <span class="stat-never-pill">${escHtml(w.native)} → ${escHtml(w.target)}</span>
         `).join('')}
-        ${cats.never.length > 12 ? `<span class="stat-never-more">+${cats.never.length - 12} autres</span>` : ''}
+        ${cats.never.length > 12 ? `<span class="stat-never-more">+${cats.never.length - 12} ${uiLang === 'en' ? 'more' : 'autres'}</span>` : ''}
       </div>
     </div>` : ''}
   `;
@@ -5350,7 +5680,7 @@ function buildHeatmapHTML(history) {
     weeks.push(week);
   }
 
-  const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  const months = t('months');
   const monthRow = weeks.map(wk => {
     const d = new Date(wk[0].date);
     return d.getDate() <= 7 ? months[d.getMonth()] : '';
@@ -5373,12 +5703,12 @@ function buildHeatmapHTML(history) {
         </div>
       </div>
       <div class="heatmap-legend">
-        <span class="heatmap-lgd-label">Moins</span>
+        <span class="heatmap-lgd-label">${t('heatmap_less')}</span>
         <div class="heatmap-cell heatmap-l0"></div>
         <div class="heatmap-cell heatmap-l1"></div>
         <div class="heatmap-cell heatmap-l2"></div>
         <div class="heatmap-cell heatmap-l3"></div>
-        <span class="heatmap-lgd-label">Plus</span>
+        <span class="heatmap-lgd-label">${t('heatmap_more')}</span>
       </div>
     </div>`;
 }
@@ -5449,22 +5779,23 @@ function openLessonPickerModal(weakOnly) {
     const allSel = selected.size === availableLessons.length;
     list.innerHTML = `
       <div class="lesson-picker-actions">
-        <button class="settings-pill${allSel ? ' active' : ''}" id="lp-sel-all">Tout</button>
-        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="lp-sel-none">Aucun</button>
+        <button class="settings-pill${allSel ? ' active' : ''}" id="lp-sel-all">${t('picker_all')}</button>
+        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="lp-sel-none">${t('picker_none')}</button>
       </div>
       ${availableLessons.map(l => {
         const lCards = cards.filter(c => c.lesson === l);
         const count = weakOnly ? lCards.filter(c => c.last_known === false).length : lCards.length;
         const isSel = selected.has(l);
+        const cardWord = uiLang === 'en' ? (count > 1 ? 'cards' : 'card') : (count > 1 ? 'fiches' : 'fiche');
         return `<div class="lesson-picker-item${isSel ? ' selected' : ''}" data-lesson="${escHtml(l)}">
           <div class="lesson-picker-check">${isSel ? '✓' : ''}</div>
           <span class="lesson-picker-name">${escHtml(l)}</span>
-          <span class="lesson-picker-count">${count} fiche${count > 1 ? 's' : ''}</span>
+          <span class="lesson-picker-count">${count} ${cardWord}</span>
         </div>`;
       }).join('')}
       <div class="lesson-picker-sep"></div>
       <button class="btn btn-primary btn-full" id="lp-start" ${n === 0 ? 'disabled' : ''}>
-        📖 Réviser — ${n} fiche${n > 1 ? 's' : ''}
+        📖 ${t('grammar_btn_review')} — ${n} ${uiLang === 'en' ? (n > 1 ? 'cards' : 'card') : (n > 1 ? 'fiches' : 'fiche')}
       </button>
     `;
     list.querySelector('#lp-sel-all').addEventListener('click', () => {
@@ -5558,19 +5889,19 @@ function renderGrammarScreen() {
     <div class="grammar-stats">
       <div class="stat-card">
         <div class="stat-value">${lessonNames.length}</div>
-        <div class="stat-label">Leçons</div>
+        <div class="stat-label">${t('grammar_stat_lessons')}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">${cards.length}</div>
-        <div class="stat-label">Fiches</div>
+        <div class="stat-label">${t('grammar_stat_cards')}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">${reviewed}</div>
-        <div class="stat-label">Révisées</div>
+        <div class="stat-label">${t('grammar_stat_reviewed')}</div>
       </div>
       <div class="stat-card ${successClass}">
         <div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div>
-        <div class="stat-label">Réussite</div>
+        <div class="stat-label">${t('grammar_stat_success')}</div>
       </div>
     </div>`;
 
@@ -5580,7 +5911,7 @@ function renderGrammarScreen() {
     const lKnown    = lCards.filter(c => c.last_known === true).length;
     const ratePct   = lReviewed > 0 ? Math.round(lKnown / lReviewed * 100) : null;
     const statsHtml = ratePct !== null
-      ? `<span class="grammar-lesson-stat">${lKnown}/${lReviewed} connues</span>` : '';
+      ? `<span class="grammar-lesson-stat">${lKnown}/${lReviewed} ${uiLang === 'en' ? 'known' : 'connues'}</span>` : '';
 
     const cardsHtml = lCards.map(card => {
       const firstLine = card.answer.split('\n')[0];
@@ -5606,7 +5937,7 @@ function renderGrammarScreen() {
             <span class="grammar-lesson-title">📖 ${escHtml(lesson)}</span>
             ${statsHtml}
           </div>
-          <button class="btn btn-primary grammar-review-btn" data-lesson="${escHtml(lesson)}">Réviser</button>
+          <button class="btn btn-primary grammar-review-btn" data-lesson="${escHtml(lesson)}">${t('grammar_btn_review')}</button>
         </div>
         <div class="grammar-cards-list">${cardsHtml}</div>
       </div>`;
@@ -5617,7 +5948,7 @@ function openAddGrammarModal() {
   const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
   const dl = document.getElementById('grammar-lessons-list');
   if (dl) dl.innerHTML = lessons.map(l => `<option value="${escHtml(l)}">`).join('');
-  document.getElementById('modal-grammar-title').textContent = 'Ajouter une fiche';
+  document.getElementById('modal-grammar-title').textContent = t('modal_add_grammar');
   document.getElementById('edit-grammar-id').value           = '';
   document.getElementById('input-grammar-lesson').value      = '';
   document.getElementById('input-grammar-question').value    = '';
@@ -5633,7 +5964,7 @@ function openEditGrammarModal(id) {
   const lessons = [...new Set(getGrammarCards().map(c => c.lesson))];
   const dl = document.getElementById('grammar-lessons-list');
   if (dl) dl.innerHTML = lessons.map(l => `<option value="${escHtml(l)}">`).join('');
-  document.getElementById('modal-grammar-title').textContent = 'Modifier la fiche';
+  document.getElementById('modal-grammar-title').textContent = t('modal_edit_grammar');
   document.getElementById('edit-grammar-id').value           = id;
   document.getElementById('input-grammar-lesson').value      = card.lesson;
   document.getElementById('input-grammar-question').value    = card.question;
@@ -5649,7 +5980,7 @@ function startGrammarReview(lesson, weakOnly = false) {
     : Array.isArray(lesson) ? all.filter(c => lesson.includes(c.lesson))
     : all.filter(c => c.lesson === lesson);
   if (weakOnly) pool = pool.filter(c => c.last_known === false);
-  if (pool.length === 0) { alert('Aucune fiche à revoir pour le moment.'); return; }
+  if (pool.length === 0) { alert(t('alert_no_grammar_review')); return; }
   const dir = getSettings().grammarReviewDir || 'native-target';
   grammarReviewState = {
     cards: shuffle([...pool]).map(c => ({
@@ -5685,7 +6016,7 @@ function renderGrammarReviewCard() {
   const revealClass = rev ? 'grammar-review-question' : 'grammar-review-answer';
   const promptHtml  = rev ? escHtml(promptText).replace(/\n/g, '<br>') : escHtml(promptText);
 
-  const revealBtnLabel = rev ? 'Voir la question' : 'Voir la réponse';
+  const revealBtnLabel = rev ? t('reveal_question') : t('reveal_answer');
   if (!revealed) {
     content.innerHTML = `
       <div class="quiz-type-label">${escHtml(card.lesson)}</div>
@@ -5705,8 +6036,8 @@ function renderGrammarReviewCard() {
         <div class="grammar-review-sep"></div>
         <div class="${revealClass}">${revealHtml}</div>
         <div class="grammar-review-actions">
-          <button class="btn btn-danger  grammar-review-btn-no"  id="gr-no">✗ À revoir</button>
-          <button class="btn btn-primary grammar-review-btn-yes" id="gr-yes">✓ Connu</button>
+          <button class="btn btn-danger  grammar-review-btn-no"  id="gr-no">${t('btn_to_review')}</button>
+          <button class="btn btn-primary grammar-review-btn-yes" id="gr-yes">${t('btn_known')}</button>
         </div>
       </div>`;
     content.querySelector('#gr-no' ).addEventListener('click', () => advanceGrammarReview(false));
@@ -5747,20 +6078,20 @@ function finishGrammarReview() {
 
   const ratio = knownCount / totalCards;
   let emoji, message;
-  if (ratio === 1)        { emoji = '🏆'; message = 'Parfait ! Toutes les fiches maîtrisées !'; }
-  else if (ratio >= 0.75) { emoji = '⭐'; message = 'Très bien ! Quelques fiches à revoir.'; }
-  else if (ratio >= 0.5)  { emoji = '📖'; message = 'Continuez à pratiquer !'; }
-  else                    { emoji = '💪'; message = 'À force de révisions, vous y arriverez !'; }
+  if (ratio === 1)        { emoji = '🏆'; message = t('gr_perfect'); }
+  else if (ratio >= 0.75) { emoji = '⭐'; message = t('gr_good'); }
+  else if (ratio >= 0.5)  { emoji = '📖'; message = t('gr_ok'); }
+  else                    { emoji = '💪'; message = t('gr_low'); }
 
   const content = document.getElementById('quiz-content');
   content.innerHTML = `
     <div class="grammar-finish">
       <div class="grammar-finish-emoji">${emoji}</div>
-      <div class="grammar-finish-score">${knownCount} / ${totalCards} connus</div>
+      <div class="grammar-finish-score">${knownCount} / ${totalCards} ${uiLang === 'en' ? 'known' : 'connues'}</div>
       <p class="grammar-finish-message">${escHtml(message)}</p>
       <div class="grammar-finish-actions">
-        <button class="btn btn-primary   btn-full" id="gr-replay">🔁 Réessayer</button>
-        <button class="btn btn-secondary btn-full" id="gr-back">📖 Retour aux cours</button>
+        <button class="btn btn-primary   btn-full" id="gr-replay">${t('btn_retry')}</button>
+        <button class="btn btn-secondary btn-full" id="gr-back">${t('btn_back_grammar')}</button>
       </div>
     </div>`;
   content.querySelector('#gr-replay').addEventListener('click', () => startGrammarReview(lesson, weakOnly));
@@ -5793,30 +6124,30 @@ function openTopicPickerModal(weakOnly) {
     const allSel = selected.size === availableTopics.length;
     list.innerHTML = `
       <div class="lesson-picker-actions">
-        <button class="settings-pill${allSel ? ' active' : ''}" id="tp-sel-all">Tout</button>
-        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="tp-sel-none">Aucun</button>
+        <button class="settings-pill${allSel ? ' active' : ''}" id="tp-sel-all">${t('picker_all')}</button>
+        <button class="settings-pill${selected.size === 0 ? ' active' : ''}" id="tp-sel-none">${t('picker_none')}</button>
       </div>
-      ${availableTopics.map(t => {
-        const tPhrases = phrases.filter(p => (p.topic || '') === t);
+      ${availableTopics.map(topic => {
+        const tPhrases = phrases.filter(p => (p.topic || '') === topic);
         const count = weakOnly ? tPhrases.filter(p => p.last_known === false).length : tPhrases.length;
-        const isSel = selected.has(t);
-        return `<div class="lesson-picker-item${isSel ? ' selected' : ''}" data-topic="${escHtml(t)}">
+        const isSel = selected.has(topic);
+        return `<div class="lesson-picker-item${isSel ? ' selected' : ''}" data-topic="${escHtml(topic)}">
           <div class="lesson-picker-check">${isSel ? '✓' : ''}</div>
-          <span class="lesson-picker-name">${escHtml(t || 'Sans thème')}</span>
+          <span class="lesson-picker-name">${escHtml(topic || t('phrases_none_topic'))}</span>
           <span class="lesson-picker-count">${count} phrase${count > 1 ? 's' : ''}</span>
         </div>`;
       }).join('')}
       <div class="lesson-picker-sep"></div>
       <button class="btn btn-primary btn-full" id="tp-start" ${n === 0 ? 'disabled' : ''}>
-        📖 Réviser — ${n} phrase${n > 1 ? 's' : ''}
+        📖 ${t('phrases_btn_review')} — ${n} phrase${n > 1 ? 's' : ''}
       </button>
     `;
-    list.querySelector('#tp-sel-all').addEventListener('click', () => { availableTopics.forEach(t => selected.add(t)); render(); });
+    list.querySelector('#tp-sel-all').addEventListener('click', () => { availableTopics.forEach(topic => selected.add(topic)); render(); });
     list.querySelector('#tp-sel-none').addEventListener('click', () => { selected.clear(); render(); });
     list.querySelectorAll('.lesson-picker-item').forEach(item => {
       item.addEventListener('click', () => {
-        const t = item.dataset.topic;
-        if (selected.has(t)) selected.delete(t); else selected.add(t);
+        const topic = item.dataset.topic;
+        if (selected.has(topic)) selected.delete(topic); else selected.add(topic);
         render();
       });
     });
@@ -5880,14 +6211,14 @@ function renderPhrasesScreen() {
     if (b === '') return -1;
     return a.localeCompare(b);
   });
-  const namedTopicCount = topicKeys.filter(t => t !== '').length;
+  const namedTopicCount = topicKeys.filter(tk => tk !== '').length;
 
   const statsHtml = `
     <div class="grammar-stats">
-      <div class="stat-card"><div class="stat-value">${namedTopicCount || '—'}</div><div class="stat-label">Thèmes</div></div>
-      <div class="stat-card"><div class="stat-value">${phrases.length}</div><div class="stat-label">Phrases</div></div>
-      <div class="stat-card"><div class="stat-value">${reviewed}</div><div class="stat-label">Révisées</div></div>
-      <div class="stat-card ${successCls}"><div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div><div class="stat-label">Réussite</div></div>
+      <div class="stat-card"><div class="stat-value">${namedTopicCount || '—'}</div><div class="stat-label">${t('phrases_stat_topics')}</div></div>
+      <div class="stat-card"><div class="stat-value">${phrases.length}</div><div class="stat-label">${t('phrases_stat_count')}</div></div>
+      <div class="stat-card"><div class="stat-value">${reviewed}</div><div class="stat-label">${t('phrases_stat_reviewed')}</div></div>
+      <div class="stat-card ${successCls}"><div class="stat-value">${successPct !== null ? successPct + '%' : '—'}</div><div class="stat-label">${t('phrases_stat_success')}</div></div>
     </div>`;
 
   listEl.innerHTML = statsHtml + topicKeys.map(topic => {
@@ -5896,8 +6227,8 @@ function renderPhrasesScreen() {
     const tKnown    = tPhrases.filter(p => p.last_known === true).length;
     const tRate     = tReviewed > 0 ? Math.round(tKnown / tReviewed * 100) : null;
     const tStatHtml = tRate !== null
-      ? `<span class="grammar-lesson-stat">${tKnown}/${tReviewed} réussies</span>` : '';
-    const topicLabel = topic || 'Sans thème';
+      ? `<span class="grammar-lesson-stat">${tKnown}/${tReviewed} ${uiLang === 'en' ? 'known' : 'réussies'}</span>` : '';
+    const topicLabel = topic || t('phrases_none_topic');
     const topicIcon  = topic ? '💬' : '📂';
 
     const itemsHtml = tPhrases.map(p => `
@@ -5919,7 +6250,7 @@ function renderPhrasesScreen() {
             <span class="grammar-lesson-title">${topicIcon} ${escHtml(topicLabel)}</span>
             ${tStatHtml}
           </div>
-          <button class="btn btn-primary grammar-review-btn" data-topic="${escHtml(topic)}">Réviser</button>
+          <button class="btn btn-primary grammar-review-btn" data-topic="${escHtml(topic)}">${t('phrases_btn_review')}</button>
         </div>
         <div class="grammar-cards-list">${itemsHtml}</div>
       </div>`;
@@ -5927,7 +6258,7 @@ function renderPhrasesScreen() {
 }
 
 function openAddPhraseModal() {
-  document.getElementById('modal-phrase-title').textContent  = 'Ajouter une phrase';
+  document.getElementById('modal-phrase-title').textContent  = t('modal_add_phrase');
   document.getElementById('edit-phrase-id').value            = '';
   document.getElementById('input-phrase-native').value       = '';
   document.getElementById('input-phrase-target').value       = '';
@@ -5941,7 +6272,7 @@ function openAddPhraseModal() {
 function openEditPhraseModal(id) {
   const phrase = getPhrases().find(p => p.id === id);
   if (!phrase) return;
-  document.getElementById('modal-phrase-title').textContent  = 'Modifier la phrase';
+  document.getElementById('modal-phrase-title').textContent  = t('modal_edit_phrase');
   document.getElementById('edit-phrase-id').value            = id;
   document.getElementById('input-phrase-native').value       = phrase.native;
   document.getElementById('input-phrase-target').value       = phrase.target;
@@ -5953,7 +6284,7 @@ function openEditPhraseModal(id) {
 
 function updatePhraseFormLabels() {
   const el = document.getElementById('label-phrase-target');
-  if (el) el.textContent = `${lang().targetFlag} Traduction (${lang().label.split('→')[1].trim()})`;
+  if (el) el.textContent = `${lang().targetFlag} ${uiLang === 'en' ? 'Translation' : 'Traduction'} (${langTargetName()})`;
 }
 
 /* ---- Phrase review (reuses quiz screen) ---- */
@@ -5964,7 +6295,7 @@ function startPhraseReview(weakOnly = false, topic = null) {
     else pool = pool.filter(p => (p.topic || '') === topic);
   }
   if (weakOnly) pool = pool.filter(p => p.last_known === false);
-  if (pool.length === 0) { alert('Aucune phrase à revoir pour le moment.'); return; }
+  if (pool.length === 0) { alert(t('alert_no_phrase_review')); return; }
   const dir = getSettings().phraseReviewDir || 'native-target';
   phraseReviewState = {
     phrases: shuffle([...pool]).map(p => ({
@@ -5999,7 +6330,7 @@ function renderPhraseReviewCard() {
   const promptFlag = rev ? lang().targetFlag : lang().nativeFlag;
   const revealFlag = rev ? lang().nativeFlag : lang().targetFlag;
 
-  const phraseRevealLabel = rev ? 'Révéler la phrase originale' : 'Révéler la traduction';
+  const phraseRevealLabel = rev ? t('reveal_original') : t('reveal_translation');
   if (!revealed) {
     content.innerHTML = `
       <div class="grammar-review-card">
@@ -6021,8 +6352,8 @@ function renderPhraseReviewCard() {
         <div class="grammar-review-sep"></div>
         <div class="grammar-review-answer">${escHtml(revealText).replace(/\n/g, '<br>')}</div>
         <div class="grammar-review-actions">
-          <button class="btn btn-danger  grammar-review-btn-no"  id="pr-no">✗ À revoir</button>
-          <button class="btn btn-primary grammar-review-btn-yes" id="pr-yes">✓ Connu</button>
+          <button class="btn btn-danger  grammar-review-btn-no"  id="pr-no">${t('btn_to_review')}</button>
+          <button class="btn btn-primary grammar-review-btn-yes" id="pr-yes">${t('btn_known')}</button>
         </div>
       </div>`;
     content.querySelector('#pr-no' ).addEventListener('click', () => advancePhraseReview(false));
@@ -6058,20 +6389,20 @@ function finishPhraseReview() {
 
   const ratio = knownCount / totalCards;
   let emoji, message;
-  if (ratio === 1)        { emoji = '🏆'; message = 'Parfait ! Toutes les phrases connues !'; }
-  else if (ratio >= 0.75) { emoji = '⭐'; message = 'Très bien ! Quelques phrases à revoir.'; }
-  else if (ratio >= 0.5)  { emoji = '📖'; message = 'Continuez à pratiquer !'; }
-  else                    { emoji = '💪'; message = 'À force de révisions, vous y arriverez !'; }
+  if (ratio === 1)        { emoji = '🏆'; message = t('pr_perfect'); }
+  else if (ratio >= 0.75) { emoji = '⭐'; message = t('pr_good'); }
+  else if (ratio >= 0.5)  { emoji = '📖'; message = t('pr_ok'); }
+  else                    { emoji = '💪'; message = t('pr_low'); }
 
   const content = document.getElementById('quiz-content');
   content.innerHTML = `
     <div class="grammar-finish">
       <div class="grammar-finish-emoji">${emoji}</div>
-      <div class="grammar-finish-score">${knownCount} / ${totalCards} connues</div>
+      <div class="grammar-finish-score">${knownCount} / ${totalCards} ${uiLang === 'en' ? 'known' : 'connues'}</div>
       <p class="grammar-finish-message">${escHtml(message)}</p>
       <div class="grammar-finish-actions">
-        <button class="btn btn-primary   btn-full" id="pr-replay">🔁 Réessayer</button>
-        <button class="btn btn-secondary btn-full" id="pr-back">💬 Retour aux phrases</button>
+        <button class="btn btn-primary   btn-full" id="pr-replay">${t('btn_retry')}</button>
+        <button class="btn btn-secondary btn-full" id="pr-back">${t('btn_back_phrases')}</button>
       </div>
     </div>`;
   quitTarget = 'phrases';
@@ -6082,13 +6413,13 @@ function finishPhraseReview() {
 /* ---- Phrase export/import ---- */
 function exportPhrases() {
   const phrases = getPhrases();
-  if (phrases.length === 0) { alert('Aucune phrase à exporter.'); return; }
+  if (phrases.length === 0) { alert(t('alert_no_phrase_export')); return; }
   downloadJson(JSON.stringify(phrases, null, 2), 'phrases_' + currentLangKey + '.json');
 }
 
 async function sharePhrases() {
   const phrases = getPhrases();
-  if (phrases.length === 0) { alert('Aucune phrase à partager.'); return; }
+  if (phrases.length === 0) { alert(t('alert_no_phrase_share')); return; }
   const json = JSON.stringify(phrases, null, 2);
   const filename = 'phrases_' + currentLangKey + '.txt';
   if (navigator.share) {
@@ -6114,10 +6445,10 @@ function handlePhraseImportFile(file) {
   reader.onload = (e) => {
     let data;
     try { data = JSON.parse(e.target.result); }
-    catch { alert('Fichier JSON invalide.'); return; }
-    if (!Array.isArray(data)) { alert('Format invalide.'); return; }
+    catch { alert(t('alert_invalid_json')); return; }
+    if (!Array.isArray(data)) { alert(t('alert_invalid_format')); return; }
     const valid = data.filter(p => p && typeof p.native === 'string' && typeof p.target === 'string');
-    if (valid.length === 0) { alert('Aucune phrase valide trouvée.'); return; }
+    if (valid.length === 0) { alert(t('alert_no_valid_phrases')); return; }
     pendingImportData = valid;
     const n = valid.length;
     _openImportModal(file,
@@ -6170,7 +6501,7 @@ function initEventListeners() {
   if (quitBtn) {
     quitBtn.addEventListener('click', () => {
       const isActive = quizState || grammarReviewState || phraseReviewState;
-      if (isActive && !confirm('Quitter ?')) return;
+      if (isActive && !confirm(t('confirm_quit'))) return;
       speechSynthesis && speechSynthesis.cancel();
       stopChronoTimer();
       quizState = null;
@@ -6214,7 +6545,7 @@ function initEventListeners() {
       const { action, id } = actionBtn.dataset;
       if (action === 'edit') openEditGrammarModal(id);
       else if (action === 'delete') {
-        if (confirm('Supprimer cette fiche ?')) { deleteGrammarCard(id); renderGrammarScreen(); }
+        if (confirm(t('confirm_delete_grammar'))) { deleteGrammarCard(id); renderGrammarScreen(); }
       }
     });
   }
@@ -6248,7 +6579,7 @@ function initEventListeners() {
       const { action, id } = actionBtn.dataset;
       if (action === 'edit') openEditPhraseModal(id);
       else if (action === 'delete') {
-        if (confirm('Supprimer cette phrase ?')) { deletePhrase(id); renderPhrasesScreen(); }
+        if (confirm(t('confirm_delete_phrase'))) { deletePhrase(id); renderPhrasesScreen(); }
       }
     });
   }
@@ -6264,7 +6595,7 @@ function initEventListeners() {
       const errorEl = document.getElementById('form-phrase-error');
       const editId  = document.getElementById('edit-phrase-id').value;
       if (!native || !target) {
-        errorEl.textContent = 'Les deux champs de texte sont requis.';
+        errorEl.textContent = t('err_phrase_fields');
         errorEl.classList.remove('hidden');
         return;
       }
@@ -6304,7 +6635,7 @@ function initEventListeners() {
       const errorEl  = document.getElementById('form-grammar-error');
       const editId   = document.getElementById('edit-grammar-id').value;
       if (!lesson || !question || !answer) {
-        errorEl.textContent = 'Tous les champs sont requis.';
+        errorEl.textContent = t('err_all_fields');
         errorEl.classList.remove('hidden');
         return;
       }
@@ -6335,7 +6666,7 @@ function initEventListeners() {
       if (action === 'edit') {
         openEditWordModal(id);
       } else if (action === 'delete') {
-        if (confirm('Supprimer ce mot ?')) {
+        if (confirm(t('confirm_delete_word'))) {
           deleteWord(id);
           renderTagFilterBar();
           renderWordList(document.getElementById('search-input').value);
@@ -6355,7 +6686,7 @@ function initEventListeners() {
       const errorEl = document.getElementById('form-error');
       const editId = document.getElementById('edit-word-id').value;
       if (!native || !target) {
-        errorEl.textContent = 'Les deux champs sont requis.';
+        errorEl.textContent = t('err_fields_required');
         errorEl.classList.remove('hidden');
         return;
       }
@@ -6365,7 +6696,7 @@ function initEventListeners() {
         w.id !== editId
       );
       if (existing) {
-        errorEl.textContent = 'Ce mot existe déjà dans votre banque.';
+        errorEl.textContent = t('err_word_exists');
         errorEl.classList.remove('hidden');
         return;
       }
@@ -6487,6 +6818,8 @@ function init() {
   applyTheme();
   applyFontSize();
   initTTS();
+  translatePage();
+  updateLangToggle();
   initEventListeners();
   renderLanguageSelector();
   renderModeSelector();
@@ -6501,8 +6834,10 @@ function init() {
   updateBackupBadge();
   const btnTheme    = document.getElementById('btn-theme');
   const btnFontSize = document.getElementById('btn-font-size');
+  const btnUILang   = document.getElementById('btn-ui-lang');
   if (btnTheme)    btnTheme.addEventListener('click', toggleTheme);
   if (btnFontSize) btnFontSize.addEventListener('click', toggleFontSize);
+  if (btnUILang)   btnUILang.addEventListener('click', () => setUILang(uiLang === 'fr' ? 'en' : 'fr'));
 }
 
 if (document.readyState === 'loading') {
