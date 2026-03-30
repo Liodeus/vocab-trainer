@@ -5540,7 +5540,7 @@ function renderGrammarScreen() {
   const lessonNames = Object.keys(lessons);
   const showGrammarBar = cards.length >= 2;
   if (reviewAllBar) reviewAllBar.classList.toggle('hidden', !showGrammarBar);
-  if (showGrammarBar) renderReviewDirBar('grammar-dir-bar', 'grammarReviewDir', 'Q→R', 'R→Q');
+  if (showGrammarBar) renderReviewDirBar('grammar-dir-bar', 'grammarReviewDir', lang().nativeFlag + '→' + lang().targetFlag, lang().targetFlag + '→' + lang().nativeFlag);
   const weakBtn = document.getElementById('btn-grammar-review-weak');
   const weakCards = cards.filter(c => c.last_known === false);
   if (weakBtn) {
@@ -5972,6 +5972,7 @@ function startPhraseReview(weakOnly = false, topic = null) {
       _showReverse: dir === 'target-native' || (dir === 'mix' && Math.random() < 0.5)
     })),
     weakOnly,
+    topic: topic || null,
     currentIndex: 0,
     totalCards: pool.length,
     knownCount: 0,
@@ -6050,7 +6051,7 @@ function advancePhraseReview(knew) {
 }
 
 function finishPhraseReview() {
-  const { knownCount, totalCards, weakOnly } = phraseReviewState;
+  const { knownCount, totalCards, weakOnly, topic } = phraseReviewState;
   phraseReviewState = null;
   document.getElementById('quiz-progress-bar').style.width = '100%';
   document.getElementById('quiz-counter').textContent = '';
@@ -6074,7 +6075,7 @@ function finishPhraseReview() {
       </div>
     </div>`;
   quitTarget = 'phrases';
-  content.querySelector('#pr-replay').addEventListener('click', () => startPhraseReview(weakOnly));
+  content.querySelector('#pr-replay').addEventListener('click', () => startPhraseReview(weakOnly, topic));
   content.querySelector('#pr-back' ).addEventListener('click', () => { showScreen('phrases'); renderPhrasesScreen(); });
 }
 
